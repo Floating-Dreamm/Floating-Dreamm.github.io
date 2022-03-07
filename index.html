@@ -130,6 +130,11 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+        <li class="menu-item menu-item-quickhelp">
+
+    <a href="/quickHelp/" rel="section"><i class="fa fa-bolt fa-fw"></i>快捷</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
@@ -322,7 +327,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-07 11:00:20" itemprop="dateModified" datetime="2022-03-07T11:00:20+08:00">2022-03-07</time>
+                <time title="修改时间：2022-03-07 16:22:44" itemprop="dateModified" datetime="2022-03-07T16:22:44+08:00">2022-03-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -344,14 +349,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>2.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -376,8 +381,18 @@
 <h3 id="NameServer"><a href="#NameServer" class="headerlink" title="NameServer"></a>NameServer</h3><p>NameServer是一个非常简单的Topic路由注册中心，其角色类似Dubbo中的zookeeper，支持Broker的动态注册与发现。主要包括两个功能：Broker管理，NameServer接受Broker集群的注册信息并且保存下来作为路由信息的基本数据。然后提供心跳检测机制，检查Broker是否还存活；路由信息管理，每个NameServer将保存关于Broker集群的整个路由信息和用于客户端查询的队列信息。然后Producer和Conumser通过NameServer就可以知道整个Broker集群的路由信息，从而进行消息的投递和消费。NameServer通常也是集群的方式部署，各实例间相互不进行信息通讯。Broker是向每一台NameServer注册自己的路由信息，所以每一个NameServer实例上面都保存一份完整的路由信息。当某个NameServer因某种原因下线了，Broker仍然可以向其它NameServer同步其路由信息，Producer和Consumer仍然可以动态感知Broker的路由的信息。</p>
 <h2 id="其他重要概念"><a href="#其他重要概念" class="headerlink" title="其他重要概念"></a>其他重要概念</h2><h3 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a><strong>Topic</strong></h3><p>表示一类消息的集合，每个主题包含若干条消息，每条消息只能属于一个主题，是RocketMQ进行消息订阅的基本单位。 同一个Topic下的数据，会分片保存到不同的Broker上，而每一个分片单位，就叫做MessageQueue。</p>
 <p>MessageQueue是生产者发送消息与消费者消费消息的最小单位。</p>
+<h3 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a><strong>Tag</strong></h3><p><strong>Tag</strong>（标签）可以看作子主题，它是消息的第二级类型，用于为用户提供额外的灵活性。使用标签，同一业务模块不同目的的消息就可以用相同 Topic 而不同的 <strong>Tag</strong> 来标识。比如交易消息又可以分为：交易创建消息、交易完成消息等，一条消息可以没有 <strong>Tag</strong> 。</p>
+<p>标签有助于保持您的代码干净和连贯，并且还可以为 <strong>RocketMQ</strong> 提供的查询系统提供帮助。</p>
 <h3 id="Message"><a href="#Message" class="headerlink" title="Message"></a><strong>Message</strong></h3><p>消息系统所传输信息的物理载体，生产和消费数据的最小单位，每条消息必须属于一个主题Topic。 RocketMQ中每个消息拥有唯一的Message ID，且可以携带具有业务标识的Key。系统提供了通过 Message ID和Key查询消息的功能。</p>
 <p>并且Message上有一个为消息设置的标志，Tag标签。用于同一主题下区分不同类型的消息。来自同一业务单元的消息，可以根据不同业务目的在同一主题下设置不同标签。标签能够有效地保持代码的清晰度和连贯性，并优化RocketMQ提供的查询系统。消费者可以根据Tag实现对不同子主题的不同消费逻辑，实现更好的扩展性。</p>
+<h3 id="Group"><a href="#Group" class="headerlink" title="Group"></a><strong>Group</strong></h3><p>分组，一个组可以订阅多个Topic。</p>
+<p>分为ProducerGroup，ConsumerGroup，代表某一类的生产者和消费者，一般来说同一个服务可以作为Group，同一个Group一般来说发送和消费的消息都是一样的。</p>
+<h3 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a><strong>Queue</strong></h3><p>在<strong>Kafka</strong>中叫Partition，每个Queue内部是有序的，在<strong>RocketMQ</strong>中分为读和写两种队列，一般来说读写队列数量一致，如果不一致就会出现很多问题。</p>
+<h3 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a><strong>Message Queue</strong></h3><p><strong>Message Queue</strong>（消息队列），主题被划分为一个或多个子主题，即消息队列。</p>
+<p>一个 Topic 下可以设置多个消息队列，发送消息时执行该消息的 Topic ，RocketMQ 会轮询该 Topic 下的所有队列将消息发出去。</p>
+<p>消息的物理管理单位。一个Topic下可以有多个Queue，Queue的引入使得消息的存储可以分布式集群化，具有了水平扩展能力。</p>
+<h3 id="Offset"><a href="#Offset" class="headerlink" title="Offset"></a><strong>Offset</strong></h3><p>在<strong>RocketMQ</strong> 中，所有消息队列都是持久化，长度无限的数据结构，所谓长度无限是指队列中的每个存储单元都是定长，访问其中的存储单元使用Offset 来访问，Offset 为 java long 类型，64 位，理论上在 100年内不会溢出，所以认为是长度无限。</p>
+<p>也可以认为 Message Queue 是一个长度无限的数组，<strong>Offset</strong> 就是下标。</p>
 <h2 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h2><p>下图为RocketMQ官网的技术架构图:</p>
 <p><img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/uTools_1646621962622.jpg"></p>
 <p>结合部署架构图，描述集群工作流程：</p>
@@ -388,7 +403,20 @@
 <li>Producer发送消息，启动时先跟NameServer集群中的其中一台建立长连接，并从NameServer中获取当前发送的Topic存在哪些Broker上，轮询从队列列表中选择一个队列，然后与队列所在的Broker建立长连接从而向Broker发消息。</li>
 <li>Consumer跟Producer类似，跟其中一台NameServer建立长连接，获取当前订阅Topic存在哪些Broker上，然后直接跟Broker建立连接通道，开始消费消息。</li>
 </ul>
-
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><p>在阅读源码之前，希望带着问题去看，这样看完才会有收获。</p>
+<p>从RocketMQ的特点出发:</p>
+<ul>
+<li>单机吞吐量：十万级</li>
+<li>可用性：非常高，分布式架构</li>
+<li>消息可靠性：经过参数优化配置，消息可以做到0丢失</li>
+<li>功能支持：MQ功能较为完善，还是分布式的，扩展性好</li>
+<li>支持10亿级别的消息堆积，不会因为堆积导致性能下降</li>
+<li>源码是java，我们可以自己阅读源码，定制自己公司的MQ，可以掌控</li>
+<li>天生为金融互联网领域而生，对于可靠性要求很高的场景，尤其是电商里面的订单扣款，以及业务削峰，在大量交易涌入时，后端可能无法及时处理的情况</li>
+<li><strong>RoketMQ</strong>在稳定性上可能更值得信赖，这些业务场景在阿里双11已经经历了多次考验，如果你的业务有上述并发场景，建议可以选择<strong>RocketMQ</strong></li>
+</ul>
+<p>以下这些先留着，以后慢慢补充</p>
+<h3 id="NameServer启动流程"><a href="#NameServer启动流程" class="headerlink" title="NameServer启动流程"></a>NameServer启动流程</h3><h3 id="Broker运行流程"><a href="#Broker运行流程" class="headerlink" title="Broker运行流程"></a>Broker运行流程</h3><h3 id="Producer运行流程"><a href="#Producer运行流程" class="headerlink" title="Producer运行流程"></a>Producer运行流程</h3><h3 id="Consumer运行流程"><a href="#Consumer运行流程" class="headerlink" title="Consumer运行流程"></a>Consumer运行流程</h3><h3 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a>其他特性</h3><h4 id="RocketMQ刷盘实现"><a href="#RocketMQ刷盘实现" class="headerlink" title="RocketMQ刷盘实现"></a>RocketMQ刷盘实现</h4><h4 id="顺序消息"><a href="#顺序消息" class="headerlink" title="顺序消息"></a>顺序消息</h4><h4 id="定时消息"><a href="#定时消息" class="headerlink" title="定时消息"></a>定时消息</h4>
       
     </div>
 
@@ -568,7 +596,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -613,13 +641,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">3k</span>
+    <span title="站点总字数">4k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3 分钟</span>
+    <span title="站点阅读时长">4 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
