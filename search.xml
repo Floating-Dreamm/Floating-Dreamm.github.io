@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>RocketMQ</title>
+      <link href="/2022/03/05/RocketMQ/"/>
+      <url>/2022/03/05/RocketMQ/</url>
+      
+        <content type="html"><![CDATA[<p>​        默认大家对MQ都有一些了解，像异步解耦啊、削峰填谷啊，就不多啰嗦了，直接干货。</p><p>​        首先需要了解RocketMQ的基本组件：</p><h2 id="基本组件"><a href="#基本组件" class="headerlink" title="基本组件"></a>基本组件</h2><h3 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h3><p>消息的生产者，具体点就把它当成生产商，生产的就是消息，它会把它生产的消息交给队列，具体谁用了我生产的消息，i don‘t care，我只管生产我的消息并把它安全的交到合适的地方去，其他事跟我没关系。</p><h3 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h3><p>负责消费消息，一般是后台系统负责异步消费。对应的就把它当成顾客，既然生产了消息，我过来消费，没问题吧？这没有问题。而且它还贴心的提供了两种消费形式：</p><ul><li>拉模式：每次顾客都需要到店里去消费；</li><li>推模式：店里到货了，打包好直接送到消费者手里（这感觉贴心多了）。</li></ul><h3 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a>Broker</h3><p>它主要干两件事，先把生产商的消息存到磁盘里，防止突然挂了消息就都丢了；然后等消费者过来消费消息。</p><h3 id="NameServer"><a href="#NameServer" class="headerlink" title="NameServer"></a>NameServer</h3><p>前面说了，Broker是有可能会挂的，生产商辛辛苦苦把消息生产好了，到给Broker的时候，发现别人关门了，咋办？当然是出来一个管理员，每隔一段时间帮着问问Broker还在不在，不在了就不让消息送过去了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 中间件 </category>
+          
+          <category> RocketMQ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 源码 </tag>
+            
+            <tag> 中间件 </tag>
+            
+            <tag> RocketMQ </tag>
+            
+            <tag> MQ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>前言</title>
       <link href="/2022/03/03/%E4%B8%80%E4%BA%9B%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D/"/>
       <url>/2022/03/03/%E4%B8%80%E4%BA%9B%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D/</url>
