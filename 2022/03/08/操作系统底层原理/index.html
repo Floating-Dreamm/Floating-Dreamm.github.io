@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"floating-dreamm.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="冯诺依曼计算机模型详解 现代计算机模型是基于-冯诺依曼计算机模型 计算机在运行时，先从内存中取出第一条指令，通过控制器的译码，按指令的要求，从存储器中取出数据进行指定的运算和逻辑操作等加工，然后再按地址把结果送到内存中去。接下来，再取出第二条指令，在控制器的指挥下完成规定操作。依此进行下去。直至遇到停止指令。 程序与数据一样存贮，按程序编排的顺序，一步一步地取出指令，自动地完成指令规定的操作是计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统底层原理">
+<meta property="og:url" content="https://floating-dreamm.github.io/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Boyce">
+<meta property="og:description" content="冯诺依曼计算机模型详解 现代计算机模型是基于-冯诺依曼计算机模型 计算机在运行时，先从内存中取出第一条指令，通过控制器的译码，按指令的要求，从存储器中取出数据进行指定的运算和逻辑操作等加工，然后再按地址把结果送到内存中去。接下来，再取出第二条指令，在控制器的指挥下完成规定操作。依此进行下去。直至遇到停止指令。 程序与数据一样存贮，按程序编排的顺序，一步一步地取出指令，自动地完成指令规定的操作是计算">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%288%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%281%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%282%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%283%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%284%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%285%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%286%29.png">
+<meta property="og:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%287%29.png">
+<meta property="article:published_time" content="2022-03-08T15:29:59.000Z">
+<meta property="article:modified_time" content="2022-03-10T14:14:57.659Z">
+<meta property="article:author" content="靓仔灬很忙">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="并发编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%288%29.png">
+
+<link rel="canonical" href="https://floating-dreamm.github.io/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>操作系统底层原理 | Boyce</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Boyce</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-essays">
+
+    <a href="/essays/" rel="section"><i class="fa fa-book fa-fw"></i>随笔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-quickhelp">
+
+    <a href="/categories/quickHelp/" rel="section"><i class="fa fa-bolt fa-fw"></i>快捷</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/Floating-Dreamm" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://floating-dreamm.github.io/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+      <meta itemprop="name" content="靓仔灬很忙">
+      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boyce">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统底层原理
+        </h1>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-08 23:29:59" itemprop="dateCreated datePublished" datetime="2022-03-08T23:29:59+08:00">2022-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-10 22:14:57" itemprop="dateModified" datetime="2022-03-10T22:14:57+08:00">2022-03-10</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="冯诺依曼计算机模型详解"><a href="#冯诺依曼计算机模型详解" class="headerlink" title="冯诺依曼计算机模型详解"></a><strong>冯诺依曼计算机模型详解</strong></h1><hr>
+<p>现代计算机模型是基于-<strong>冯诺依曼计算机模型</strong></p>
+<p>计算机在运行时，先从内存中取出第一条指令，通过控制器的译码，按指令的要求，从存储器中取出数据进行指定的运算和逻辑操作等加工，然后再按地址把结果送到内存中去。接下来，再取出第二条指令，在控制器的指挥下完成规定操作。依此进行下去。直至遇到停止指令。</p>
+<p>程序与数据一样存贮，按程序编排的顺序，一步一步地取出指令，自动地完成指令规定的操作是计算机最基本的工作模型。这一原理最初是由美籍匈牙利数学家冯.诺依曼于1945年提出来的，故称为冯.诺依曼计算机模型。</p>
+<h2 id="计算机五大核心组成部分"><a href="#计算机五大核心组成部分" class="headerlink" title="计算机五大核心组成部分"></a><strong>计算机五大核心组成部分</strong></h2><ol>
+<li><p>控制器(Control)：是整个计算机的中枢神经，其功能是对程序规定的控制信息进行解释，根据其要求进行控制，调度程序、数据、地址，协调计算机各部分工作及内存与外设的访问等。</p>
+</li>
+<li><p>运算器(Datapath)：运算器的功能是对数据进行各种算术运算和逻辑运算，即对数据进行加工处理。</p>
+</li>
+<li><p>存储器(Memory)：存储器的功能是存储程序、数据和各种信号、命令等信息，并在需要时提供这些信息。</p>
+</li>
+<li><p>输入(Input system)：输入设备是计算机的重要组成部分，输入设备与输出设备合你为外部设备，简称外设，输入设备的作用是将程序、原始数据、文字、字符、控制命令或现场采集的数据等信息输入到计算机。常见的输入设备有键盘、鼠标器、光电输入机、磁带机、磁盘机、光盘机等。</p>
+</li>
+<li><p>输出(Output system)：输出设备与输入设备同样是计算机的重要组成部分，它把外算机的中间结果或最后结果、机内的各种数据符号及文字或各种控制信号等信息输出出来。微机常用的输出设备有显示终端CRT、打印机、激光印字机、绘图仪及磁带、光盘机等。</p>
+</li>
+</ol>
+<p>下图-冯诺依曼计算机模型图</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%288%29.png" alt="0"></p>
+<p>上面的模型是一个理论的抽象简化模型，它的具体应用就是现代计算机当中的硬件结构设计：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%281%29.png" alt="0"></p>
+<p>在上图硬件结构当中，配件很多，但最核心的只有两部分：CPU、内存。所以我们重点学习的也是这两部分。</p>
+<h2 id="CPU指令结构"><a href="#CPU指令结构" class="headerlink" title="CPU指令结构"></a><strong>CPU指令结构</strong></h2><p>CPU内部结构</p>
+<ul>
+<li>控制单元</li>
+<li>运算单元</li>
+<li>数据单元</li>
+</ul>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%282%29.png" alt="0"></p>
+<h3 id="控制单元"><a href="#控制单元" class="headerlink" title="控制单元"></a><strong>控制单元</strong></h3><p>控制单元是整个CPU的指挥控制中心，由指令寄存器IR（Instruction Register）、指令译码器ID（Instruction Decoder）和 操作控制器OC（Operation Controller） 等组成，对协调整个电脑有序工作极为重要。它根据用户预先编好的程序，依次从存储器中取出各条指令，放在指令寄存器IR中，通过指令译码（分析）确定应该进行什么操作，然后通过操作控制器OC，按确定的时序，向相应的部件发出微操作控制信号。操作控制器OC中主要包括：节拍脉冲发生器、控制矩阵、时钟脉冲发生器、复位电路和启停电路等控制逻辑。</p>
+<h3 id="运算单元"><a href="#运算单元" class="headerlink" title="运算单元"></a><strong>运算单元</strong></h3><p>运算单元是运算器的核心。可以执行算术运算（包括加减乘数等基本运算及其附加运算）和逻辑运算（包括移位、逻辑测试或两个值比较）。相对控制单元而言，运算器接受控制单元的命令而进行动作，即运算单元所进行的全部操作都是由控制单元发出的控制信号来指挥的，所以它是执行部件。</p>
+<h3 id="存储单元"><a href="#存储单元" class="headerlink" title="存储单元"></a><strong>存储单元</strong></h3><p>存储单元包括 CPU 片内缓存Cache和寄存器组，是 CPU 中暂时存放数据的地方，里面保存着那些等待处理的数据，或已经处理过的数据，CPU 访问寄存器所用的时间要比访问内存的时间短。 寄存器是CPU内部的元件，寄存器拥有非常高的读写速度，所以在寄存器之间的数据传送非常快。采用寄存器，可以减少 CPU 访问内存的次数，从而提高了 CPU 的工作速度。寄存器组可分为专用寄存器和通用寄存器。专用寄存器的作用是固定的，分别寄存相应的数据；而通用寄存器用途广泛并可由程序员规定其用途。</p>
+<p>下表列出了CPU关键技术的发展历程以及代表系列，每一个关键技术的诞生都是环环相扣的，处理器这些技术发展历程都围绕着如何不让“CPU闲下来”这一个核心目标展开。</p>
+<table>
+<thead>
+<tr>
+<th>关键技术</th>
+<th>时间</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>指令缓存(L1)</td>
+<td>1982</td>
+<td>预读多条指令</td>
+</tr>
+<tr>
+<td>数据缓存(L1)</td>
+<td>1985</td>
+<td>预读一定长度的数据</td>
+</tr>
+<tr>
+<td>流水线</td>
+<td>1989</td>
+<td>一条指令被拆分由多个单元协同处理, i486</td>
+</tr>
+<tr>
+<td>多流水线</td>
+<td>1993</td>
+<td>多运算单元多流水线并行处理, 奔腾1</td>
+</tr>
+<tr>
+<td>乱序+分支预测</td>
+<td>1995</td>
+<td>充分利用不同组件协同处理, 奔腾Pro</td>
+</tr>
+<tr>
+<td>超线程</td>
+<td>2002</td>
+<td>引入多组前端部件共享执行引擎, 奔腾4</td>
+</tr>
+<tr>
+<td>多核处理器</td>
+<td>2006</td>
+<td>取消超线程，降低时钟频率，改用多核心, Core酷睿</td>
+</tr>
+<tr>
+<td>多核超线程</td>
+<td>2008</td>
+<td>重新引入超线程技术，iX系列</td>
+</tr>
+</tbody></table>
+<h2 id="CPU缓存结构"><a href="#CPU缓存结构" class="headerlink" title="CPU缓存结构"></a><strong>CPU缓存结构</strong></h2><p>现代CPU为了提升执行效率，减少CPU与内存的交互(交互影响CPU效率)，一般在CPU上集成了多级缓存架构，常见的为三级缓存结构</p>
+<ul>
+<li>L1 Cache，分为数据缓存和指令缓存，逻辑核独占</li>
+<li>L2 Cache，物理核独占，逻辑核共享</li>
+<li>L3 Cache，所有物理核共享</li>
+</ul>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%283%29.png" alt="0"></p>
+<p>存储器存储空间大小：内存&gt;L3&gt;L2&gt;L1&gt;寄存器；</p>
+<p>存储器速度快慢排序：寄存器&gt;L1&gt;L2&gt;L3&gt;内存；</p>
+<p>还有一点值得注意的是：缓存是由最小的存储区块-缓存行(cacheline)组成，缓存行大小通常为64byte。</p>
+<p>缓存行是什么意思呢？</p>
+<p>比如你的L1缓存大小是512kb,而cacheline &#x3D; 64byte,那么就是L1里有512 * 1024&#x2F;64个cacheline</p>
+<h3 id="CPU读取存储器数据过程"><a href="#CPU读取存储器数据过程" class="headerlink" title="CPU读取存储器数据过程"></a><strong>CPU读取存储器数据过程</strong></h3><p>1、CPU要取寄存器X的值，只需要一步：直接读取。</p>
+<p>2、CPU要取L1 cache的某个值，需要1-3步（或者更多）：把cache行锁住，把某个数据拿来，解锁，如果没锁住就慢了。</p>
+<p>3、CPU要取L2 cache的某个值，先要到L1 cache里取，L1当中不存在，在L2里，L2开始加锁，加锁以后，把L2里的数据复制到L1，再执行读L1的过程，上面的3步，再解锁。</p>
+<p>4、CPU取L3 cache的也是一样，只不过先由L3复制到L2，从L2复制到L1，从L1到CPU。</p>
+<p>5、CPU取内存则最复杂：通知内存控制器占用总线带宽，通知内存加锁，发起内存读请求，等待回应，回应数据保存到L3（如果没有就到L2），再从L3&#x2F;2到L1，再从L1到CPU，之后解除总线锁定。</p>
+<h3 id="CPU为何要有高速缓存"><a href="#CPU为何要有高速缓存" class="headerlink" title="CPU为何要有高速缓存"></a><strong>CPU为何要有高速缓存</strong></h3><p>CPU在摩尔定律的指导下以每18个月翻一番的速度在发展，然而内存和硬盘的发展速度远远不及CPU。这就造成了高性能能的内存和硬盘价格及其昂贵。然而CPU的高度运算需要高速的数据。为了解决这个问题，CPU厂商在CPU中内置了少量的高速缓存以解决I\O速度和CPU运算速度之间的不匹配问题。</p>
+<p>在CPU访问存储设备时，无论是存取数据抑或存取指令，都趋于聚集在一片连续的区域中，这就被称为局部性原理。</p>
+<p><strong>时间局部性（Temporal Locality）</strong>：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。</p>
+<p>比如循环、递归、方法的反复调用等。</p>
+<p><strong>空间局部性（Spatial Locality）</strong>：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。</p>
+<p>比如顺序执行的代码、连续创建的两个对象、数组等。</p>
+<p>举个空间局部性原则例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TwoDimensionalArraySum</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">RUNS</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DIMENSION_1</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DIMENSION_2</span> <span class="operator">=</span> <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">long</span>[][] longs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 初始化数组</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        longs = <span class="keyword">new</span> <span class="title class_">long</span>[DIMENSION_1][];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++) &#123;</span><br><span class="line">            longs[i] = <span class="keyword">new</span> <span class="title class_">long</span>[DIMENSION_2];</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; DIMENSION_2; j++) &#123;</span><br><span class="line">                longs[i][j] = <span class="number">1L</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;Array初始化完毕....&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> <span class="number">0</span>; r &lt; RUNS; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++) &#123;<span class="comment">//DIMENSION_1=1024*1024</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j=<span class="number">0</span>;j&lt;DIMENSION_2;j++)&#123;<span class="comment">//6</span></span><br><span class="line">                    sum+=longs[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;spend time1:&quot;</span>+(System.currentTimeMillis()-start));</span><br><span class="line">        System.out.println(<span class="string">&quot;sum1:&quot;</span>+sum);</span><br><span class="line"></span><br><span class="line">        sum = <span class="number">0L</span>;</span><br><span class="line">        start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> <span class="number">0</span>; r &lt; RUNS; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j=<span class="number">0</span>;j&lt;DIMENSION_2;j++) &#123;<span class="comment">//6</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++)&#123;<span class="comment">//1024*1024</span></span><br><span class="line">                    sum+=longs[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;spend time2:&quot;</span>+(System.currentTimeMillis()-start));</span><br><span class="line">        System.out.println(<span class="string">&quot;sum2:&quot;</span>+sum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="带有高速缓存的CPU执行计算的流程"><a href="#带有高速缓存的CPU执行计算的流程" class="headerlink" title="带有高速缓存的CPU执行计算的流程"></a><strong>带有高速缓存的CPU执行计算的流程</strong></h3><ol>
+<li>程序以及数据被加载到主内存</li>
+<li>指令和数据被加载到CPU的高速缓存</li>
+<li>CPU执行指令，把结果写到高速缓存</li>
+<li>高速缓存中的数据写回主内存</li>
+</ol>
+<h2 id="CPU运行安全等级"><a href="#CPU运行安全等级" class="headerlink" title="CPU运行安全等级"></a><strong>CPU运行安全等级</strong></h2><p>CPU有4个运行级别，分别为：</p>
+<ul>
+<li>ring0</li>
+<li>ring1</li>
+<li>ring2</li>
+<li>ring3</li>
+</ul>
+<p>Linux与Windows只用到了2个级别:ring0、ring3，操作系统内部内部程序指令通常运行在ring0级别，操作系统以外的第三方程序运行在ring3级别，第三方程序如果要调用操作系统内部函数功能，由于运行安全级别不够,必须切换CPU运行状态，从ring3切换到ring0,然后执行系统函数，说到这里相信同学们明白为什么JVM创建线程，线程阻塞唤醒是重型操作了，因为CPU要切换运行状态。</p>
+<p>下面我大概梳理一下JVM创建线程CPU的工作过程</p>
+<p>step1：CPU从ring3切换ring0创建线程</p>
+<p>step2：创建完毕,CPU从ring0切换回ring3</p>
+<p>step3：线程执行JVM程序</p>
+<p>step4：线程执行完毕，销毁还得切回ring0</p>
+<p>讲完了CPU部分，我们来看下内存部分。</p>
+<h1 id="操作系统内存管理"><a href="#操作系统内存管理" class="headerlink" title="操作系统内存管理"></a><strong>操作系统内存管理</strong></h1><hr>
+<h2 id="执行空间保护"><a href="#执行空间保护" class="headerlink" title="执行空间保护"></a><strong>执行空间保护</strong></h2><p>操作系统有用户空间与内核空间两个概念，目的也是为了做到程序运行安全隔离与稳定，以32位操作系统4G大小的内存空间为例</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%284%29.png" alt="0"></p>
+<p>Linux为内核代码和数据结构预留了几个页框，这些页永远不会被转出到磁盘上。从 0x00000000 到 0xC0000000（PAGE_OFFSET） 的线性地址可由用户代码 和 内核代码进行引用（<strong>即用户空间</strong>）。从0xC0000000（PAGE_OFFSET）到 0xFFFFFFFFF的线性地址只能由内核代码进行访问（<strong>即内核空间</strong>）。内核代码及其数据结构都必须位于这 1 GB的地址空间中，但是对于此地址空间而言，更大的消费者是物理地址的虚拟映射。</p>
+<p>这意味着在 4 GB 的内存空间中，只有 3 GB 可以用于用户应用程序。进程与线程只能运行在用户方式（usermode）或内核方式（kernelmode）下。用户程序运行在用户方式下，而系统调用运行在内核方式下。在这两种方式下所用的堆栈不一样：用户方式下用的是一般的堆栈(用户空间的堆栈)，而内核方式下用的是固定大小的堆栈（内核空间的对战，一般为一个内存页的大小），即每个进程与线程其实有两个堆栈，分别运行与用户态与内核态。</p>
+<p>由空间划分我们再引深一下，CPU调度的基本单位线程，也划分为：</p>
+<p><strong>1、内核线程模型(KLT)</strong></p>
+<p><strong>2、用户线程模型(ULT)</strong></p>
+<h3 id="内核线程模型"><a href="#内核线程模型" class="headerlink" title="内核线程模型"></a><strong>内核线程模型</strong></h3><p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%285%29.png" alt="0"></p>
+<p>内核线程(KLT)：系统内核管理线程(KLT),内核保存线程的状态和上下文信息，线程阻塞不会引起进程阻塞。在多处理器系统上，多线程在多处理器上并行运行。线程的创建、调度和管理由内核完成，效率比ULT要慢，比进程操作快。 </p>
+<h3 id="用户线程模型"><a href="#用户线程模型" class="headerlink" title="用户线程模型"></a><strong>用户线程模型</strong></h3><p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%286%29.png" alt="0"></p>
+<p>用户线程(ULT)：用户程序实现,不依赖操作系统核心,应用提供创建、同步、调度和管理线程的函数来控制用户线程。不需要用户态&#x2F;内核态切换，速度快。内核对ULT无感知，线程阻塞则进程（包括它的所有线程）阻塞。</p>
+<p><strong>到这里，大家不妨思考一下，jvm是采用的哪一种线程模型？</strong></p>
+<h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a><strong>进程与线程</strong></h1><p><strong>什么是进程？</strong></p>
+<p>现代操作系统在运行一个程序时，会为其创建一个进程；例如，启动一个Java程序，操作系统就会创建一个Java进程。进程是OS(操作系统)资源分配的最小单位。</p>
+<p><strong>什么是线程？</strong></p>
+<p>线程是OS(操作系统)调度CPU的最小单元，也叫轻量级进程（Light Weight Process），在一个进程里可以创建多个线程，这些线程都拥有各自的计数器、堆栈和局部变量等属性，并且能够访问共享的内存变量。CPU在这些线程上高速切换，让使用者感觉到这些线程在同时执行，即并发的概念，相似的概念还有并行！</p>
+<p>线程上下文切换过程：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%287%29.png" alt="0"></p>
+<h2 id="虚拟机指令集架构"><a href="#虚拟机指令集架构" class="headerlink" title="虚拟机指令集架构"></a><strong>虚拟机指令集架构</strong></h2><hr>
+<p>虚拟机指令集架构主要分两种：</p>
+<p>1、栈指令集架构</p>
+<p>2、寄存器指令集架构</p>
+<p>关于指令集架构的wiki详细说明：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B">https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B</a></p>
+<h2 id="栈指令集架构"><a href="#栈指令集架构" class="headerlink" title="栈指令集架构"></a><strong>栈指令集架构</strong></h2><ol>
+<li>设计和实现更简单,适用于资源受限的系统;</li>
+<li>避开了寄存器的分配难题:使用零地址指令方式分配;</li>
+<li>指令流中的指令大部分是零地址指令,其执行过程依赖与操作栈,指令集更小,编译器容易实现;</li>
+<li>不需要硬件支持,可移植性更好,更好实现跨平台。</li>
+</ol>
+<h2 id="寄存器指令集架构"><a href="#寄存器指令集架构" class="headerlink" title="寄存器指令集架构"></a><strong>寄存器指令集架构</strong></h2><ol>
+<li>典型的应用是x86的二进制指令集:比如传统的PC以及Android的Davlik虚拟机。</li>
+<li>指令集架构则完全依赖硬件,可移植性差。</li>
+<li>性能优秀和执行更高效。</li>
+<li>花费更少的指令去完成一项操作。</li>
+<li>在大部分情况下,基于寄存器架构的指令集往往都以一地址指令、二地址指令和三地址指令为主,而基于栈式架构的指令集却是以零地址指令为主。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>靓仔灬很忙
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://floating-dreamm.github.io/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="操作系统底层原理">https://floating-dreamm.github.io/2022/03/08/操作系统底层原理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag"># 并发编程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/08/RocketMQ%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/" rel="prev" title="RocketMQ开发模型">
+      <i class="fa fa-chevron-left"></i> RocketMQ开发模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/08/JMM%E6%A8%A1%E5%9E%8B/" rel="next" title="JMM模型">
+      JMM模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81NTY2MS8zMjEyOA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">冯诺依曼计算机模型详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="nav-number">1.1.</span> <span class="nav-text">计算机五大核心组成部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E6%8C%87%E4%BB%A4%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">CPU指令结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%8D%95%E5%85%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">控制单元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E5%8D%95%E5%85%83"><span class="nav-number">1.2.2.</span> <span class="nav-text">运算单元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83"><span class="nav-number">1.2.3.</span> <span class="nav-text">存储单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">CPU缓存结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E8%AF%BB%E5%8F%96%E5%AD%98%E5%82%A8%E5%99%A8%E6%95%B0%E6%8D%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">CPU读取存储器数据过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E4%B8%BA%E4%BD%95%E8%A6%81%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">CPU为何要有高速缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%9A%84CPU%E6%89%A7%E8%A1%8C%E8%AE%A1%E7%AE%97%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">带有高速缓存的CPU执行计算的流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E8%BF%90%E8%A1%8C%E5%AE%89%E5%85%A8%E7%AD%89%E7%BA%A7"><span class="nav-number">1.4.</span> <span class="nav-text">CPU运行安全等级</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">操作系统内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E7%A9%BA%E9%97%B4%E4%BF%9D%E6%8A%A4"><span class="nav-number">2.1.</span> <span class="nav-text">执行空间保护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text">内核线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.2.</span> <span class="nav-text">用户线程模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">虚拟机指令集架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">栈指令集架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84"><span class="nav-number">3.3.</span> <span class="nav-text">寄存器指令集架构</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="靓仔灬很忙"
+      src="/images/WechatIMG1.jpeg">
+  <p class="site-author-name" itemprop="name">靓仔灬很忙</p>
+  <div class="site-description" itemprop="description">同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Floating-Dreamm" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Floating-Dreamm" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:cl516729483@outlook.com" title="E-Mail → mailto:cl516729483@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">靓仔灬很忙</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">81k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:14</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
