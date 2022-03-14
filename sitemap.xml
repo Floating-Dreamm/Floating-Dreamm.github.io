@@ -2,7 +2,88 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/volatile/</loc>
+    <loc>http://cailiang.website/2022/03/14/Executor%E7%BA%BF%E7%A8%8B%E6%B1%A0/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/map/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/Atomic-Unsafe/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/Semaphore/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/AQS%E4%B9%8BBlockingQueue/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/AQS%E8%AF%A6%E8%A7%A3/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/AQS%E4%B9%8BLock/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/14/synchronized%E8%AF%A6%E8%A7%A3/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/03/%E4%B8%80%E4%BA%9B%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D/</loc>
+    
+    <lastmod>2022-03-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/2022/03/08/volatile/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -11,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/JMM%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>http://cailiang.website/2022/03/08/JMM%E6%A8%A1%E5%9E%8B/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -20,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/RocketMQ%E4%BB%8B%E7%BB%8D/</loc>
+    <loc>http://cailiang.website/2022/03/08/RocketMQ%E4%BB%8B%E7%BB%8D/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -29,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/</loc>
+    <loc>http://cailiang.website/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -38,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</loc>
+    <loc>http://cailiang.website/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -47,7 +128,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/07/index-1/</loc>
+    <loc>http://cailiang.website/2022/03/07/index-1/</loc>
     
     <lastmod>2022-03-13</lastmod>
     
@@ -56,7 +137,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/RocketMQ%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>http://cailiang.website/2022/03/08/RocketMQ%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/</loc>
     
     <lastmod>2022-03-10</lastmod>
     
@@ -65,7 +146,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/RocketMQ%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</loc>
+    <loc>http://cailiang.website/2022/03/08/RocketMQ%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</loc>
     
     <lastmod>2022-03-08</lastmod>
     
@@ -74,7 +155,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/03/%E4%B8%80%E4%BA%9B%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D/</loc>
+    <loc>http://cailiang.website/quickHelp/index-1.html</loc>
     
     <lastmod>2022-03-08</lastmod>
     
@@ -83,7 +164,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/quickHelp/index-1.html</loc>
+    <loc>http://cailiang.website/2022/03/08/MySQL/</loc>
     
     <lastmod>2022-03-08</lastmod>
     
@@ -92,16 +173,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/08/MySQL/</loc>
-    
-    <lastmod>2022-03-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://floating-dreamm.github.io/quickHelp/index.html</loc>
+    <loc>http://cailiang.website/quickHelp/index.html</loc>
     
     <lastmod>2022-03-07</lastmod>
     
@@ -110,7 +182,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/05/RocketMQ/</loc>
+    <loc>http://cailiang.website/2022/03/05/RocketMQ/</loc>
     
     <lastmod>2022-03-07</lastmod>
     
@@ -119,7 +191,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/essays/index.html</loc>
+    <loc>http://cailiang.website/essays/index.html</loc>
     
     <lastmod>2022-03-04</lastmod>
     
@@ -128,7 +200,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/essays/index-1.html</loc>
+    <loc>http://cailiang.website/essays/index-1.html</loc>
     
     <lastmod>2022-03-04</lastmod>
     
@@ -137,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/index.html</loc>
+    <loc>http://cailiang.website/tags/index.html</loc>
     
     <lastmod>2022-03-02</lastmod>
     
@@ -146,7 +218,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/resources/index.html</loc>
+    <loc>http://cailiang.website/resources/index.html</loc>
     
     <lastmod>2022-03-02</lastmod>
     
@@ -155,7 +227,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/index.html</loc>
+    <loc>http://cailiang.website/categories/index.html</loc>
     
     <lastmod>2022-03-02</lastmod>
     
@@ -164,7 +236,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/about/index.html</loc>
+    <loc>http://cailiang.website/about/index.html</loc>
     
     <lastmod>2022-03-02</lastmod>
     
@@ -173,7 +245,7 @@
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/2022/03/02/hello-world/</loc>
+    <loc>http://cailiang.website/2022/03/02/hello-world/</loc>
     
     <lastmod>2022-03-02</lastmod>
     
@@ -183,142 +255,212 @@
   
 
   <url>
-    <loc>https://floating-dreamm.github.io/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/JMM%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/AQS/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/Lock/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/MESI/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E9%94%81/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E6%BA%90%E7%A0%81/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/Atomic/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/Unsafe/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/RocketMQ/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E6%BA%90%E7%A0%81/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/MQ/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/java/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/RocketMQ/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E5%BF%AB%E6%8D%B7%E5%B8%AE%E5%8A%A9/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/MQ/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/java/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/IDEA/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/MESI/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/vloatile/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/JMM%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/Semaphore/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/HashMap/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/ConcurrentHashMap/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/vloatile/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E5%BF%AB%E6%8D%B7%E5%B8%AE%E5%8A%A9/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/IDEA/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/synchronized/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</loc>
+    <lastmod>2022-03-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://cailiang.website/tags/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%9E%84/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -326,50 +468,50 @@
 
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/quickHelp/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/RocketMQ/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/RocketMQ/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/quickHelp/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/quickHelp/%E5%BF%AB%E6%8D%B7%E9%94%AE/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/quickHelp/%E5%BF%AB%E6%8D%B7%E9%94%AE/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://floating-dreamm.github.io/categories/quickHelp/%E5%BF%AB%E6%8D%B7%E9%94%AE/IDEA/</loc>
-    <lastmod>2022-03-13</lastmod>
+    <loc>http://cailiang.website/categories/quickHelp/%E5%BF%AB%E6%8D%B7%E9%94%AE/IDEA/</loc>
+    <lastmod>2022-03-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

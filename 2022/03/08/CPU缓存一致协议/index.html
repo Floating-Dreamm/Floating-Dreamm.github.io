@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"floating-dreamm.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"cailiang.website","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="CPU缓存一致性协议MESI CPU高速缓存（Cache Memory） CPU为何要有高速缓存CPU在摩尔定律的指导下以每18个月翻一番的速度在发展，然而内存和硬盘的发展速度远远不及CPU。这就造成了高性能能的内存和硬盘价格及其昂贵。然而CPU的高度运算需要高速的数据。为了解决这个问题，CPU厂商在CPU中内置了少量的高速缓存以解决I\O速度和CPU运算速度之间的不匹配问题。 在CPU访问存储设">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CPU缓存一致协议">
-<meta property="og:url" content="https://floating-dreamm.github.io/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:url" content="http://cailiang.website/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="Boyce">
 <meta property="og:description" content="CPU缓存一致性协议MESI CPU高速缓存（Cache Memory） CPU为何要有高速缓存CPU在摩尔定律的指导下以每18个月翻一番的速度在发展，然而内存和硬盘的发展速度远远不及CPU。这就造成了高性能能的内存和硬盘价格及其昂贵。然而CPU的高度运算需要高速的数据。为了解决这个问题，CPU厂商在CPU中内置了少量的高速缓存以解决I\O速度和CPU运算速度之间的不匹配问题。 在CPU访问存储设">
 <meta property="og:locale" content="zh_CN">
@@ -45,7 +45,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/00-647146146.png">
 
-<link rel="canonical" href="https://floating-dreamm.github.io/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/">
+<link rel="canonical" href="http://cailiang.website/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/">
 
 
 <script id="page-configurations">
@@ -211,7 +211,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://floating-dreamm.github.io/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/">
+    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/WechatIMG1.jpeg">
@@ -533,7 +533,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://floating-dreamm.github.io/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/" title="CPU缓存一致协议">https://floating-dreamm.github.io/2022/03/08/CPU缓存一致协议/</a>
+    <a href="http://cailiang.website/2022/03/08/CPU%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E5%8D%8F%E8%AE%AE/" title="CPU缓存一致协议">http://cailiang.website/2022/03/08/CPU缓存一致协议/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -557,7 +557,10 @@
     <a href="/2022/03/08/volatile/" rel="prev" title="volatile">
       <i class="fa fa-chevron-left"></i> volatile
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/14/synchronized%E8%AF%A6%E8%A7%A3/" rel="next" title="synchronized详解">
+      synchronized详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -637,7 +640,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -648,7 +651,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -693,13 +696,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">81k</span>
+    <span title="站点总字数">179k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:13</span>
+    <span title="站点阅读时长">2:43</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
