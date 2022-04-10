@@ -198,6 +198,408 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/08/JMM%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+      <meta itemprop="name" content="靓仔灬很忙">
+      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boyce">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/08/JMM%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">JMM模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-08 23:34:47" itemprop="dateCreated datePublished" datetime="2022-03-08T23:34:47+08:00">2022-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-13 10:52:05" itemprop="dateModified" datetime="2022-03-13T10:52:05+08:00">2022-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是JMM模型？"><a href="#什么是JMM模型？" class="headerlink" title="什么是JMM模型？"></a><strong>什么是JMM模型？</strong></h1><p>Java内存模型(Java Memory Model简称JMM)是一种抽象的概念，并不真实存在，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，用于存储线程私有的数据，而Java内存模型中规定所有变量都存储在主内存，主内存是共享内存区域，所有线程都可以访问，但线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝的自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存，不能直接操作主内存中的变量，工作内存中存储着主内存中的变量副本拷贝，前面说过，工作内存是每个线程的私有数据区域，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成。</p>
+<h2 id="JMM不同于JVM内存区域模型"><a href="#JMM不同于JVM内存区域模型" class="headerlink" title="JMM不同于JVM内存区域模型"></a><strong>JMM不同于JVM内存区域模型</strong></h2><p>JMM与JVM内存区域的划分是不同的概念层次，更恰当说JMM描述的是一组规则，通过这组规则控制程序中各个变量在共享数据区域和私有数据区域的访问方式，<strong>JMM是围绕原子性，有序性、可见性展开</strong>。JMM与Java内存区域唯一相似点，都存在共享数据区域和私有数据区域，在JMM中主内存属于共享数据区域，从某个程度上讲应该包括了堆和方法区，而工作内存数据线程私有数据区域，从某个程度上讲则应该包括程序计数器、虚拟机栈以及本地方法栈。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </p>
+<p>线程，工作内存，主内存工作交互图（基于JMM规范）：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%289%29.png" alt="0"></p>
+<h3 id="主内存"><a href="#主内存" class="headerlink" title="主内存"></a><strong>主内存</strong></h3><p>主要存储的是Java实例对象，所有线程创建的实例对象都存放在主内存中，不管该**实例对象是成员变量还是方法中的本地变量(也称局部变量)**，当然也包括了共享的类信息、常量、静态变量。由于是共享数据区域，多条线程对同一个变量进行访问可能会发生线程安全问题。</p>
+<h3 id="工作内存"><a href="#工作内存" class="headerlink" title="工作内存"></a><strong>工作内存</strong></h3><p>主要存储当前方法的所有本地变量信息(工作内存中存储着主内存中的变量副本拷贝)，每个线程只能访问自己的工作内存，即线程中的本地变量对其它线程是不可见的，就算是两个线程执行的是同一段代码，它们也会各自在自己的工作内存中创建属于当前线程的本地变量，当然也包括了字节码行号指示器、相关Native方法的信息。注意由于工作内存是每个线程的私有数据，线程间无法相互访问工作内存，因此存储在工作内存的数据不存在线程安全问题。</p>
+<p>根据JVM虚拟机规范主内存与工作内存的数据存储类型以及操作方式，对于一个实例对象中的成员方法而言，如果方法中包含本地变量是基本数据类型（boolean,byte,short,char,int,long,float,double），将直接存储在工作内存的帧栈结构中，但倘若本地变量是引用类型，那么该变量的引用会存储在功能内存的帧栈中，而对象实例将存储在主内存(共享数据区域，堆)中。但对于实例对象的成员变量，不管它是基本数据类型或者包装类型(Integer、Double等)还是引用类型，都会被存储到堆区。至于static变量以及类本身相关信息将会存储在主内存中。需要注意的是，在主内存中的实例对象可以被多线程共享，倘若两个线程同时调用了同一个对象的同一个方法，那么两条线程会将要操作的数据拷贝一份到自己的工作内存中，执行完成操作后才刷新到主内存</p>
+<p>模型如下图所示</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard.png" alt="0"></p>
+<h3 id="Java内存模型与硬件内存架构的关系"><a href="#Java内存模型与硬件内存架构的关系" class="headerlink" title="Java内存模型与硬件内存架构的关系"></a><strong>Java内存模型与硬件内存架构的关系</strong></h3><p>通过对前面的硬件内存架构、Java内存模型以及Java多线程的实现原理的了解，我们应该已经意识到，多线程的执行最终都会映射到硬件处理器上进行执行，但Java内存模型和硬件内存架构并不完全一致。对于硬件内存来说只有寄存器、缓存内存、主内存的概念，并没有工作内存(线程私有数据区域)和主内存(堆内存)之分，也就是说Java内存模型对内存的划分对硬件内存并没有任何影响，因为JMM只是一种抽象的概念，是一组规则，并不实际存在，不管是工作内存的数据还是主内存的数据，对于计算机硬件来说都会存储在计算机主内存中，当然也有可能存储到CPU缓存或者寄存器中，因此总体上来说，Java内存模型和计算机硬件内存架构是一个相互交叉的关系，是一种抽象概念划分与真实物理硬件的交叉。(注意对于Java内存区域划分也是同样的道理)</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%281%29.png" alt="0"></p>
+<h2 id="JMM存在的必要性"><a href="#JMM存在的必要性" class="headerlink" title="JMM存在的必要性"></a><strong>JMM存在的必要性</strong></h2><p>在明白了Java内存区域划分、硬件内存架构、Java多线程的实现原理与Java内存模型的具体关系后，接着来谈谈Java内存模型存在的必要性。由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，用于存储线程私有的数据，线程与主内存中的变量操作必须通过工作内存间接完成，主要过程是将变量从主内存拷贝的每个线程各自的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存，如果存在两个线程同时对一个主内存中的实例对象的变量进行操作就有可能诱发线程安全问题。</p>
+<p>假设主内存中存在一个共享变量x，现在有A和B两条线程分别对该变量x&#x3D;1进行操作，A&#x2F;B线程各自的工作内存中存在共享变量副本x。假设现在A线程想要修改x的值为2，而B线程却想要读取x的值，那么B线程读取到的值是A线程更新后的值2还是更新前的值1呢？答案是，不确定，即B线程有可能读取到A线程更新前的值1，也有可能读取到A线程更新后的值2，这是因为工作内存是每个线程私有的数据区域，而线程A变量x时，首先是将变量从主内存拷贝到A线程的工作内存中，然后对变量进行操作，操作完成后再将变量x写回主内，而对于B线程的也是类似的，这样就有可能造成主内存与工作内存间数据存在一致性问题，假如A线程修改完后正在将数据写回主内存，而B线程此时正在读取主内存，即将x&#x3D;1拷贝到自己的工作内存中，这样B线程读取到的值就是x&#x3D;1，但如果A线程已将x&#x3D;2写回主内存后，B线程才开始读取的话，那么此时B线程读取到的就是x&#x3D;2，但到底是哪种情况先发生呢？</p>
+<p>如以下示例图所示案例：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%282%29.png" alt="0"></p>
+<p>以上关于主内存与工作内存之间的具体交互协议，即一个变量如何从主内存拷贝到工作内存、如何从工作内存同步到主内存之间的实现细节，Java内存模型定义了以下八种操作来完成。</p>
+<h2 id="数据同步八大原子操作"><a href="#数据同步八大原子操作" class="headerlink" title="数据同步八大原子操作"></a><strong>数据同步八大原子操作</strong></h2><p>（1）lock(锁定)：作用于主内存的变量，把一个变量标记为一条线程独占状态</p>
+<p>（2）unlock(解锁)：作用于主内存的变量，把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定</p>
+<p>（3）read(读取)：作用于主内存的变量，把一个变量值从主内存传输到线程的工作内存中，以便随后的load动作使用</p>
+<p>（4）load(载入)：作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中</p>
+<p>（5）use(使用)：作用于工作内存的变量，把工作内存中的一个变量值传递给执行引擎</p>
+<p>（6）assign(赋值)：作用于工作内存的变量，它把一个从执行引擎接收到的值赋给工作内存的变量</p>
+<p>（7）store(存储)：作用于工作内存的变量，把工作内存中的一个变量的值传送到主内存中，以便随后的write的操作</p>
+<p>（8）write(写入)：作用于工作内存的变量，它把store操作从工作内存中的一个变量的值传送到主内存的变量中</p>
+<p>如果要把一个变量从主内存中复制到工作内存中，就需要按顺序地执行read和load操作，如果把变量从工作内存中同步到主内存中，就需要按顺序地执行store和write操作。但Java内存模型只要求上述操作必须按顺序执行，而没有保证必须是连续执行。</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%283%29.png" alt="0"></p>
+<h3 id="同步规则分析"><a href="#同步规则分析" class="headerlink" title="同步规则分析"></a><strong>同步规则分析</strong></h3><p>1）不允许一个线程无原因地（没有发生过任何assign操作）把数据从工作内存同步回主内存中</p>
+<p>2）一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load或者assign）的变量。即就是对一个变量实施use和store操作之前，必须先自行assign和load操作。</p>
+<p>3）一个变量在同一时刻只允许一条线程对其进行lock操作，但lock操作可以被同一线程重复执行多次，多次执行lock后，只有执行相同次数的unlock操作，变量才会被解锁。lock和unlock必须成对出现。</p>
+<p>4）如果对一个变量执行lock操作，将会清空工作内存中此变量的值，在执行引擎使用这个变量之前需要重新执行load或assign操作初始化变量的值。</p>
+<p>5）如果一个变量事先没有被lock操作锁定，则不允许对它执行unlock操作；也不允许去unlock一个被其他线程锁定的变量。</p>
+<p>6）对一个变量执行unlock操作之前，必须先把此变量同步到主内存中（执行store和write操作）</p>
+<h2 id="并发编程的可见性，原子性与有序性问题"><a href="#并发编程的可见性，原子性与有序性问题" class="headerlink" title="并发编程的可见性，原子性与有序性问题"></a><strong>并发编程的可见性，原子性与有序性问题</strong></h2><h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a><strong>原子性</strong></h3><p>原子性指的是一个操作是不可中断的，即使是在多线程环境下，一个操作一旦开始就不会被其他线程影响。</p>
+<p>在java中，对基本数据类型的变量的读取和赋值操作是原子性操作有点要注意的是，对于32位系统的来说，long类型数据和double类型数据(对于基本数据类型，byte,short,int,float,boolean,char读写是原子操作)，它们的读写并非原子性的，也就是说如果存在两条线程同时对long类型或者double类型的数据进行读写是存在相互干扰的，因为对于32位虚拟机来说，每次原子读写是32位的，而long和double则是64位的存储单元，这样会导致一个线程在写时，操作完前32位的原子操作后，轮到B线程读取时，恰好只读取到了后32位的数据，这样可能会读取到一个既非原值又不是线程修改值的变量，它可能是“半个变量”的数值，即64位数据被两个线程分成了两次读取。但也不必太担心，因为读取到“半个变量”的情况比较少见，至少在目前的商用的虚拟机中，几乎都把64位的数据的读写操作作为原子操作来执行，因此对于这个问题不必太在意，知道这么回事即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X=<span class="number">10</span>;  <span class="comment">//原子性（简单的读取、将数字赋值给变量）</span></span><br><span class="line">Y = x;  <span class="comment">//变量之间的相互赋值，不是原子操作</span></span><br><span class="line">X++;  <span class="comment">//对变量进行计算操作</span></span><br><span class="line">X = x+<span class="number">1</span>;     </span><br></pre></td></tr></table></figure>
+
+<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a><strong>可见性</strong></h3><p>理解了指令重排现象后，可见性容易了，可见性指的是当一个线程修改了某个共享变量的值，其他线程是否能够马上得知这个修改的值。对于串行程序来说，可见性是不存在的，因为我们在任何一个操作中修改了某个变量的值，后续的操作中都能读取这个变量值，并且是修改过的新值。</p>
+<p>但在多线程环境中可就不一定了，前面我们分析过，由于线程对共享变量的操作都是线程拷贝到各自的工作内存进行操作后才写回到主内存中的，这就可能存在一个线程A修改了共享变量x的值，还未写回主内存时，另外一个线程B又对主内存中同一个共享变量x进行操作，但此时A线程工作内存中共享变量x对线程B来说并不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题，另外指令重排以及编译器优化也可能导致可见性问题，通过前面的分析，我们知道无论是编译器优化还是处理器优化的重排现象，在多线程环境下，确实会导致程序轮序执行的问题，从而也就导致可见性问题。</p>
+<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a><strong>有序性</strong></h3><p>有序性是指对于单线程的执行代码，我们总是认为代码的执行是按顺序依次执行的，这样的理解并没有毛病，毕竟对于单线程而言确实如此，但对于多线程环境，则可能出现乱序现象，因为程序编译成机器码指令后可能会出现指令重排现象，重排后的指令与原指令的顺序未必一致，要明白的是，在Java程序中，倘若在本线程内，所有操作都视为有序行为，如果是多线程环境下，一个线程中观察另外一个线程，所有操作都是无序的，前半句指的是单线程内保证串行语义执行的一致性，后半句则指指令重排现象和工作内存与主内存同步延迟现象。</p>
+<h2 id="JMM如何解决原子性-amp-可见性-amp-有序性问题"><a href="#JMM如何解决原子性-amp-可见性-amp-有序性问题" class="headerlink" title="JMM如何解决原子性&amp;可见性&amp;有序性问题"></a><strong>JMM如何解决原子性&amp;可见性&amp;有序性问题</strong></h2><p><strong>代码示例参见本节课程的相关源码Demo</strong></p>
+<h3 id="原子性问题"><a href="#原子性问题" class="headerlink" title="原子性问题"></a><strong>原子性问题</strong></h3><p>除了JVM自身提供的对基本数据类型读写操作的原子性外，可以通过 synchronized和Lock实现原子性。因为synchronized和Lock能够保证任一时刻只有一个线程访问该代码块。</p>
+<h3 id="可见性问题"><a href="#可见性问题" class="headerlink" title="可见性问题"></a><strong>可见性问题</strong></h3><p>volatile关键字保证可见性。当一个共享变量被volatile修饰时，它会保证修改的值立即被其他的线程看到，即修改的值立即更新到主存中，当其他线程需要读取时，它会去内存中读取新值。synchronized和Lock也可以保证可见性，因为它们可以保证任一时刻只有一个线程能访问共享资源，并在其释放锁之前将修改的变量刷新到内存中。</p>
+<h3 id="有序性问题"><a href="#有序性问题" class="headerlink" title="有序性问题"></a><strong>有序性问题</strong></h3><p>在Java里面，可以通过volatile关键字来保证一定的“有序性”（具体原理在下一节讲述volatile关键字）。另外可以通过synchronized和Lock来保证有序性，很显然，synchronized和Lock保证每个时刻是有一个线程执行同步代码，相当于是让线程顺序执行同步代码，自然就保证了有序性。</p>
+<p><strong>Java内存模型</strong>：每个线程都有自己的工作内存（类似于前面的高速缓存）。线程对变量的所有操作都必须在工作内存中进行，而不能直接对主存进行操作。并且每个线程不能访问其他线程的工作内存。Java内存模型具备一些先天的“有序性”，即不需要通过任何手段就能够得到保证的有序性，这个通常也称为happens-before 原则。如果两个操作的执行次序无法从happens-before原则推导出来，那么它们就不能保证它们的有序性，虚拟机可以随意地对它们进行重排序。</p>
+<p><strong>指令重排序</strong>：java语言规范规定JVM线程内部维持顺序化语义。即只要程序的最终结果与它顺序化情况的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令的重排序。指令重排序的意义是什么？JVM能根据处理器特性（CPU多级缓存系统、多核处理器等）适当的对机器指令进行重排序，使机器指令能更符合CPU的执行特性，最大限度的发挥机器性能。</p>
+<p>下图为从源码到最终执行的指令序列示意图：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%288%29.png" alt="0"></p>
+<h3 id="as-if-serial语义"><a href="#as-if-serial语义" class="headerlink" title="as-if-serial语义"></a><strong>as-if-serial语义</strong></h3><p>as-if-serial语义的意思是：不管怎么重排序（编译器和处理器为了提高并行度），（单线程）程序的执行结果不能被改变。编译器、runtime和处理器都必须遵守as-if-serial语义。</p>
+<p>为了遵守as-if-serial语义，编译器和处理器不会对存在数据依赖关系的操作做重排序，因为这种重排序会改变执行结果。但是，如果操作之间不存在数据依赖关系，这些操作就可能被编译器和处理器重排序。</p>
+<h3 id="happens-before-原则"><a href="#happens-before-原则" class="headerlink" title="happens-before 原则"></a><strong>happens-before 原则</strong></h3><p>只靠sychronized和volatile关键字来保证原子性、可见性以及有序性，那么编写并发程序可能会显得十分麻烦，幸运的是，从JDK 5开始，Java使用新的JSR-133内存模型，提供了happens-before 原则来辅助保证程序执行的原子性、可见性以及有序性的问题，它是判断数据是否存在竞争、线程是否安全的依据，happens-before 原则内容如下</p>
+<ol>
+<li>程序顺序原则，即在一个线程内必须保证语义串行性，也就是说按照代码顺序执行。</li>
+<li>锁规则 解锁(unlock)操作必然发生在后续的同一个锁的加锁(lock)之前，也就是说，如果对于一个锁解锁后，再加锁，那么加锁的动作必须在解锁动作之后(同一个锁)。</li>
+<li>volatile规则 volatile变量的写，先发生于读，这保证了volatile变量的可见性，简单的理解就是，volatile变量在每次被线程访问时，都强迫从主内存中读该变量的值，而当该变量发生变化时，又会强迫将最新的值刷新到主内存，任何时刻，不同的线程总是能够看到该变量的最新值。</li>
+<li>线程启动规则 线程的start()方法先于它的每一个动作，即如果线程A在执行线程B的start方法之前修改了共享变量的值，那么当线程B执行start方法时，线程A对共享变量的修改对线程B可见</li>
+<li>传递性 A先于B ，B先于C 那么A必然先于C</li>
+<li>线程终止规则 线程的所有操作先于线程的终结，Thread.join()方法的作用是等待当前执行的线程终止。假设在线程B终止之前，修改了共享变量，线程A从线程B的join方法成功返回后，线程B对共享变量的修改将对线程A可见。</li>
+<li>线程中断规则 对线程 interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测线程是否中断。</li>
+<li>对象终结规则对象的构造函数执行，结束先于finalize()方法</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+      <meta itemprop="name" content="靓仔灬很忙">
+      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boyce">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">操作系统底层原理</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-08 23:29:59" itemprop="dateCreated datePublished" datetime="2022-03-08T23:29:59+08:00">2022-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-13 10:49:30" itemprop="dateModified" datetime="2022-03-13T10:49:30+08:00">2022-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="冯诺依曼计算机模型详解"><a href="#冯诺依曼计算机模型详解" class="headerlink" title="冯诺依曼计算机模型详解"></a><strong>冯诺依曼计算机模型详解</strong></h1><hr>
+<p>现代计算机模型是基于-<strong>冯诺依曼计算机模型</strong></p>
+<p>计算机在运行时，先从内存中取出第一条指令，通过控制器的译码，按指令的要求，从存储器中取出数据进行指定的运算和逻辑操作等加工，然后再按地址把结果送到内存中去。接下来，再取出第二条指令，在控制器的指挥下完成规定操作。依此进行下去。直至遇到停止指令。</p>
+<p>程序与数据一样存贮，按程序编排的顺序，一步一步地取出指令，自动地完成指令规定的操作是计算机最基本的工作模型。这一原理最初是由美籍匈牙利数学家冯.诺依曼于1945年提出来的，故称为冯.诺依曼计算机模型。</p>
+<h2 id="计算机五大核心组成部分"><a href="#计算机五大核心组成部分" class="headerlink" title="计算机五大核心组成部分"></a><strong>计算机五大核心组成部分</strong></h2><ol>
+<li><p>控制器(Control)：是整个计算机的中枢神经，其功能是对程序规定的控制信息进行解释，根据其要求进行控制，调度程序、数据、地址，协调计算机各部分工作及内存与外设的访问等。</p>
+</li>
+<li><p>运算器(Datapath)：运算器的功能是对数据进行各种算术运算和逻辑运算，即对数据进行加工处理。</p>
+</li>
+<li><p>存储器(Memory)：存储器的功能是存储程序、数据和各种信号、命令等信息，并在需要时提供这些信息。</p>
+</li>
+<li><p>输入(Input system)：输入设备是计算机的重要组成部分，输入设备与输出设备合你为外部设备，简称外设，输入设备的作用是将程序、原始数据、文字、字符、控制命令或现场采集的数据等信息输入到计算机。常见的输入设备有键盘、鼠标器、光电输入机、磁带机、磁盘机、光盘机等。</p>
+</li>
+<li><p>输出(Output system)：输出设备与输入设备同样是计算机的重要组成部分，它把外算机的中间结果或最后结果、机内的各种数据符号及文字或各种控制信号等信息输出出来。微机常用的输出设备有显示终端CRT、打印机、激光印字机、绘图仪及磁带、光盘机等。</p>
+</li>
+</ol>
+<p>下图-冯诺依曼计算机模型图</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%288%29.png" alt="0"></p>
+<p>上面的模型是一个理论的抽象简化模型，它的具体应用就是现代计算机当中的硬件结构设计：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%281%29.png" alt="0"></p>
+<p>在上图硬件结构当中，配件很多，但最核心的只有两部分：CPU、内存。所以我们重点学习的也是这两部分。</p>
+<h2 id="CPU指令结构"><a href="#CPU指令结构" class="headerlink" title="CPU指令结构"></a><strong>CPU指令结构</strong></h2><p>CPU内部结构</p>
+<ul>
+<li>控制单元</li>
+<li>运算单元</li>
+<li>数据单元</li>
+</ul>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%282%29.png" alt="0"></p>
+<h3 id="控制单元"><a href="#控制单元" class="headerlink" title="控制单元"></a><strong>控制单元</strong></h3><p>控制单元是整个CPU的指挥控制中心，由指令寄存器IR（Instruction Register）、指令译码器ID（Instruction Decoder）和 操作控制器OC（Operation Controller） 等组成，对协调整个电脑有序工作极为重要。它根据用户预先编好的程序，依次从存储器中取出各条指令，放在指令寄存器IR中，通过指令译码（分析）确定应该进行什么操作，然后通过操作控制器OC，按确定的时序，向相应的部件发出微操作控制信号。操作控制器OC中主要包括：节拍脉冲发生器、控制矩阵、时钟脉冲发生器、复位电路和启停电路等控制逻辑。</p>
+<h3 id="运算单元"><a href="#运算单元" class="headerlink" title="运算单元"></a><strong>运算单元</strong></h3><p>运算单元是运算器的核心。可以执行算术运算（包括加减乘数等基本运算及其附加运算）和逻辑运算（包括移位、逻辑测试或两个值比较）。相对控制单元而言，运算器接受控制单元的命令而进行动作，即运算单元所进行的全部操作都是由控制单元发出的控制信号来指挥的，所以它是执行部件。</p>
+<h3 id="存储单元"><a href="#存储单元" class="headerlink" title="存储单元"></a><strong>存储单元</strong></h3><p>存储单元包括 CPU 片内缓存Cache和寄存器组，是 CPU 中暂时存放数据的地方，里面保存着那些等待处理的数据，或已经处理过的数据，CPU 访问寄存器所用的时间要比访问内存的时间短。 寄存器是CPU内部的元件，寄存器拥有非常高的读写速度，所以在寄存器之间的数据传送非常快。采用寄存器，可以减少 CPU 访问内存的次数，从而提高了 CPU 的工作速度。寄存器组可分为专用寄存器和通用寄存器。专用寄存器的作用是固定的，分别寄存相应的数据；而通用寄存器用途广泛并可由程序员规定其用途。</p>
+<p>下表列出了CPU关键技术的发展历程以及代表系列，每一个关键技术的诞生都是环环相扣的，处理器这些技术发展历程都围绕着如何不让“CPU闲下来”这一个核心目标展开。</p>
+<table>
+<thead>
+<tr>
+<th>关键技术</th>
+<th>时间</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>指令缓存(L1)</td>
+<td>1982</td>
+<td>预读多条指令</td>
+</tr>
+<tr>
+<td>数据缓存(L1)</td>
+<td>1985</td>
+<td>预读一定长度的数据</td>
+</tr>
+<tr>
+<td>流水线</td>
+<td>1989</td>
+<td>一条指令被拆分由多个单元协同处理, i486</td>
+</tr>
+<tr>
+<td>多流水线</td>
+<td>1993</td>
+<td>多运算单元多流水线并行处理, 奔腾1</td>
+</tr>
+<tr>
+<td>乱序+分支预测</td>
+<td>1995</td>
+<td>充分利用不同组件协同处理, 奔腾Pro</td>
+</tr>
+<tr>
+<td>超线程</td>
+<td>2002</td>
+<td>引入多组前端部件共享执行引擎, 奔腾4</td>
+</tr>
+<tr>
+<td>多核处理器</td>
+<td>2006</td>
+<td>取消超线程，降低时钟频率，改用多核心, Core酷睿</td>
+</tr>
+<tr>
+<td>多核超线程</td>
+<td>2008</td>
+<td>重新引入超线程技术，iX系列</td>
+</tr>
+</tbody></table>
+<h2 id="CPU缓存结构"><a href="#CPU缓存结构" class="headerlink" title="CPU缓存结构"></a><strong>CPU缓存结构</strong></h2><p>现代CPU为了提升执行效率，减少CPU与内存的交互(交互影响CPU效率)，一般在CPU上集成了多级缓存架构，常见的为三级缓存结构</p>
+<ul>
+<li>L1 Cache，分为数据缓存和指令缓存，逻辑核独占</li>
+<li>L2 Cache，物理核独占，逻辑核共享</li>
+<li>L3 Cache，所有物理核共享</li>
+</ul>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%283%29.png" alt="0"></p>
+<p>存储器存储空间大小：内存&gt;L3&gt;L2&gt;L1&gt;寄存器；</p>
+<p>存储器速度快慢排序：寄存器&gt;L1&gt;L2&gt;L3&gt;内存；</p>
+<p>还有一点值得注意的是：缓存是由最小的存储区块-缓存行(cacheline)组成，缓存行大小通常为64byte。</p>
+<p>缓存行是什么意思呢？</p>
+<p>比如你的L1缓存大小是512kb,而cacheline &#x3D; 64byte,那么就是L1里有512 * 1024&#x2F;64个cacheline</p>
+<h3 id="CPU读取存储器数据过程"><a href="#CPU读取存储器数据过程" class="headerlink" title="CPU读取存储器数据过程"></a><strong>CPU读取存储器数据过程</strong></h3><p>1、CPU要取寄存器X的值，只需要一步：直接读取。</p>
+<p>2、CPU要取L1 cache的某个值，需要1-3步（或者更多）：把cache行锁住，把某个数据拿来，解锁，如果没锁住就慢了。</p>
+<p>3、CPU要取L2 cache的某个值，先要到L1 cache里取，L1当中不存在，在L2里，L2开始加锁，加锁以后，把L2里的数据复制到L1，再执行读L1的过程，上面的3步，再解锁。</p>
+<p>4、CPU取L3 cache的也是一样，只不过先由L3复制到L2，从L2复制到L1，从L1到CPU。</p>
+<p>5、CPU取内存则最复杂：通知内存控制器占用总线带宽，通知内存加锁，发起内存读请求，等待回应，回应数据保存到L3（如果没有就到L2），再从L3&#x2F;2到L1，再从L1到CPU，之后解除总线锁定。</p>
+<h3 id="CPU为何要有高速缓存"><a href="#CPU为何要有高速缓存" class="headerlink" title="CPU为何要有高速缓存"></a><strong>CPU为何要有高速缓存</strong></h3><p>CPU在摩尔定律的指导下以每18个月翻一番的速度在发展，然而内存和硬盘的发展速度远远不及CPU。这就造成了高性能能的内存和硬盘价格及其昂贵。然而CPU的高度运算需要高速的数据。为了解决这个问题，CPU厂商在CPU中内置了少量的高速缓存以解决I\O速度和CPU运算速度之间的不匹配问题。</p>
+<p>在CPU访问存储设备时，无论是存取数据抑或存取指令，都趋于聚集在一片连续的区域中，这就被称为局部性原理。</p>
+<p><strong>时间局部性（Temporal Locality）</strong>：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。</p>
+<p>比如循环、递归、方法的反复调用等。</p>
+<p><strong>空间局部性（Spatial Locality）</strong>：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。</p>
+<p>比如顺序执行的代码、连续创建的两个对象、数组等。</p>
+<p>举个空间局部性原则例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TwoDimensionalArraySum</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">RUNS</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DIMENSION_1</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DIMENSION_2</span> <span class="operator">=</span> <span class="number">6</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">long</span>[][] longs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 初始化数组</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        longs = <span class="keyword">new</span> <span class="title class_">long</span>[DIMENSION_1][];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++) &#123;</span><br><span class="line">            longs[i] = <span class="keyword">new</span> <span class="title class_">long</span>[DIMENSION_2];</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; DIMENSION_2; j++) &#123;</span><br><span class="line">                longs[i][j] = <span class="number">1L</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;Array初始化完毕....&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> <span class="number">0</span>; r &lt; RUNS; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++) &#123;<span class="comment">//DIMENSION_1=1024*1024</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j=<span class="number">0</span>;j&lt;DIMENSION_2;j++)&#123;<span class="comment">//6</span></span><br><span class="line">                    sum+=longs[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;spend time1:&quot;</span>+(System.currentTimeMillis()-start));</span><br><span class="line">        System.out.println(<span class="string">&quot;sum1:&quot;</span>+sum);</span><br><span class="line"></span><br><span class="line">        sum = <span class="number">0L</span>;</span><br><span class="line">        start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> <span class="number">0</span>; r &lt; RUNS; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j=<span class="number">0</span>;j&lt;DIMENSION_2;j++) &#123;<span class="comment">//6</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; DIMENSION_1; i++)&#123;<span class="comment">//1024*1024</span></span><br><span class="line">                    sum+=longs[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;spend time2:&quot;</span>+(System.currentTimeMillis()-start));</span><br><span class="line">        System.out.println(<span class="string">&quot;sum2:&quot;</span>+sum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="带有高速缓存的CPU执行计算的流程"><a href="#带有高速缓存的CPU执行计算的流程" class="headerlink" title="带有高速缓存的CPU执行计算的流程"></a><strong>带有高速缓存的CPU执行计算的流程</strong></h3><ol>
+<li>程序以及数据被加载到主内存</li>
+<li>指令和数据被加载到CPU的高速缓存</li>
+<li>CPU执行指令，把结果写到高速缓存</li>
+<li>高速缓存中的数据写回主内存</li>
+</ol>
+<h2 id="CPU运行安全等级"><a href="#CPU运行安全等级" class="headerlink" title="CPU运行安全等级"></a><strong>CPU运行安全等级</strong></h2><p>CPU有4个运行级别，分别为：</p>
+<ul>
+<li>ring0</li>
+<li>ring1</li>
+<li>ring2</li>
+<li>ring3</li>
+</ul>
+<p>Linux与Windows只用到了2个级别:ring0、ring3，操作系统内部内部程序指令通常运行在ring0级别，操作系统以外的第三方程序运行在ring3级别，第三方程序如果要调用操作系统内部函数功能，由于运行安全级别不够,必须切换CPU运行状态，从ring3切换到ring0,然后执行系统函数，说到这里相信同学们明白为什么JVM创建线程，线程阻塞唤醒是重型操作了，因为CPU要切换运行状态。</p>
+<p>下面我大概梳理一下JVM创建线程CPU的工作过程</p>
+<p>step1：CPU从ring3切换ring0创建线程</p>
+<p>step2：创建完毕,CPU从ring0切换回ring3</p>
+<p>step3：线程执行JVM程序</p>
+<p>step4：线程执行完毕，销毁还得切回ring0</p>
+<p>讲完了CPU部分，我们来看下内存部分。</p>
+<h1 id="操作系统内存管理"><a href="#操作系统内存管理" class="headerlink" title="操作系统内存管理"></a><strong>操作系统内存管理</strong></h1><hr>
+<h2 id="执行空间保护"><a href="#执行空间保护" class="headerlink" title="执行空间保护"></a><strong>执行空间保护</strong></h2><p>操作系统有用户空间与内核空间两个概念，目的也是为了做到程序运行安全隔离与稳定，以32位操作系统4G大小的内存空间为例</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%284%29.png" alt="0"></p>
+<p>Linux为内核代码和数据结构预留了几个页框，这些页永远不会被转出到磁盘上。从 0x00000000 到 0xC0000000（PAGE_OFFSET） 的线性地址可由用户代码 和 内核代码进行引用（<strong>即用户空间</strong>）。从0xC0000000（PAGE_OFFSET）到 0xFFFFFFFFF的线性地址只能由内核代码进行访问（<strong>即内核空间</strong>）。内核代码及其数据结构都必须位于这 1 GB的地址空间中，但是对于此地址空间而言，更大的消费者是物理地址的虚拟映射。</p>
+<p>这意味着在 4 GB 的内存空间中，只有 3 GB 可以用于用户应用程序。进程与线程只能运行在用户方式（usermode）或内核方式（kernelmode）下。用户程序运行在用户方式下，而系统调用运行在内核方式下。在这两种方式下所用的堆栈不一样：用户方式下用的是一般的堆栈(用户空间的堆栈)，而内核方式下用的是固定大小的堆栈（内核空间的对战，一般为一个内存页的大小），即每个进程与线程其实有两个堆栈，分别运行与用户态与内核态。</p>
+<p>由空间划分我们再引深一下，CPU调度的基本单位线程，也划分为：</p>
+<p><strong>1、内核线程模型(KLT)</strong></p>
+<p><strong>2、用户线程模型(ULT)</strong></p>
+<h3 id="内核线程模型"><a href="#内核线程模型" class="headerlink" title="内核线程模型"></a><strong>内核线程模型</strong></h3><p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%285%29.png" alt="0"></p>
+<p>内核线程(KLT)：系统内核管理线程(KLT),内核保存线程的状态和上下文信息，线程阻塞不会引起进程阻塞。在多处理器系统上，多线程在多处理器上并行运行。线程的创建、调度和管理由内核完成，效率比ULT要慢，比进程操作快。 </p>
+<h3 id="用户线程模型"><a href="#用户线程模型" class="headerlink" title="用户线程模型"></a><strong>用户线程模型</strong></h3><p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%286%29.png" alt="0"></p>
+<p>用户线程(ULT)：用户程序实现,不依赖操作系统核心,应用提供创建、同步、调度和管理线程的函数来控制用户线程。不需要用户态&#x2F;内核态切换，速度快。内核对ULT无感知，线程阻塞则进程（包括它的所有线程）阻塞。</p>
+<p><strong>到这里，大家不妨思考一下，jvm是采用的哪一种线程模型？</strong></p>
+<h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a><strong>进程与线程</strong></h1><p><strong>什么是进程？</strong></p>
+<p>现代操作系统在运行一个程序时，会为其创建一个进程；例如，启动一个Java程序，操作系统就会创建一个Java进程。进程是OS(操作系统)资源分配的最小单位。</p>
+<p><strong>什么是线程？</strong></p>
+<p>线程是OS(操作系统)调度CPU的最小单元，也叫轻量级进程（Light Weight Process），在一个进程里可以创建多个线程，这些线程都拥有各自的计数器、堆栈和局部变量等属性，并且能够访问共享的内存变量。CPU在这些线程上高速切换，让使用者感觉到这些线程在同时执行，即并发的概念，相似的概念还有并行！</p>
+<p>线程上下文切换过程：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20%287%29.png" alt="0"></p>
+<h2 id="虚拟机指令集架构"><a href="#虚拟机指令集架构" class="headerlink" title="虚拟机指令集架构"></a><strong>虚拟机指令集架构</strong></h2><hr>
+<p>虚拟机指令集架构主要分两种：</p>
+<p>1、栈指令集架构</p>
+<p>2、寄存器指令集架构</p>
+<p>关于指令集架构的wiki详细说明：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B">https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86%E6%9E%B6%E6%A7%8B</a></p>
+<h2 id="栈指令集架构"><a href="#栈指令集架构" class="headerlink" title="栈指令集架构"></a><strong>栈指令集架构</strong></h2><ol>
+<li>设计和实现更简单,适用于资源受限的系统;</li>
+<li>避开了寄存器的分配难题:使用零地址指令方式分配;</li>
+<li>指令流中的指令大部分是零地址指令,其执行过程依赖与操作栈,指令集更小,编译器容易实现;</li>
+<li>不需要硬件支持,可移植性更好,更好实现跨平台。</li>
+</ol>
+<h2 id="寄存器指令集架构"><a href="#寄存器指令集架构" class="headerlink" title="寄存器指令集架构"></a><strong>寄存器指令集架构</strong></h2><ol>
+<li>典型的应用是x86的二进制指令集:比如传统的PC以及Android的Davlik虚拟机。</li>
+<li>指令集架构则完全依赖硬件,可移植性差。</li>
+<li>性能优秀和执行更高效。</li>
+<li>花费更少的指令去完成一项操作。</li>
+<li>在大部分情况下,基于寄存器架构的指令集往往都以一地址指令、二地址指令和三地址指令为主,而基于栈式架构的指令集却是以零地址指令为主。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/08/RocketMQ%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3409,7 +3811,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -3465,13 +3867,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">263k</span>
+    <span title="站点总字数">287k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:59</span>
+    <span title="站点阅读时长">4:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
