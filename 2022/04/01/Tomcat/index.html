@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.1.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -22,17 +22,17 @@
     var CONFIG = {"hostname":"cailiang.website","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+  <meta name="description" content="⼀、Tomcat处理请求过程Tomcat通过Endpoint组件接收socket连接，接收到⼀个socket连接后会执⾏如下步骤   第⼀次从socket中获取数据到InputBuffer中，BIO对应的是InternalInputBuffer，⽗类是 AbstractInputBuffer  然后基于InputBuffer进⾏解析数据  先解析请求⾏，把请求⽅法，请求uri，请求协议等封装到or">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat">
 <meta property="og:url" content="http://cailiang.website/2022/04/01/Tomcat/index.html">
 <meta property="og:site_name" content="Boyce">
-<meta property="og:description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+<meta property="og:description" content="⼀、Tomcat处理请求过程Tomcat通过Endpoint组件接收socket连接，接收到⼀个socket连接后会执⾏如下步骤   第⼀次从socket中获取数据到InputBuffer中，BIO对应的是InternalInputBuffer，⽗类是 AbstractInputBuffer  然后基于InputBuffer进⾏解析数据  先解析请求⾏，把请求⽅法，请求uri，请求协议等封装到or">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-01T13:51:28.000Z">
-<meta property="article:modified_time" content="2022-04-01T13:51:28.439Z">
+<meta property="article:modified_time" content="2022-04-14T15:33:12.175Z">
 <meta property="article:author" content="靓仔灬很忙">
-<meta property="article:tag" content="博客">
+<meta property="article:tag" content="tomcat">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://cailiang.website/2022/04/01/Tomcat/">
@@ -228,6 +228,13 @@
 
               <time title="创建时间：2022-04-01 21:51:28" itemprop="dateCreated datePublished" datetime="2022-04-01T21:51:28+08:00">2022-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-14 23:33:12" itemprop="dateModified" datetime="2022-04-14T23:33:12+08:00">2022-04-14</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -242,14 +249,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>2.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -261,7 +268,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="⼀、Tomcat处理请求过程"><a href="#⼀、Tomcat处理请求过程" class="headerlink" title="⼀、Tomcat处理请求过程"></a>⼀、Tomcat处理请求过程</h1><p>Tomcat通过Endpoint组件接收socket连接，接收到⼀个socket连接后会执⾏如下步骤 </p>
+<ol>
+<li>第⼀次从socket中获取数据到InputBuffer中，BIO对应的是InternalInputBuffer，⽗类是 AbstractInputBuffer </li>
+<li>然后基于InputBuffer进⾏解析数据 </li>
+<li>先解析请求⾏，把请求⽅法，请求uri，请求协议等封装到org.apache.coyote.Request对象中 </li>
+<li>org.apache.coyote.Request中的属性都是MessageBytes类型，直接可以理解为字节类型，因为从 socket中获取的数据都是字节，在解析过程中不⽤直接把字节转成字符串，并且MessageBytes虽然表 示字节，但是它并不会真正的存储字节，还是使⽤ByteChunk基于InputBuffer中的字节数组来进⾏标 记，标记字节数组中的哪个⼀个范围表示请求⽅法，哪个⼀个范围表示请求uri等等。 </li>
+<li>然后解析头，和解析请求⾏类似 </li>
+<li>解析完请求头后，就基于请求头来初始化⼀些参数，⽐如Connection是keepalive是close，⽐如是否 有Content-length，并且对于的⻓度是多少等等，还包括当前请求在处理请求体时应该使⽤哪个 InputFilter。 </li>
+<li>然后将请求交给容器 </li>
+<li>容器再将请求交给具体的servlet进⾏处理 </li>
+<li>servlet在处理请求的过程中会利⽤response进⾏响应，返回数据给客户端，⼀个普通的响应过程会把 数据先写⼊⼀个缓冲区，当调⽤flush，或者close⽅法时会把缓冲区中的内容发送给socet</li>
+<li>servlet处理完请求后，先会检查是否需要把响应数据发送给socket </li>
+<li>接着看当前请求的请求体是否处理结束，是否还有剩余数据，如果有剩余数据需要把这些数据处理掉， 以便能够获取到下⼀个请求的数据 </li>
+<li>然后回到第⼀步开始处理下⼀个请求</li>
+</ol>
+<h1 id="⼆、Tomcat响应数据过程"><a href="#⼆、Tomcat响应数据过程" class="headerlink" title="⼆、Tomcat响应数据过程"></a>⼆、Tomcat响应数据过程</h1><p>当我们在Servlet中调⽤如下⽅法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OutputStream</span> <span class="variable">outputStream</span> <span class="operator">=</span> resp.getOutputStream();</span><br><span class="line">outputStream.write(<span class="string">&quot;test&quot;</span>.getBytes());</span><br></pre></td></tr></table></figure>
+
+<p>resp对应的类型为ResponseFacade, 得到的outputStream的类型为CoyoteOutputStream。 所以响应数据是通过CoyoteOutputStream这个类处理的。 当调⽤outputStream的write⽅法写数据时，实际调⽤的就是CoyoteOutputStream类的write(byte[] b) ⽅法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(<span class="type">byte</span>[] b)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	write(b, <span class="number">0</span>, b.length);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(<span class="type">byte</span>[] b, <span class="type">int</span> off, <span class="type">int</span> len)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	ob.write(b, off, len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在CoyoteOutputStream类中有⼀个属性是ob，类型为org.apache.catalina.connector.OutputBuffer ，该属性是在构造CoyoteOutputStream对象时初始化的。先注意OutputBuffer所在的包。 我们在调⽤write⽅法时，实际就是调⽤OutputBuffer的write⽅法，⽽write⽅法实际调⽤的就是该类中的 writeBytes(byte b[], int off, int len)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeBytes</span><span class="params">(<span class="type">byte</span> b[], <span class="type">int</span> off, <span class="type">int</span> len)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (closed) &#123;</span><br><span class="line"> 		<span class="keyword">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line">  </span><br><span class="line">  bb.append(b, off, len);</span><br><span class="line">	bytesWritten += len;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// if called from within flush(), then immediately flush</span></span><br><span class="line">	<span class="comment">// remaining bytes</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (doFlush) &#123;</span><br><span class="line"> 	<span class="comment">// 那么每次write都把缓冲中的数据发送出去</span></span><br><span class="line"> 	bb.flushBuffer();</span><br><span class="line"> 	&#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在OutputBuffer中有⼀个属性叫做bb，类型是ByteChunk。在Tomcat响应流程中，可以把ByteChunk类 当作⼀个缓冲区的实现，该类中有⼀个字节数组，名字叫做buff，默认⼤⼩为8192。 </p>
+<p>当我们在write字节数据时，就是把数据添加到ByteChunk对应的缓冲区buff中。当把数据添加到缓冲区 后，如果有其他线程在执⾏outputSteam的flush()⽅法，则doFlush为true，那么则会调⽤ bb.flushBuffer()。 </p>
+<p>这⾥就要考虑⼀个问题，我们把数据都写到了缓冲区buff中，那么buff中的数据是何时传递给socket中的 呢？</p>
+<p>在ByteChunk中有⼀个属性out，类型是ByteOutputChannel，它表示缓冲区中的数据该向流向哪个渠 道，为了⽅便理解，可以先理解为渠道就是socket，表示把缓冲区中的数据发送给socket，当实际情况并 不是，暂且这么理解。</p>
+<p> ByteOutputChannel类中有⼀个⽅法realWriteBytes(byte buf[], int off, int len)，当调⽤ out.realWriteBytes(src, off, len)⽅法时，就会把src数据发送给对应驱动 </p>
+<p>在当前这个ByteChunk中，它的out对应的仍然还是org.apache.catalina.connector.OutputBuffer，在这个类中存在该⽅法：</p>
+<div class="pdfobject-container" data-target="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/Tomcat/Tomcat/%E4%B8%80%E3%80%81Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="二、Tomcat响应数据过程.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="三、Tomcat中BIO和NIO底层原理实现对比.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="四、Tomcat中的类加载器与安全机制.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="五、Tomcat的架构、生命周期、事件监听.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="六、Tomcat启动过程.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="七、Tomcat热部署与热加载.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="八、Tomcat中关于Session的实现.pdf" data-height="500px"></div>
+
+
     </div>
 
     
@@ -286,6 +339,9 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+          </div>
 
         
 
@@ -363,6 +419,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%BC%80%E3%80%81Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">⼀、Tomcat处理请求过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%BC%86%E3%80%81Tomcat%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">⼆、Tomcat响应数据过程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -389,7 +446,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -434,13 +491,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">287k</span>
+    <span title="站点总字数">290k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:21</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

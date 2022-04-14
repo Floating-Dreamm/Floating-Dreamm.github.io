@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.1.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -287,7 +287,7 @@
 <p><strong>TERMINATED</strong>，终结</p>
 <p>状态切换如下图所示：</p>
 <p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(35).png" alt="0"></p>
-<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a><strong>协程</strong></h1><p>协程    (纤程，用户级线程)，目的是为了追求最大力度的发挥硬件性能和提升软件的速度，协程基本原理是:在某个点挂起当前的任务，并且保存栈信息，去执行另一个任务；等完成或达到某个条件时，再还原原来的栈信息并继续执行(整个过程线程不需要上下文切换)。</p>
+<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a><strong>协程</strong></h1><p>协程	(纤程，用户级线程)，目的是为了追求最大力度的发挥硬件性能和提升软件的速度，协程基本原理是:在某个点挂起当前的任务，并且保存栈信息，去执行另一个任务；等完成或达到某个条件时，再还原原来的栈信息并继续执行(整个过程线程不需要上下文切换)。</p>
 <p>Java原生不支持协程，在纯java代码里需要使用协程的话需要引入第三方包,如：quasar</p>
 <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a><strong>线程池</strong></h1><p>“线程池”，顾名思义就是一个线程缓存，线程是稀缺资源，如果被无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，因此Java中提供线程池对线程进行统一分配、调优和监控</p>
 <h2 id="线程池介绍"><a href="#线程池介绍" class="headerlink" title="线程池介绍"></a><strong>线程池介绍</strong></h2><p>在web开发中，服务器需要接受并处理请求，所以会为一个请求来分配一个线程来进行处理。如果每次请求都新创建一个线程的话实现起来非常简便，但是存在一个问题：</p>
@@ -619,7 +619,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -664,13 +664,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">287k</span>
+    <span title="站点总字数">290k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:21</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

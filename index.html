@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.1.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -484,7 +484,7 @@
 <p>通过put方法写Buffer的例子：</p>
 <p>buf.put(127);</p>
 <p>put方法有很多版本，允许你以不同的方式把数据写入到Buffer中。例如， 写到一个指定的位置，或者把一个字节数组写入到Buffer。在比如：</p>
-<p>put(byte b)    相对写，向position的位置写入一个byte，并将postion+1，为下次读写作准备。</p>
+<p>put(byte b)	相对写，向position的位置写入一个byte，并将postion+1，为下次读写作准备。</p>
 <p><strong>flip()方法</strong></p>
 <p>flip方法将Buffer从写模式切换到读模式。调用flip()方法会将position设回0，并将limit设置成之前position的值。</p>
 <p>换句话说，position现在用于标记读的位置，limit表示之前写进了多少个byte、char等 —— 现在能读取多少个byte、char等。</p>
@@ -509,7 +509,7 @@
 </ol>
 <p>当向buffer写入数据时，buffer会记录下写了多少数据。一旦要读取数据，需要通过flip()方法将Buffer从写模式切换到读模式。在读模式下，可以读取之前写入到buffer的所有数据。</p>
 <p>一旦读完了所有的数据，就需要清空缓冲区，让它可以再次被写入。有两种方式能清空缓冲区：调用clear()或compact()方法。clear()方法会清空整个缓冲区。compact()方法只会清除已经读过的数据。</p>
-<h3 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a><strong>其他常用操作</strong></h3><h4 id="绝对读写"><a href="#绝对读写" class="headerlink" title="绝对读写"></a><strong>绝对读写</strong></h4><p>put(int index, byte b)    绝对写，向byteBuffer底层的bytes中下标为index的位置插入byte b，不改变position的值。</p>
+<h3 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a><strong>其他常用操作</strong></h3><h4 id="绝对读写"><a href="#绝对读写" class="headerlink" title="绝对读写"></a><strong>绝对读写</strong></h4><p>put(int index, byte b)	绝对写，向byteBuffer底层的bytes中下标为index的位置插入byte b，不改变position的值。</p>
 <p> get(int index)属于绝对读，读取byteBuffer底层的bytes中下标为index的byte，不改变position。</p>
 <p>更多Buffer实现的细节参考JavaDoc。</p>
 <p><strong>rewind()方法</strong></p>
@@ -771,6 +771,13 @@
 
               <time title="创建时间：2022-04-01 21:51:28" itemprop="dateCreated datePublished" datetime="2022-04-01T21:51:28+08:00">2022-04-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-14 23:33:12" itemprop="dateModified" datetime="2022-04-14T23:33:12+08:00">2022-04-14</time>
+              </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -778,14 +785,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>2.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -797,7 +804,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="⼀、Tomcat处理请求过程"><a href="#⼀、Tomcat处理请求过程" class="headerlink" title="⼀、Tomcat处理请求过程"></a>⼀、Tomcat处理请求过程</h1><p>Tomcat通过Endpoint组件接收socket连接，接收到⼀个socket连接后会执⾏如下步骤 </p>
+<ol>
+<li>第⼀次从socket中获取数据到InputBuffer中，BIO对应的是InternalInputBuffer，⽗类是 AbstractInputBuffer </li>
+<li>然后基于InputBuffer进⾏解析数据 </li>
+<li>先解析请求⾏，把请求⽅法，请求uri，请求协议等封装到org.apache.coyote.Request对象中 </li>
+<li>org.apache.coyote.Request中的属性都是MessageBytes类型，直接可以理解为字节类型，因为从 socket中获取的数据都是字节，在解析过程中不⽤直接把字节转成字符串，并且MessageBytes虽然表 示字节，但是它并不会真正的存储字节，还是使⽤ByteChunk基于InputBuffer中的字节数组来进⾏标 记，标记字节数组中的哪个⼀个范围表示请求⽅法，哪个⼀个范围表示请求uri等等。 </li>
+<li>然后解析头，和解析请求⾏类似 </li>
+<li>解析完请求头后，就基于请求头来初始化⼀些参数，⽐如Connection是keepalive是close，⽐如是否 有Content-length，并且对于的⻓度是多少等等，还包括当前请求在处理请求体时应该使⽤哪个 InputFilter。 </li>
+<li>然后将请求交给容器 </li>
+<li>容器再将请求交给具体的servlet进⾏处理 </li>
+<li>servlet在处理请求的过程中会利⽤response进⾏响应，返回数据给客户端，⼀个普通的响应过程会把 数据先写⼊⼀个缓冲区，当调⽤flush，或者close⽅法时会把缓冲区中的内容发送给socet</li>
+<li>servlet处理完请求后，先会检查是否需要把响应数据发送给socket </li>
+<li>接着看当前请求的请求体是否处理结束，是否还有剩余数据，如果有剩余数据需要把这些数据处理掉， 以便能够获取到下⼀个请求的数据 </li>
+<li>然后回到第⼀步开始处理下⼀个请求</li>
+</ol>
+<h1 id="⼆、Tomcat响应数据过程"><a href="#⼆、Tomcat响应数据过程" class="headerlink" title="⼆、Tomcat响应数据过程"></a>⼆、Tomcat响应数据过程</h1><p>当我们在Servlet中调⽤如下⽅法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OutputStream</span> <span class="variable">outputStream</span> <span class="operator">=</span> resp.getOutputStream();</span><br><span class="line">outputStream.write(<span class="string">&quot;test&quot;</span>.getBytes());</span><br></pre></td></tr></table></figure>
+
+<p>resp对应的类型为ResponseFacade, 得到的outputStream的类型为CoyoteOutputStream。 所以响应数据是通过CoyoteOutputStream这个类处理的。 当调⽤outputStream的write⽅法写数据时，实际调⽤的就是CoyoteOutputStream类的write(byte[] b) ⽅法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(<span class="type">byte</span>[] b)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	write(b, <span class="number">0</span>, b.length);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(<span class="type">byte</span>[] b, <span class="type">int</span> off, <span class="type">int</span> len)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	ob.write(b, off, len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在CoyoteOutputStream类中有⼀个属性是ob，类型为org.apache.catalina.connector.OutputBuffer ，该属性是在构造CoyoteOutputStream对象时初始化的。先注意OutputBuffer所在的包。 我们在调⽤write⽅法时，实际就是调⽤OutputBuffer的write⽅法，⽽write⽅法实际调⽤的就是该类中的 writeBytes(byte b[], int off, int len)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeBytes</span><span class="params">(<span class="type">byte</span> b[], <span class="type">int</span> off, <span class="type">int</span> len)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (closed) &#123;</span><br><span class="line"> 		<span class="keyword">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line">  </span><br><span class="line">  bb.append(b, off, len);</span><br><span class="line">	bytesWritten += len;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// if called from within flush(), then immediately flush</span></span><br><span class="line">	<span class="comment">// remaining bytes</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (doFlush) &#123;</span><br><span class="line"> 	<span class="comment">// 那么每次write都把缓冲中的数据发送出去</span></span><br><span class="line"> 	bb.flushBuffer();</span><br><span class="line"> 	&#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在OutputBuffer中有⼀个属性叫做bb，类型是ByteChunk。在Tomcat响应流程中，可以把ByteChunk类 当作⼀个缓冲区的实现，该类中有⼀个字节数组，名字叫做buff，默认⼤⼩为8192。 </p>
+<p>当我们在write字节数据时，就是把数据添加到ByteChunk对应的缓冲区buff中。当把数据添加到缓冲区 后，如果有其他线程在执⾏outputSteam的flush()⽅法，则doFlush为true，那么则会调⽤ bb.flushBuffer()。 </p>
+<p>这⾥就要考虑⼀个问题，我们把数据都写到了缓冲区buff中，那么buff中的数据是何时传递给socket中的 呢？</p>
+<p>在ByteChunk中有⼀个属性out，类型是ByteOutputChannel，它表示缓冲区中的数据该向流向哪个渠 道，为了⽅便理解，可以先理解为渠道就是socket，表示把缓冲区中的数据发送给socket，当实际情况并 不是，暂且这么理解。</p>
+<p> ByteOutputChannel类中有⼀个⽅法realWriteBytes(byte buf[], int off, int len)，当调⽤ out.realWriteBytes(src, off, len)⽅法时，就会把src数据发送给对应驱动 </p>
+<p>在当前这个ByteChunk中，它的out对应的仍然还是org.apache.catalina.connector.OutputBuffer，在这个类中存在该⽅法：</p>
+<div class="pdfobject-container" data-target="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/Tomcat/Tomcat/%E4%B8%80%E3%80%81Tomcat%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="二、Tomcat响应数据过程.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="三、Tomcat中BIO和NIO底层原理实现对比.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="四、Tomcat中的类加载器与安全机制.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="五、Tomcat的架构、生命周期、事件监听.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="六、Tomcat启动过程.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="七、Tomcat热部署与热加载.pdf" data-height="500px"></div>
+
+<div class="pdfobject-container" data-target="八、Tomcat中关于Session的实现.pdf" data-height="500px"></div>
+
+
       
     </div>
 
@@ -1035,7 +1088,7 @@
 <p><strong>下图有连线的可以搭配使用</strong></p>
 <p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JVM/clipboard%20(19).png" alt="0"></p>
 <p><strong>JDK 1.8默认使用 Parallel(年轻代和老年代都是)</strong></p>
-<p><strong>JDK 1.9默认使用 G1</strong>    </p>
+<p><strong>JDK 1.9默认使用 G1</strong>	</p>
 <p><strong>安全点与安全区域</strong></p>
 <p><strong>安全点</strong>就是指代码中一些特定的位置,当线程运行到这些位置时它的状态是确定的,这样JVM就可以安全的进行一些操作,比如GC等，所以GC不是想什么时候做就立即触发的，是需要等待所有线程运行到安全点后才能触发。</p>
 <p>这些特定的安全点位置主要有以下几种:</p>
@@ -2413,7 +2466,7 @@
 <p>举例来说，如果没有leader，那么在执行take时，都要执行available.awaitNanos(delay)，假设当前线程执行了该段代码，这时还没有signal，第二个线程也执行了该段代码，则第二个线程也要被阻塞。多个这时执行该段代码是没有作用的，因为只能有一个线程会从take中返回queue[0]（因为有lock），其他线程这时再返回for循环执行时取的queue[0]，已经不是之前的queue[0]了，然后又要继续阻塞。</p>
 <p>所以，为了不让多个线程频繁的做无用的定时等待，这里增加了leader，如果leader不为空，则说明队列中第一个节点已经在等待出队，这时其它的线程会一直阻塞，减少了无用的阻塞（注意，在finally中调用了signal()来唤醒一个线程，而不是signalAll()）。</p>
 <h3 id="poll-方法"><a href="#poll-方法" class="headerlink" title="poll 方法"></a><strong>poll 方法</strong></h3><p>下面看下poll方法，与take类似，但这里要提供超时功能：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; poll(<span class="type">long</span> timeout, TimeUnit unit)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nanos</span> <span class="operator">=</span> unit.toNanos(timeout);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                <span class="type">else</span></span><br><span class="line">                    <span class="variable">nanos</span> <span class="operator">=</span> available.awaitNanos(nanos);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line"><span class="comment">// 如果delay &lt;= 0，说明已经到了任务执行的时间，返回。</span></span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line"><span class="comment">// 如果nanos &lt;= 0，说明已经超时，返回null</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">  <span class="comment">// nanos &lt; delay 说明需要等待的时间小于任务要执行的延迟时间</span></span><br><span class="line">                <span class="comment">// leader != null 说明有其它线程正在对任务进行阻塞</span></span><br><span class="line">                <span class="comment">// 这时阻塞当前线程nanos纳秒</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt; delay || leader != <span class="literal">null</span>)</span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 这里的timeLeft表示delay减去实际的等待时间</span></span><br><span class="line">                        <span class="type">long</span> <span class="variable">timeLeft</span> <span class="operator">=</span> available.awaitNanos(delay);</span><br><span class="line">                       <span class="comment">// 计算剩余的等待时间 </span></span><br><span class="line">nanos -= delay - timeLeft;</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; poll(<span class="type">long</span> timeout, TimeUnit unit)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nanos</span> <span class="operator">=</span> unit.toNanos(timeout);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line"><span class="comment">// 如果delay &lt;= 0，说明已经到了任务执行的时间，返回。</span></span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line"><span class="comment">// 如果nanos &lt;= 0，说明已经超时，返回null</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">  <span class="comment">// nanos &lt; delay 说明需要等待的时间小于任务要执行的延迟时间</span></span><br><span class="line">                <span class="comment">// leader != null 说明有其它线程正在对任务进行阻塞</span></span><br><span class="line">                <span class="comment">// 这时阻塞当前线程nanos纳秒</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt; delay || leader != <span class="literal">null</span>)</span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 这里的timeLeft表示delay减去实际的等待时间</span></span><br><span class="line">                        <span class="type">long</span> <span class="variable">timeLeft</span> <span class="operator">=</span> available.awaitNanos(delay);</span><br><span class="line">                       <span class="comment">// 计算剩余的等待时间 </span></span><br><span class="line">nanos -= delay - timeLeft;</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>​      </p>
 <h3 id="finishPoll方法"><a href="#finishPoll方法" class="headerlink" title="finishPoll方法"></a><strong>finishPoll方法</strong></h3><p>当调用了take或者poll方法能够获取到任务时，会调用该方法进行返回：</p>
@@ -2563,7 +2616,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2608,13 +2661,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">287k</span>
+    <span title="站点总字数">290k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:21</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

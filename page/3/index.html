@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.1.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -1109,7 +1109,7 @@
 </blockquote>
 <p>而这个Consume指令并不会结束，他会继续挂起，等待消费其他的消息。我们可以使用CTRL+C停止该进程。</p>
 <h3 id="3-4-关闭RocketMQ服务"><a href="#3-4-关闭RocketMQ服务" class="headerlink" title="3.4 关闭RocketMQ服务"></a>3.4 关闭RocketMQ服务</h3><p>要关闭RocketMQ服务可以通过mqshutdown脚本直接关闭</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">1.关闭NameServer</span></span><br><span class="line">sh bin/mqshutdown namesrv</span><br><span class="line"><span class="meta"># </span><span class="language-bash">2.关闭Broker</span></span><br><span class="line">sh bin/mqshutdown broker</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1.关闭NameServer</span></span><br><span class="line">sh bin/mqshutdown namesrv</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2.关闭Broker</span></span><br><span class="line">sh bin/mqshutdown broker</span><br></pre></td></tr></table></figure>
 
 <h1 id="三、RocketMQ集群架构"><a href="#三、RocketMQ集群架构" class="headerlink" title="三、RocketMQ集群架构"></a>三、RocketMQ集群架构</h1><p> 刚才的演示中，我们已经体验到了RocketMQ是如何工作的。这样，我们回头看RocketMQ的集群架构，就能够有更全面的理解了。</p>
 <p><img src="https://note.youdao.com/yws/public/resource/9a677e8cbccb2808802d608abe2b8a8d/BAD094A2F5B249EA87FB5B9048B62B19?ynotemdtimestamp=1646737866265" alt="RocketMQ组件"></p>
@@ -1333,7 +1333,7 @@
 <h3 id="3、启动状态检查"><a href="#3、启动状态检查" class="headerlink" title="3、启动状态检查"></a>3、启动状态检查</h3><p>使用jps指令，能看到一个NameSrvStartup进程和两个BrokerStartup进程。</p>
 <p>nohup.out中也有启动成功的日志。</p>
 <p>对应的日志文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">查看nameServer日志</span></span><br><span class="line">tail -500f ~/logs/rocketmqlogs/namesrv.log</span><br><span class="line"><span class="meta"># </span><span class="language-bash">查看broker日志</span></span><br><span class="line">tail -500f ~/logs/rocketmqlogs/broker.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看nameServer日志</span></span><br><span class="line">tail -500f ~/logs/rocketmqlogs/namesrv.log</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看broker日志</span></span><br><span class="line">tail -500f ~/logs/rocketmqlogs/broker.log</span><br></pre></td></tr></table></figure>
 
 <h3 id="4、测试mqadmin管理工具"><a href="#4、测试mqadmin管理工具" class="headerlink" title="4、测试mqadmin管理工具"></a>4、测试mqadmin管理工具</h3><p>RocketMQ的源代码中并没有为我们提供类似于Nacos或者RabbitMQ那样的控制台，只提供了一个mqadmin指令来管理RocketMQ，命令在bin目录下。使用方式是 .&#x2F;mqadmin {command} {args}</p>
 <p>所有指令如下：</p>
@@ -3630,9 +3630,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>​        首先想感谢一下提供这些开源软件及安装教程的开发者们。从零开始搭建一个博客，光靠一个人从头开始，耗时耗力耗神，有了这些工具之后，让我可以在很短时间内实现自己的博客。我是参考知乎上一位作者，每一步都讲的很详细，如果有读者也想自己搭建一个自己的博客，可以参考一下，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/102592286">从零开始搭建个人博客</a>。</p>
-<p>​        当程序员是件很酷的事，反正我一直是这么觉得。想做一名合格的java程序员，要学的东西还真不少，java基础、网络编程、多线程相关、框架源码、中间件、数据库等等。要真正把这些掌握，还是要花挺多时间的。很多知识点学过之后，可能自己似懂非懂，不如把这些以自己的理解讲出来，更加能加深印象。接下来我准备持续更新一些java开发中用到的一些技术，不一定能每天更新，但是尽量吧。</p>
-<p>​        先介绍一些基本功能吧。</p>
+          <p>​		首先想感谢一下提供这些开源软件及安装教程的开发者们。从零开始搭建一个博客，光靠一个人从头开始，耗时耗力耗神，有了这些工具之后，让我可以在很短时间内实现自己的博客。我是参考知乎上一位作者，每一步都讲的很详细，如果有读者也想自己搭建一个自己的博客，可以参考一下，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/102592286">从零开始搭建个人博客</a>。</p>
+<p>​		当程序员是件很酷的事，反正我一直是这么觉得。想做一名合格的java程序员，要学的东西还真不少，java基础、网络编程、多线程相关、框架源码、中间件、数据库等等。要真正把这些掌握，还是要花挺多时间的。很多知识点学过之后，可能自己似懂非懂，不如把这些以自己的理解讲出来，更加能加深印象。接下来我准备持续更新一些java开发中用到的一些技术，不一定能每天更新，但是尽量吧。</p>
+<p>​		先介绍一些基本功能吧。</p>
 <ul>
 <li>在<strong>首页</strong>标签下，我会持续更新一些技术源码等；各位读者可以通过网站的搜索功能或者标签跳转到想看的专题；当然，由于个人能力有限，如果发现有错误的地方，可以点击导航栏最下面的<strong>E-mail</strong>标签与我联系，我会及时查看每一位读者的来信；</li>
 <li>在<strong>随笔</strong>标签下，我会记录一些日常开发中遇到的bug，如果解决了会及时贴上去，各位读者可以通过搜索功能查看是否有与自己遇到相同的问题；另外，在随笔标签下，我开启了评论功能，如果读者有更好的解决方案，可以在下方留言。</li>
@@ -3822,7 +3822,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -3867,13 +3867,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">287k</span>
+    <span title="站点总字数">290k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:21</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

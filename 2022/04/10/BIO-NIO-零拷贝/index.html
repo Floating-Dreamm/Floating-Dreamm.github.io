@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.1.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -517,7 +517,7 @@
 <p>通过put方法写Buffer的例子：</p>
 <p>buf.put(127);</p>
 <p>put方法有很多版本，允许你以不同的方式把数据写入到Buffer中。例如， 写到一个指定的位置，或者把一个字节数组写入到Buffer。在比如：</p>
-<p>put(byte b)    相对写，向position的位置写入一个byte，并将postion+1，为下次读写作准备。</p>
+<p>put(byte b)	相对写，向position的位置写入一个byte，并将postion+1，为下次读写作准备。</p>
 <p><strong>flip()方法</strong></p>
 <p>flip方法将Buffer从写模式切换到读模式。调用flip()方法会将position设回0，并将limit设置成之前position的值。</p>
 <p>换句话说，position现在用于标记读的位置，limit表示之前写进了多少个byte、char等 —— 现在能读取多少个byte、char等。</p>
@@ -542,7 +542,7 @@
 </ol>
 <p>当向buffer写入数据时，buffer会记录下写了多少数据。一旦要读取数据，需要通过flip()方法将Buffer从写模式切换到读模式。在读模式下，可以读取之前写入到buffer的所有数据。</p>
 <p>一旦读完了所有的数据，就需要清空缓冲区，让它可以再次被写入。有两种方式能清空缓冲区：调用clear()或compact()方法。clear()方法会清空整个缓冲区。compact()方法只会清除已经读过的数据。</p>
-<h3 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a><strong>其他常用操作</strong></h3><h4 id="绝对读写"><a href="#绝对读写" class="headerlink" title="绝对读写"></a><strong>绝对读写</strong></h4><p>put(int index, byte b)    绝对写，向byteBuffer底层的bytes中下标为index的位置插入byte b，不改变position的值。</p>
+<h3 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a><strong>其他常用操作</strong></h3><h4 id="绝对读写"><a href="#绝对读写" class="headerlink" title="绝对读写"></a><strong>绝对读写</strong></h4><p>put(int index, byte b)	绝对写，向byteBuffer底层的bytes中下标为index的位置插入byte b，不改变position的值。</p>
 <p> get(int index)属于绝对读，读取byteBuffer底层的bytes中下标为index的byte，不改变position。</p>
 <p>更多Buffer实现的细节参考JavaDoc。</p>
 <p><strong>rewind()方法</strong></p>
@@ -888,7 +888,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -933,13 +933,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">287k</span>
+    <span title="站点总字数">290k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:21</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
