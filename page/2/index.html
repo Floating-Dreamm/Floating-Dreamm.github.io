@@ -198,6 +198,257 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/20/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+      <meta itemprop="name" content="靓仔灬很忙">
+      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boyce">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/20/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="post-title-link" itemprop="url">定时任务</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-20 17:26:46 / 修改时间：17:45:02" itemprop="dateCreated datePublished" datetime="2022-03-20T17:26:46+08:00">2022-03-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ScheduledThreadPoolExecutor"><a href="#ScheduledThreadPoolExecutor" class="headerlink" title="ScheduledThreadPoolExecutor"></a><strong>ScheduledThreadPoolExecutor</strong></h1><p>定时线程池类的类结构图</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(40).png" alt="0"></p>
+<p>它用来处理延时任务或定时任务。</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(41).png" alt="0"></p>
+<p>它接收SchduledFutureTask类型的任务，是线程池调度任务的最小单位，有三种提交任务的方式：</p>
+<ol>
+<li>schedule</li>
+<li>scheduledAtFixedRate</li>
+<li>scheduledWithFixedDelay</li>
+</ol>
+<p>它采用DelayQueue存储等待的任务</p>
+<ol>
+<li>DelayQueue内部封装了一个PriorityQueue，它会根据time的先后时间排序，若time相同则根据sequenceNumber排序；</li>
+<li>DelayQueue也是一个无界队列；</li>
+</ol>
+<h2 id="SchduledFutureTask"><a href="#SchduledFutureTask" class="headerlink" title="SchduledFutureTask"></a><strong>SchduledFutureTask</strong></h2><p>SchduledFutureTask接收的参数(成员变量)：</p>
+<ol>
+<li><strong>private long</strong> <strong>time</strong>：任务开始的时间</li>
+<li><strong>private final long</strong> <strong>sequenceNumber</strong>;：任务的序号</li>
+<li><strong>private final long</strong> <strong>period</strong>：任务执行的时间间隔</li>
+</ol>
+<p>工作线程的执行过程：</p>
+<ul>
+<li>工作线程会从DelayQueue取已经到期的任务去执行；</li>
+<li>执行结束后重新设置任务的到期时间，再次放回DelayQueue</li>
+</ul>
+<p>ScheduledThreadPoolExecutor会把待执行的任务放到工作队列DelayQueue中，DelayQueue封装了一个PriorityQueue，PriorityQueue会对队列中的ScheduledFutureTask进行排序，具体的排序算法实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Delayed other)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (other == <span class="built_in">this</span>) <span class="comment">// compare zero if same object</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (other <span class="keyword">instanceof</span> ScheduledFutureTask) &#123;</span><br><span class="line">        ScheduledFutureTask&lt;?&gt; x = (ScheduledFutureTask&lt;?&gt;)other;</span><br><span class="line">        <span class="type">long</span> <span class="variable">diff</span> <span class="operator">=</span> time - x.time;</span><br><span class="line">        <span class="keyword">if</span> (diff &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (diff &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (sequenceNumber &lt; x.sequenceNumber)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">diff</span> <span class="operator">=</span> getDelay(NANOSECONDS) - other.getDelay(NANOSECONDS);</span><br><span class="line">    <span class="keyword">return</span> (diff &lt; <span class="number">0</span>) ? -<span class="number">1</span> : (diff &gt; <span class="number">0</span>) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​         </p>
+<ol>
+<li>首先按照time排序，time小的排在前面，time大的排在后面；</li>
+<li>如果time相同，按照sequenceNumber排序，sequenceNumber小的排在前面，sequenceNumber大的排在后面，换句话说，如果两个task的执行时间相同，优先执行先提交的task。</li>
+</ol>
+<p>SchduledFutureTask之run方法实现</p>
+<p>run方法是调度task的核心，task的执行实际上是run方法的执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">periodic</span> <span class="operator">=</span> isPeriodic();</span><br><span class="line"><span class="comment">//如果当前线程池已经不支持执行任务，则取消</span></span><br><span class="line">    <span class="keyword">if</span> (!canRunInCurrentRunState(periodic))</span><br><span class="line">        cancel(<span class="literal">false</span>);</span><br><span class="line"><span class="comment">//如果不需要周期性执行，则直接执行run方法然后结束</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!periodic)</span><br><span class="line">        ScheduledFutureTask.<span class="built_in">super</span>.run();</span><br><span class="line"><span class="comment">//如果需要周期执行，则在执行完任务以后，设置下一次执行时间</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ScheduledFutureTask.<span class="built_in">super</span>.runAndReset()) &#123;</span><br><span class="line">        <span class="comment">// 计算下次执行该任务的时间</span></span><br><span class="line"> setNextRunTime();</span><br><span class="line"> <span class="comment">//重复执行任务</span></span><br><span class="line">        reExecutePeriodic(outerTask);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​      </p>
+<ol>
+<li>如果当前线程池运行状态不可以执行任务，取消该任务，然后直接返回，否则执行步骤2；</li>
+<li>如果不是周期性任务，调用FutureTask中的run方法执行，会设置执行结果，然后直接返回，否则执行步骤3；</li>
+<li>如果是周期性任务，调用FutureTask中的runAndReset方法执行，不会设置执行结果，然后直接返回，否则执行步骤4和步骤5；</li>
+<li>计算下次执行该任务的具体时间；</li>
+<li>重复执行任务。</li>
+</ol>
+<p>reExecutePeriodic方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">reExecutePeriodic</span><span class="params">(RunnableScheduledFuture&lt;?&gt; task)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (canRunInCurrentRunState(<span class="literal">true</span>)) &#123;</span><br><span class="line">        <span class="built_in">super</span>.getQueue().add(task);</span><br><span class="line">        <span class="keyword">if</span> (!canRunInCurrentRunState(<span class="literal">true</span>) &amp;&amp; remove(task))</span><br><span class="line">            task.cancel(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            ensurePrestart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>该方法和delayedExecute方法类似，不同的是：</p>
+<ol>
+<li>由于调用reExecutePeriodic方法时已经执行过一次周期性任务了，所以不会reject当前任务；</li>
+<li>传入的任务一定是周期性任务。</li>
+</ol>
+<h2 id="线程池任务的提交"><a href="#线程池任务的提交" class="headerlink" title="线程池任务的提交"></a><strong>线程池任务的提交</strong></h2><p>首先是schedule方法，该方法是指任务在指定延迟时间到达后触发，只会执行一次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; schedule(Runnable command,</span><br><span class="line">                                   <span class="type">long</span> delay,</span><br><span class="line">                                   TimeUnit unit) &#123;</span><br><span class="line"><span class="comment">//参数校验</span></span><br><span class="line"><span class="keyword">if</span> (command == <span class="literal">null</span> || unit == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line"><span class="comment">//这里是一个嵌套结构，首先把用户提交的任务包装成ScheduledFutureTask</span></span><br><span class="line"><span class="comment">//然后在调用decorateTask进行包装，该方法是留给用户去扩展的，默认是个空方法</span></span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; t = decorateTask(command,</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ScheduledFutureTask</span>&lt;Void&gt;(command, <span class="literal">null</span>,</span><br><span class="line">                                      triggerTime(delay, unit)));</span><br><span class="line">   <span class="comment">//包装好任务以后，就进行提交了</span></span><br><span class="line">delayedExecute(t);</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​          </p>
+<p>任务提交方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">delayedExecute</span><span class="params">(RunnableScheduledFuture&lt;?&gt; task)</span> &#123;</span><br><span class="line">    <span class="comment">//如果线程池已经关闭，则使用拒绝策略把提交任务拒绝掉</span></span><br><span class="line"><span class="keyword">if</span> (isShutdown())</span><br><span class="line">        reject(task);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="comment">//与ThreadPoolExecutor不同，这里直接把任务加入延迟队列</span></span><br><span class="line">        <span class="built_in">super</span>.getQueue().add(task);<span class="comment">//使用用的DelayedWorkQueue</span></span><br><span class="line"><span class="comment">//如果当前状态无法执行任务，则取消</span></span><br><span class="line">        <span class="keyword">if</span> (isShutdown() &amp;&amp;</span><br><span class="line">            !canRunInCurrentRunState(task.isPeriodic()) &amp;&amp;</span><br><span class="line">            remove(task))</span><br><span class="line">            task.cancel(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line"><span class="comment">//这里是增加一个worker线程，避免提交的任务没有worker去执行</span></span><br><span class="line"><span class="comment">//原因就是该类没有像ThreadPoolExecutor一样，woker满了才放入队列</span></span><br><span class="line">          ensurePrestart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​         </p>
+<h2 id="DelayedWorkQueue"><a href="#DelayedWorkQueue" class="headerlink" title="DelayedWorkQueue"></a><strong>DelayedWorkQueue</strong></h2><p>ScheduledThreadPoolExecutor之所以要自己实现阻塞的工作队列，是因为ScheduledThreadPoolExecutor要求的工作队列有些特殊。</p>
+<p>DelayedWorkQueue是一个基于堆的数据结构，类似于DelayQueue和PriorityQueue。在执行定时任务的时候，每个任务的执行时间都不同，所以DelayedWorkQueue的工作就是按照执行时间的升序来排列，执行时间距离当前时间越近的任务在队列的前面（<strong>注意：这里的顺序并不是绝对的，堆中的排序只保证了子节点的下次执行时间要比父节点的下次执行时间要大，而叶子节点之间并不一定是顺序的，下文中会说明</strong>）。</p>
+<p>堆结构如下图：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(42).png" alt="0"></p>
+<p>可见，DelayedWorkQueue是一个基于最小堆结构的队列。堆结构可以使用数组表示，可以转换成如下的数组：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(43).png" alt="0"></p>
+<p>在这种结构中，可以发现有如下特性：</p>
+<p>假设，索引值从0开始，子节点的索引值为k，父节点的索引值为p，则：</p>
+<ol>
+<li>一个节点的左子节点的索引为：k &#x3D; p * 2 + 1；</li>
+<li>一个节点的右子节点的索引为：k &#x3D; (p + 1) * 2；</li>
+<li>一个节点的父节点的索引为：p &#x3D; (k - 1) &#x2F; 2。</li>
+</ol>
+<p><strong>为什么要使用DelayedWorkQueue呢？</strong></p>
+<p>定时任务执行时需要取出最近要执行的任务，所以任务在队列中每次出队时一定要是当前队列中执行时间最靠前的，所以自然要使用优先级队列。</p>
+<p>DelayedWorkQueue是一个优先级队列，它可以保证每次出队的任务都是当前队列中执行时间最靠前的，由于它是基于堆结构的队列，堆结构在执行插入和删除操作时的最坏时间复杂度是 *O(logN)*。</p>
+<h3 id="DelayedWorkQueue属性"><a href="#DelayedWorkQueue属性" class="headerlink" title="DelayedWorkQueue属性"></a><strong>DelayedWorkQueue属性</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 队列初始容量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">INITIAL_CAPACITY</span> <span class="operator">=</span> <span class="number">16</span>;</span><br><span class="line"><span class="comment">// 根据初始容量创建RunnableScheduledFuture类型的数组</span></span><br><span class="line"><span class="keyword">private</span> RunnableScheduledFuture&lt;?&gt;[] queue =</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">RunnableScheduledFuture</span>&lt;?&gt;[INITIAL_CAPACITY];</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="comment">// leader线程</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">leader</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 当较新的任务在队列的头部可用时，或者新线程可能需要成为leader，则通过该条件发出信号</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">available</span> <span class="operator">=</span> lock.newCondition();</span><br></pre></td></tr></table></figure>
+
+<p>​          </p>
+<p>注意这里的leader，它是Leader-Follower模式的变体，用于减少不必要的定时等待。什么意思呢？对于多线程的网络模型来说：</p>
+<p>所有线程会有三种身份中的一种：leader和follower，以及一个干活中的状态：proccesser。它的基本原则就是，永远最多只有一个leader。而所有follower都在等待成为leader。线程池启动时会自动产生一个Leader负责等待网络IO事件，当有一个事件产生时，Leader线程首先通知一个Follower线程将其提拔为新的Leader，然后自己就去干活了，去处理这个网络事件，处理完毕后加入Follower线程等待队列，等待下次成为Leader。这种方法可以增强CPU高速缓存相似性，及消除动态内存分配和线程间的数据交换。</p>
+<h3 id="offer方法"><a href="#offer方法" class="headerlink" title="offer方法"></a><strong>offer方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">offer</span><span class="params">(Runnable x)</span> &#123;</span><br><span class="line"><span class="comment">//参数校验</span></span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; e = (RunnableScheduledFuture&lt;?&gt;)x;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">//查看当前元素数量，如果大于队列长度则进行扩容</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> size;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= queue.length)</span><br><span class="line">            grow();</span><br><span class="line"><span class="comment">//元素数量加1</span></span><br><span class="line">        size = i + <span class="number">1</span>;</span><br><span class="line"><span class="comment">//如果当前队列还没有元素，则直接加入头部</span></span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">            queue[<span class="number">0</span>] = e;</span><br><span class="line"><span class="comment">//记录索引</span></span><br><span class="line">            setIndex(e, <span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"> <span class="comment">//把任务加入堆中，并调整堆结构，这里就会根据任务的触发时间排列</span></span><br><span class="line">             <span class="comment">//把需要最早执行的任务放在前面</span></span><br><span class="line">            siftUp(i, e);</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//如果新加入的元素就是队列头，这里有两种情况</span></span><br><span class="line">        <span class="comment">//1.这是用户提交的第一个任务</span></span><br><span class="line">        <span class="comment">//2.新任务进行堆调整以后，排在队列头</span></span><br><span class="line">        <span class="keyword">if</span> (queue[<span class="number">0</span>] == e) &#123;</span><br><span class="line"><span class="comment">// leader设置为null为了使在take方法中的线程在通过available.signal();后会执行available.awaitNanos(delay);</span></span><br><span class="line">            leader = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">//加入元素以后，唤醒worker线程</span></span><br><span class="line">            available.signal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​          </p>
+<h3 id="任务排序sift方法"><a href="#任务排序sift方法" class="headerlink" title="任务排序sift方法"></a><strong>任务排序sift方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftUp</span><span class="params">(<span class="type">int</span> k, RunnableScheduledFuture&lt;?&gt; key)</span> &#123;</span><br><span class="line"><span class="comment">// 找到父节点的索引</span></span><br><span class="line"><span class="keyword">while</span> (k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取父节点</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">parent</span> <span class="operator">=</span> (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; e = queue[parent];</span><br><span class="line">  <span class="comment">// 如果key节点的执行时间大于父节点的执行时间，不需要再排序了</span></span><br><span class="line">        <span class="keyword">if</span> (key.compareTo(e) &gt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"> <span class="comment">// 如果key.compareTo(e) &lt; 0，说明key节点的执行时间小于父节点的执行时间，需要把父节点移到后面</span></span><br><span class="line">        queue[k] = e;</span><br><span class="line">        setIndex(e, k);</span><br><span class="line"><span class="comment">// 设置索引为k</span></span><br><span class="line">        k = parent;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// key设置为排序后的位置中</span></span><br><span class="line">    queue[k] = key;</span><br><span class="line">    setIndex(key, k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>代码很好理解，就是循环的根据key节点与它的父节点来判断，如果key节点的执行时间小于父节点，则将两个节点交换，使执行时间靠前的节点排列在队列的前面。</p>
+<p>假设新入队的节点的延迟时间（调用getDelay()方法获得）是5，执行过程如下：</p>
+<ol>
+<li><strong>先将新的节点添加到数组的尾部，这时新节点的索引k为7：</strong></li>
+</ol>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(44).png" alt="0"></p>
+<ol>
+<li><strong>计算新父节点的索引：parent &#x3D; (k - 1) &gt;&gt;&gt; 1，parent &#x3D; 3，那么queue[3]的时间间隔值为8，因为 5 &lt; 8 ，将执行queue[7] &#x3D; queue[3]：</strong></li>
+</ol>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(45).png" alt="0"></p>
+<ol>
+<li><strong>这时将k设置为3，继续循环，再次计算parent为1，queue[1]的时间间隔为3，因为 5 &gt; 3 ，这时退出循环，最终k为3：</strong></li>
+</ol>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(46).png" alt="0"></p>
+<p>可见，每次新增节点时，只是根据父节点来判断，而不会影响兄弟节点。</p>
+<h3 id="take方法"><a href="#take方法" class="headerlink" title="take方法"></a><strong>take方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; take() <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>)</span><br><span class="line">                available.await();</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="comment">// 计算当前时间到执行时间的时间间隔</span></span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">                <span class="comment">// leader不为空，阻塞线程</span></span><br><span class="line"><span class="keyword">if</span> (leader != <span class="literal">null</span>)</span><br><span class="line">                    available.await();</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// leader为空，则把leader设置为当前线程，</span></span><br><span class="line"><span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                       <span class="comment">// 阻塞到执行时间 </span></span><br><span class="line">available.awaitNanos(delay);</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line"><span class="comment">// 设置leader = null，让其他线程执行available.awaitNanos(delay);</span></span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line"><span class="comment">// 如果leader不为空，则说明leader的线程正在执行available.awaitNanos(delay);</span></span><br><span class="line">        <span class="comment">// 如果queue[0] == null，说明队列为空</span></span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​      </p>
+<p>take方法是什么时候调用的呢？在ThreadPoolExecutor中，介绍了getTask方法，工作线程会循环地从workQueue中取任务。但定时任务却不同，因为如果一旦getTask方法取出了任务就开始执行了，而这时可能还没有到执行的时间，所以在take方法中，要保证只有在到指定的执行时间的时候任务才可以被取走。</p>
+<p>再来说一下leader的作用，这里的leader是为了减少不必要的定时等待，当一个线程成为leader时，它只等待下一个节点的时间间隔，但其它线程无限期等待。 leader线程必须在从take（）或poll（）返回之前signal其它线程，除非其他线程成为了leader。</p>
+<p>举例来说，如果没有leader，那么在执行take时，都要执行available.awaitNanos(delay)，假设当前线程执行了该段代码，这时还没有signal，第二个线程也执行了该段代码，则第二个线程也要被阻塞。多个这时执行该段代码是没有作用的，因为只能有一个线程会从take中返回queue[0]（因为有lock），其他线程这时再返回for循环执行时取的queue[0]，已经不是之前的queue[0]了，然后又要继续阻塞。</p>
+<p>所以，为了不让多个线程频繁的做无用的定时等待，这里增加了leader，如果leader不为空，则说明队列中第一个节点已经在等待出队，这时其它的线程会一直阻塞，减少了无用的阻塞（注意，在finally中调用了signal()来唤醒一个线程，而不是signalAll()）。</p>
+<h3 id="poll-方法"><a href="#poll-方法" class="headerlink" title="poll 方法"></a><strong>poll 方法</strong></h3><p>下面看下poll方法，与take类似，但这里要提供超时功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; poll(<span class="type">long</span> timeout, TimeUnit unit)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nanos</span> <span class="operator">=</span> unit.toNanos(timeout);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line"><span class="comment">// 如果delay &lt;= 0，说明已经到了任务执行的时间，返回。</span></span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line"><span class="comment">// 如果nanos &lt;= 0，说明已经超时，返回null</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">  <span class="comment">// nanos &lt; delay 说明需要等待的时间小于任务要执行的延迟时间</span></span><br><span class="line">                <span class="comment">// leader != null 说明有其它线程正在对任务进行阻塞</span></span><br><span class="line">                <span class="comment">// 这时阻塞当前线程nanos纳秒</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt; delay || leader != <span class="literal">null</span>)</span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 这里的timeLeft表示delay减去实际的等待时间</span></span><br><span class="line">                        <span class="type">long</span> <span class="variable">timeLeft</span> <span class="operator">=</span> available.awaitNanos(delay);</span><br><span class="line">                       <span class="comment">// 计算剩余的等待时间 </span></span><br><span class="line">nanos -= delay - timeLeft;</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​      </p>
+<h3 id="finishPoll方法"><a href="#finishPoll方法" class="headerlink" title="finishPoll方法"></a><strong>finishPoll方法</strong></h3><p>当调用了take或者poll方法能够获取到任务时，会调用该方法进行返回：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> RunnableScheduledFuture&lt;?&gt; finishPoll(RunnableScheduledFuture&lt;?&gt; f) &#123;</span><br><span class="line"><span class="comment">// 数组长度-1</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> --size;</span><br><span class="line"><span class="comment">// 取出最后一个节点</span></span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; x = queue[s];</span><br><span class="line">    queue[s] = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 长度不为0，则从第一个元素开始排序，目的是要把最后一个节点放到合适的位置上</span></span><br><span class="line">    <span class="keyword">if</span> (s != <span class="number">0</span>)</span><br><span class="line">        siftDown(<span class="number">0</span>, x);</span><br><span class="line">    setIndex(f, -<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<h3 id="siftDown方法"><a href="#siftDown方法" class="headerlink" title="siftDown方法"></a><strong>siftDown方法</strong></h3><p>siftDown方法使堆从k开始向下调整：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftDown</span><span class="params">(<span class="type">int</span> k, RunnableScheduledFuture&lt;?&gt; key)</span> &#123;</span><br><span class="line"><span class="comment">// 根据二叉树的特性，数组长度除以2，表示取有子节点的索引</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">half</span> <span class="operator">=</span> size &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 判断索引为k的节点是否有子节点</span></span><br><span class="line">    <span class="keyword">while</span> (k &lt; half) &#123;</span><br><span class="line"><span class="comment">// 左子节点的索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">child</span> <span class="operator">=</span> (k &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; c = queue[child];</span><br><span class="line"><span class="comment">// 右子节点的索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> child + <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 如果有右子节点并且左子节点的时间间隔大于右子节点，取时间间隔最小的节点</span></span><br><span class="line">        <span class="keyword">if</span> (right &lt; size &amp;&amp; c.compareTo(queue[right]) &gt; <span class="number">0</span>)</span><br><span class="line">            c = queue[child = right];</span><br><span class="line"><span class="comment">// 如果key的时间间隔小于等于c的时间间隔，跳出循环</span></span><br><span class="line">        <span class="keyword">if</span> (key.compareTo(c) &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"><span class="comment">// 设置要移除索引的节点为其子节点</span></span><br><span class="line">        queue[k] = c;</span><br><span class="line">        setIndex(c, k);</span><br><span class="line">        k = child;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 将key放入索引为k的位置</span></span><br><span class="line">    queue[k] = key;</span><br><span class="line">    setIndex(key, k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>siftDown方法执行时包含两种情况，一种是没有子节点，一种是有子节点（根据half判断）。例如：</p>
+<p><strong>没有子节点的情况：</strong></p>
+<p>假设初始的堆如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(47).png" alt="0"></p>
+<p>假设 k &#x3D; 3 ，那么 k &#x3D; half ，没有子节点，在执行siftDown方法时直接把索引为3的节点设置为数组的最后一个节点：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(48).png" alt="0"></p>
+<p><strong>有子节点的情况：</strong></p>
+<p>假设 k &#x3D; 0 ，那么执行以下步骤：</p>
+<p>1、获取左子节点，child &#x3D; 1 ，获取右子节点， right &#x3D; 2 ：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(49).png" alt="0"></p>
+<p>2、由于 right &lt; size ，这时比较左子节点和右子节点时间间隔的大小，这里 3 &lt; 7 ，所以 c &#x3D; queue[child] ；</p>
+<p>3、比较key的时间间隔是否小于c的时间间隔，这里不满足，继续执行，把索引为k的节点设置为c，然后将k设置为child；</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(50).png" alt="0"></p>
+<p>4、因为 half &#x3D; 3 ，k &#x3D; 1 ，继续执行循环，这时的索引变为：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(51).png" alt="0"></p>
+<p>5、这时再经过如上判断后，将k的值为3，最终的结果如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(52).png" alt="0"></p>
+<p>6、最后，如果在finishPoll方法中调用的话，会把索引为0的节点的索引设置为-1，表示已经删除了该节点，并且size也减了1，最后的结果如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(53).png" alt="0"></p>
+<p>可见，siftdown方法在执行完并不是有序的，但可以发现，子节点的下次执行时间一定比父节点的下次执行时间要大，由于每次都会取左子节点和右子节点中下次执行时间最小的节点，所以还是可以保证在take和poll时出队是有序的。</p>
+<h3 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a><strong>remove方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">remove</span><span class="params">(Object x)</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> indexOf(x);</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        setIndex(queue[i], -<span class="number">1</span>);</span><br><span class="line">        <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> --size;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; replacement = queue[s];</span><br><span class="line">        queue[s] = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (s != i) &#123;</span><br><span class="line">  <span class="comment">// 从i开始向下调整</span></span><br><span class="line">            siftDown(i, replacement);</span><br><span class="line"> <span class="comment">// 如果queue[i] == replacement，说明i是叶子节点</span></span><br><span class="line">            <span class="comment">// 如果是这种情况，不能保证子节点的下次执行时间比父节点的大</span></span><br><span class="line">            <span class="comment">// 这时需要进行一次向上调整</span></span><br><span class="line">            <span class="keyword">if</span> (queue[i] == replacement)</span><br><span class="line">                siftUp(i, replacement);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​       </p>
+<p>假设初始的堆结构如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(54).png" alt="0"></p>
+<p>这时要删除8的节点，那么这时 k &#x3D; 1，key为最后一个节点：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(55).png" alt="0"></p>
+<p>这时通过上文对siftDown方法的分析，siftDown方法执行后的结果如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(56).png" alt="0"></p>
+<p>这时会发现，最后一个节点的值比父节点还要小，所以这里要执行一次siftUp方法来保证子节点的下次执行时间要比父节点的大，所以最终结果如下：</p>
+<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(57).png" alt="0"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>主要总结为以下几个方面：</p>
+<ul>
+<li>与Timer执行定时任务的比较，相比Timer，ScheduedThreadPoolExecutor有什么优点；</li>
+<li>ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，所以它也是一个线程池，也有coorPoolSize和workQueue，ScheduledThreadPoolExecutor特殊的地方在于，自己实现了优先工作队列DelayedWorkQueue；</li>
+<li>ScheduedThreadPoolExecutor实现了ScheduledExecutorService，所以就有了任务调度的方法，如schedule，scheduleAtFixedRate和scheduleWithFixedDelay，同时注意他们之间的区别；</li>
+<li>内部类ScheduledFutureTask继承自FutureTask，实现了任务的异步执行并且可以获取返回结果。同时也实现了Delayed接口，可以通过getDelay方法获取将要执行的时间间隔；</li>
+<li>周期任务的执行其实是调用了FutureTask类中的runAndReset方法，每次执行完不设置结果和状态。</li>
+<li>详细分析了DelayedWorkQueue的数据结构，它是一个基于最小堆结构的优先队列，并且每次出队时能够保证取出的任务是当前队列中下次执行时间最小的任务。同时注意一下优先队列中堆的顺序，堆中的顺序并不是绝对的，但要保证子节点的值要比父节点的值要大，这样就不会影响出队的顺序。</li>
+</ul>
+<p>总体来说，ScheduedThreadPoolExecutor的重点是要理解下次执行时间的计算，以及优先队列的出队、入队和删除的过程，这两个是理解ScheduedThreadPoolExecutor的关键。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/14/Executor%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2180,240 +2431,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/08/volatile/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
-      <meta itemprop="name" content="靓仔灬很忙">
-      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Boyce">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/08/volatile/" class="post-title-link" itemprop="url">volatile</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-08 23:37:31" itemprop="dateCreated datePublished" datetime="2022-03-08T23:37:31+08:00">2022-03-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-13 10:53:02" itemprop="dateModified" datetime="2022-03-13T10:53:02+08:00">2022-03-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="volatile内存语义"><a href="#volatile内存语义" class="headerlink" title="volatile内存语义"></a><strong>volatile内存语义</strong></h1><p>volatile是Java虚拟机提供的轻量级的同步机制。volatile关键字有如下两个作用</p>
-<ul>
-<li>保证被volatile修饰的共享变量对所有线程总数可见的，也就是当一个线程修改了一个被volatile修饰共享变量的值，新值总是可以被其他线程立即得知。</li>
-<li>禁止指令重排序优化。</li>
-</ul>
-<h2 id="volatile的可见性"><a href="#volatile的可见性" class="headerlink" title="volatile的可见性"></a><strong>volatile的可见性</strong></h2><p>关于volatile的可见性作用，我们必须意识到被volatile修饰的变量对所有线程总数立即可见的，对volatile变量的所有写操作总是能立刻反应到其他线程中</p>
-<p>示例</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileVisibilitySample</span> &#123;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">initFlag</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.initFlag = <span class="literal">true</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">threadname</span> <span class="operator">=</span> Thread.currentThread().getName();</span><br><span class="line">        System.out.println(<span class="string">&quot;线程：&quot;</span>+threadname+<span class="string">&quot;:修改共享变量initFlag&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">load</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">threadname</span> <span class="operator">=</span> Thread.currentThread().getName();</span><br><span class="line">        <span class="keyword">while</span> (!initFlag)&#123;</span><br><span class="line">            <span class="comment">//线程在此处空跑，等待initFlag状态改变</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;线程：&quot;</span>+threadname+<span class="string">&quot;当前线程嗅探到initFlag的状态的改变&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">VolatileVisibilitySample</span> <span class="variable">sample</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VolatileVisibilitySample</span>();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            sample.save();</span><br><span class="line">        &#125;,<span class="string">&quot;threadA&quot;</span>);</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            sample.load();</span><br><span class="line">        &#125;,<span class="string">&quot;threadB&quot;</span>);</span><br><span class="line">        threadB.start();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        threadA.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>线程A改变initFlag属性之后，线程B马上感知到</p>
-<h2 id="volatile无法保证原子性"><a href="#volatile无法保证原子性" class="headerlink" title="volatile无法保证原子性"></a><strong>volatile无法保证原子性</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//示例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileVisibility</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span><span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">increase</span><span class="params">()</span>&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;     </span><br></pre></td></tr></table></figure>
-
-<p>在并发场景下，i变量的任何改变都会立马反应到其他线程中，但是如此存在多条线程同时调用increase()方法的话，就会出现线程安全问题，毕竟i++;操作并不具备原子性，该操作是先读取值，然后写回一个新值，相当于原来的值加上1，分两步完成，如果第二个线程在第一个线程读取旧值和写回新值期间读取i的域值，那么第二个线程就会与第一个线程一起看到同一个值，并执行相同值的加1操作，这也就造成了线程安全失败，因此对于increase方法必须使用synchronized修饰，以便保证线程安全，需要注意的是一旦使用synchronized修饰方法后，由于synchronized本身也具备与volatile相同的特性，即可见性，因此在这样种情况下就完全可以省去volatile修饰变量。</p>
-<h2 id="volatile禁止重排优化"><a href="#volatile禁止重排优化" class="headerlink" title="volatile禁止重排优化"></a><strong>volatile禁止重排优化</strong></h2><p>volatile关键字另一个作用就是禁止指令重排优化，从而避免多线程环境下程序出现乱序执行的现象，关于指令重排优化前面已详细分析过，这里主要简单说明一下volatile是如何实现禁止指令重排优化的。先了解一个概念，内存屏障(Memory Barrier）。 </p>
-<h2 id="硬件层的内存屏障"><a href="#硬件层的内存屏障" class="headerlink" title="硬件层的内存屏障"></a><strong>硬件层的内存屏障</strong></h2><p>Intel硬件提供了一系列的内存屏障，主要有： </p>
-<ol>
-<li><p>lfence，是一种Load Barrier 读屏障 </p>
-</li>
-<li><p>sfence, 是一种Store Barrier 写屏障 </p>
-</li>
-<li><p>mfence, 是一种全能型的屏障，具备ifence和sfence的能力 </p>
-</li>
-<li><p>Lock前缀，Lock不是一种内存屏障，但是它能完成类似内存屏障的功能。Lock会对CPU总线和高速缓存加锁，可以理解为CPU指令级的一种锁。它后面可以跟ADD, ADC, AND, BTC, BTR, BTS, CMPXCHG, CMPXCH8B, DEC, INC, NEG, NOT, OR, SBB, SUB, XOR, XADD, and XCHG等指令。</p>
-</li>
-</ol>
-<p>不同硬件实现内存屏障的方式不同，Java内存模型屏蔽了这种底层硬件平台的差异，由JVM来为不同的平台生成相应的机器码。 JVM中提供了四类内存屏障指令：</p>
-<table>
-<thead>
-<tr>
-<th>屏障类型</th>
-<th>指令示例</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>LoadLoad</td>
-<td>Load1; LoadLoad; Load2</td>
-<td>保证load1的读取操作在load2及后续读取操作之前执行</td>
-</tr>
-<tr>
-<td>StoreStore</td>
-<td>Store1; StoreStore; Store2</td>
-<td>在store2及其后的写操作执行前，保证store1的写操作已刷新到主内存</td>
-</tr>
-<tr>
-<td>LoadStore</td>
-<td>Load1; LoadStore; Store2</td>
-<td>在stroe2及其后的写操作执行前，保证load1的读操作已读取结束</td>
-</tr>
-<tr>
-<td>StoreLoad</td>
-<td>Store1; StoreLoad; Load2</td>
-<td>保证store1的写操作已刷新到主内存之后，load2及其后的读操作才能执行</td>
-</tr>
-</tbody></table>
-<p>内存屏障，又称内存栅栏，是一个CPU指令，它的作用有两个，一是保证特定操作的执行顺序，二是保证某些变量的内存可见性（利用该特性实现volatile的内存可见性）。由于编译器和处理器都能执行指令重排优化。如果在指令间插入一条Memory Barrier则会告诉编译器和CPU，不管什么指令都不能和这条Memory Barrier指令重排序，也就是说通过插入内存屏障禁止在内存屏障前后的指令执行重排序优化。Memory Barrier的另外一个作用是强制刷出各种CPU的缓存数据，因此任何CPU上的线程都能读取到这些数据的最新版本。总之，volatile变量正是通过内存屏障实现其在内存中的语义，即可见性和禁止重排优化。下面看一个非常典型的禁止重排优化的例子DCL，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DoubleCheckLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> DoubleCheckLock instance;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">DoubleCheckLock</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> DoubleCheckLock <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//第一次检测</span></span><br><span class="line">        <span class="keyword">if</span> (instance==<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">//同步</span></span><br><span class="line">            <span class="keyword">synchronized</span> (DoubleCheckLock.class)&#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="comment">//多线程环境下可能会出现问题的地方</span></span><br><span class="line">                    instance = <span class="keyword">new</span>  <span class="title class_">DoubleCheckLock</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;        </span><br></pre></td></tr></table></figure>
-
-<p>上述代码一个经典的单例的双重检测的代码，这段代码在单线程环境下并没有什么问题，但如果在多线程环境下就可以出现线程安全问题。原因在于某一个线程执行到第一次检测，读取到的instance不为null时，instance的引用对象可能没有完成初始化。</p>
-<p>因为instance &#x3D; new DoubleCheckLock();可以分为以下3步完成(伪代码)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate();<span class="comment">//1.分配对象内存空间</span></span><br><span class="line">instance(memory);<span class="comment">//2.初始化对象</span></span><br><span class="line">instance = memory;<span class="comment">//3.设置instance指向刚分配的内存地址，此时instance！=null         </span></span><br></pre></td></tr></table></figure>
-
-<p>由于步骤1和步骤2间可能会重排序，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory=allocate();<span class="comment">//1.分配对象内存空间</span></span><br><span class="line">instance=memory;<span class="comment">//3.设置instance指向刚分配的内存地址，此时instance！=null，但是对象还没有初始化完成！</span></span><br><span class="line">instance(memory);<span class="comment">//2.初始化对象      </span></span><br></pre></td></tr></table></figure>
-
-<p>由于步骤2和步骤3不存在数据依赖关系，而且无论重排前还是重排后程序的执行结果在单线程中并没有改变，因此这种重排优化是允许的。但是指令重排只会保证串行语义的执行的一致性(单线程)，但并不会关心多线程间的语义一致性。所以当一条线程访问instance不为null时，由于instance实例未必已初始化完成，也就造成了线程安全问题。那么该如何解决呢，很简单，我们使用volatile禁止instance变量被执行指令重排优化即可。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//禁止指令重排优化</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> DoubleCheckLock instance;</span><br></pre></td></tr></table></figure>
-
-<h2 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现"></a><strong>volatile内存语义的实现</strong></h2><p>前面提到过重排序分为编译器重排序和处理器重排序。为了实现volatile内存语义，JMM会分别限制这两种类型的重排序类型。</p>
-<p>下图是JMM针对编译器制定的volatile重排序规则表。</p>
-<table>
-<thead>
-<tr>
-<th>第一个操作</th>
-<th>第二个操作：普通读写</th>
-<th>第二个操作：volatile读</th>
-<th>第二个操作：volatile写</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>普通读写</td>
-<td>可以重排</td>
-<td>可以重排</td>
-<td>不可以重排</td>
-</tr>
-<tr>
-<td>volatile读</td>
-<td>不可以重排</td>
-<td>不可以重排</td>
-<td>不可以重排</td>
-</tr>
-<tr>
-<td>volatile写</td>
-<td>可以重排</td>
-<td>不可以重排</td>
-<td>不可以重排</td>
-</tr>
-</tbody></table>
-<p>举例来说，第二行最后一个单元格的意思是：在程序中，当第一个操作为普通变量的读或写时，如果第二个操作为volatile写，则编译器不能重排序这两个操作。</p>
-<p>从上图可以看出：</p>
-<ul>
-<li><ul>
-<li>当第二个操作是volatile写时，不管第一个操作是什么，都不能重排序。这个规则确保volatile写之前的操作不会被编译器重排序到volatile写之后。</li>
-</ul>
-</li>
-<li><ul>
-<li>当第一个操作是volatile读时，不管第二个操作是什么，都不能重排序。这个规则确保volatile读之后的操作不会被编译器重排序到volatile读之前。</li>
-<li>当第一个操作是volatile写，第二个操作是volatile读或写时，不能重排序。</li>
-</ul>
-</li>
-</ul>
-<p>为了实现volatile的内存语义，编译器在生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。对于编译器来说，发现一个最优布置来最小化插入屏障的总数几乎不可能。为此，JMM采取保守策略。下面是基于保守策略的JMM内存屏障插入策略。</p>
-<ul>
-<li><ul>
-<li>在每个volatile写操作的前面插入一个StoreStore屏障。</li>
-<li>在每个volatile写操作的后面插入一个StoreLoad屏障。</li>
-<li>在每个volatile读操作的后面插入一个LoadLoad屏障。</li>
-<li>在每个volatile读操作的后面插入一个LoadStore屏障。</li>
-</ul>
-</li>
-</ul>
-<p>上述内存屏障插入策略非常保守，但它可以保证在任意处理器平台，任意的程序中都能得到正确的volatile内存语义。</p>
-<p>下面是保守策略下，volatile写插入内存屏障后生成的指令序列示意图</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%284%29.png" alt="0"></p>
-<p>上图中StoreStore屏障可以保证在volatile写之前，其前面的所有普通写操作已经对任意处理器可见了。这是因为StoreStore屏障将保障上面所有的普通写在volatile写之前刷新到主内存。</p>
-<p>这里比较有意思的是，volatile写后面的StoreLoad屏障。此屏障的作用是避免volatile写与 后面可能有的volatile读&#x2F;写操作重排序。因为编译器常常无法准确判断在一个volatile写的后面 是否需要插入一个StoreLoad屏障（比如，一个volatile写之后方法立即return）。为了保证能正确 实现volatile的内存语义，JMM在采取了保守策略：在每个volatile写的后面，或者在每个volatile 读的前面插入一个StoreLoad屏障。从整体执行效率的角度考虑，JMM最终选择了在每个 volatile写的后面插入一个StoreLoad屏障。因为volatile写-读内存语义的常见使用模式是：一个 写线程写volatile变量，多个读线程读同一个volatile变量。当读线程的数量大大超过写线程时，选择在volatile写之后插入StoreLoad屏障将带来可观的执行效率的提升。从这里可以看到JMM 在实现上的一个特点：首先确保正确性，然后再去追求执行效率。</p>
-<p>下图是在保守策略下，volatile读插入内存屏障后生成的指令序列示意图</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%285%29.png" alt="0"></p>
-<p>上图中LoadLoad屏障用来禁止处理器把上面的volatile读与下面的普通读重排序。LoadStore屏障用来禁止处理器把上面的volatile读与下面的普通写重排序。</p>
-<p>上述volatile写和volatile读的内存屏障插入策略非常保守。在实际执行时，只要不改变 volatile写-读的内存语义，编译器可以根据具体情况省略不必要的屏障。下面通过具体的示例</p>
-<p>代码进行说明。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">VolatileBarrierExample</span> &#123;</span><br><span class="line">       <span class="type">int</span> a;</span><br><span class="line">       <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">v1</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">       <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">v2</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line">       <span class="keyword">void</span> <span class="title function_">readAndWrite</span><span class="params">()</span> &#123;</span><br><span class="line">           <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> v1;　　    <span class="comment">// 第一个volatile读</span></span><br><span class="line">           <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> v2;    　  <span class="comment">// 第二个volatile读</span></span><br><span class="line">           a = i + j;         <span class="comment">// 普通写</span></span><br><span class="line">           v1 = i + <span class="number">1</span>;     　 <span class="comment">// 第一个volatile写</span></span><br><span class="line">          v2 = j * <span class="number">2</span>;    　  <span class="comment">// 第二个 volatile写</span></span><br><span class="line">       &#125;</span><br><span class="line">&#125;      </span><br></pre></td></tr></table></figure>
-
-<p>针对readAndWrite()方法，编译器在生成字节码时可以做如下的优化。</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%286%29.png" alt="0"></p>
-<p>注意，最后的StoreLoad屏障不能省略。因为第二个volatile写之后，方法立即return。此时编 译器可能无法准确断定后面是否会有volatile读或写，为了安全起见，编译器通常会在这里插 入一个StoreLoad屏障。</p>
-<p>上面的优化针对任意处理器平台，由于不同的处理器有不同“松紧度”的处理器内存模 型，内存屏障的插入还可以根据具体的处理器内存模型继续优化。以X86处理器为例，图3-21 中除最后的StoreLoad屏障外，其他的屏障都会被省略。</p>
-<p>前面保守策略下的volatile读和写，在X86处理器平台可以优化成如下图所示。前文提到过，X86处理器仅会对写-读操作做重排序。X86不会对读-读、读-写和写-写操作 做重排序，因此在X86处理器中会省略掉这3种操作类型对应的内存屏障。在X86中，JMM仅需 在volatile写后面插入一个StoreLoad屏障即可正确实现volatile写-读的内存语义。这意味着在 X86处理器中，volatile写的开销比volatile读的开销会大很多（因为执行StoreLoad屏障开销会比较大）。</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/JMM/clipboard%20%287%29.png" alt="0"></p>
-<p><strong>引用资料：</strong></p>
-<p>1、《并发编程的艺术》</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2481,7 +2502,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2537,13 +2558,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">290k</span>
+    <span title="站点总字数">312k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:23</span>
+    <span title="站点阅读时长">4:44</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

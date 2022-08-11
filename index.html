@@ -198,6 +198,763 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/08/11/Flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
+      <meta itemprop="name" content="靓仔灬很忙">
+      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boyce">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/11/Flask/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta">
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-11 15:15:18 / 修改时间：17:28:22" itemprop="dateCreated datePublished" datetime="2022-08-11T15:15:18+08:00">2022-08-11</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>23k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>21 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="title-Flask入门"><a href="#title-Flask入门" class="headerlink" title="title: Flask入门"></a>title: Flask入门</h2><p>date: 2022-08-11 15:15:18<br>tags:</p>
+<ul>
+<li>flask</li>
+<li>web<br>categories: </li>
+<li>python</li>
+</ul>
+<h1 id="Flask简介："><a href="#Flask简介：" class="headerlink" title="Flask简介："></a>Flask简介：</h1><p>Flask诞生于2010年，是用Python语言基于Werkzeug工具箱编写的轻量级Web开发框架。</p>
+<p>Flask本身相当于一个内核，其他几乎所有的功能都要用到扩展（邮件扩展Flask-Mail，用户认证Flask-Login），都需要用第三方的扩展来实现。</p>
+<p>其 WSGI 工具箱采用 Werkzeug（路由模块），模板引擎则使用 Jinja2。这两个也是Flask框架的核心。</p>
+<p>Python最出名的框架要数Django，此外还有Flask、Tornado等框架。虽然Flask不是最出名的框架，但是Flask应该算是最灵活的框架之一，这也是Flask受到广大开发者喜爱的原因。</p>
+<p><strong>Flask常用扩展包：</strong></p>
+<ul>
+<li>Flask-SQLalchemy：操作数据库；</li>
+<li>Flask-migrate：管理迁移数据库；</li>
+<li>Flask-Mail:邮件；</li>
+<li>Flask-WTF：表单；</li>
+<li>Flask-Bable：提供国际化和本地化支持，翻译；</li>
+<li>Flask-script：插入脚本；</li>
+<li>Flask-Login：认证用户状态；</li>
+<li>Flask-OpenID：认证；</li>
+<li>Flask-RESTful：开发REST API的工具；</li>
+<li>Flask-Bootstrap：集成前端Twitter Bootstrap框架；</li>
+<li>Flask-Moment：本地化日期和时间；</li>
+<li>Flask-Admin：简单而可扩展的管理接口的框架</li>
+</ul>
+<blockquote>
+<p>扩展列表：<a target="_blank" rel="noopener" href="http://flask.pocoo.org/extensions/">http://flask.pocoo.org/extensions/</a></p>
+</blockquote>
+<ol>
+<li>中文文档（<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/%EF%BC%89">http://docs.jinkan.org/docs/flask/）</a></li>
+<li>英文文档（<a target="_blank" rel="noopener" href="http://flask.pocoo.org/docs/0.12/%EF%BC%89">http://flask.pocoo.org/docs/0.12/）</a></li>
+</ol>
+<h2 id="Flask-安装环境"><a href="#Flask-安装环境" class="headerlink" title="Flask 安装环境"></a>Flask 安装环境</h2><p>使用虚拟环境安装Flask，可以避免包的混乱和版本的冲突，虚拟环境是Python解释器的副本，在虚拟环境中你可以安装扩展包，为每个程序单独创建的虚拟环境，可以保证程序只能访问虚拟环境中的包。而不会影响系统中安装的全局Python解释器，从而保证全局解释器的整洁。</p>
+<p>虚拟环境使用virtualenv创建，可以查看系统是否安装了virtualenv：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ virtualenv --version</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装虚拟环境</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo pip install virtualenv</span><br><span class="line">$ sudo pip install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建虚拟环境(须在联网状态下)</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkvirtualenv Flask_py</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装完虚拟环境后，如果提示找不到mkvirtualenv命令，须配置环境变量：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 1、创建目录用来存放虚拟环境</span><br><span class="line">mkdir </span><br><span class="line">$HOME/.virtualenvs</span><br><span class="line"></span><br><span class="line"># 2、打开~/.bashrc文件，并添加如下：</span><br><span class="line">export WORKON_HOME=$HOME/.virtualenvs</span><br><span class="line">source /usr/local/bin/virtualenvwrapper.sh</span><br><span class="line"></span><br><span class="line"># 3、运行</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p><strong>进入虚拟环境</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ workon Flask_py</span><br></pre></td></tr></table></figure>
+
+<p><strong>退出虚拟环境</strong></p>
+<p>如果所在环境为真实环境，会提示deactivate：未找到命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ deactivate Flask_py</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-1-安装Flask"><a href="#1-2-1-安装Flask" class="headerlink" title="1.2.1 安装Flask"></a>1.2.1 安装Flask</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">指定Flask版本安装</span><br><span class="line">$ pip install flask==0.10.1</span><br><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>Mac系统：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ easy_install flask==0.10.1</span><br></pre></td></tr></table></figure>
+
+<p><strong>在ipython中测试安装是否成功</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ from flask import Flask</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/install_success1.png" alt="安装成功1"></p>
+<p><img src="/../images/install_success2.png" alt="安装成功2"></p>
+<h2 id="requirements-文件"><a href="#requirements-文件" class="headerlink" title="requirements 文件"></a>requirements 文件</h2><p>Python 项目中必须包含一个 requirements.txt 文件，用于记录所有依赖包及其精确的版本号，以便在新环境中进行部署操作。</p>
+<p>在虚拟环境使用以下命令将当前虚拟环境中的依赖包以版本号生成至文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip freeze &gt;requirements.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>安装或升级包后，最好更新这个文件以保证虚拟环境中的依赖包。</p>
+</blockquote>
+<p>需求文件的内容示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">alembic==0.9.2</span><br><span class="line">blinker==1.4</span><br><span class="line">click==6.7</span><br><span class="line">dominate==2.3.1</span><br><span class="line">Flask==0.10.1</span><br><span class="line">Flask-Bootstrap==3.3.7.1</span><br><span class="line">Flask-Login==0.4.0</span><br><span class="line">Flask-Mail==0.9.1</span><br><span class="line">Flask-Migrate==2.0.4</span><br><span class="line">Flask-Redis==0.3.0</span><br><span class="line">Flask-Script==2.0.5</span><br><span class="line">Flask-SQLAlchemy==2.2</span><br><span class="line">Flask-Testing==0.6.2</span><br><span class="line">Flask-WTF==0.14.2</span><br><span class="line">gunicorn==19.7.1</span><br><span class="line">itsdangerous==0.24</span><br><span class="line">Jinja2==2.9.6</span><br><span class="line">Mako==1.0.6</span><br><span class="line">MarkupSafe==1.0</span><br><span class="line">MySQL-python==1.2.5</span><br><span class="line">mysqlclient==1.3.10</span><br><span class="line">PyMySQL==0.7.11</span><br><span class="line">python-dateutil==2.6.0</span><br><span class="line">python-editor==1.0.3</span><br><span class="line">redis==2.10.5</span><br><span class="line">six==1.10.0</span><br><span class="line">SQLAlchemy==1.1.10</span><br><span class="line">uWSGI==2.0.15</span><br><span class="line">visitor==0.1.3</span><br><span class="line">Werkzeug==0.12.2</span><br><span class="line">WTForms==2.1</span><br><span class="line">xmltodict==0.11.0</span><br></pre></td></tr></table></figure>
+
+<p>当需要创建这个虚拟环境的完全副本，可以创建一个新的虚拟环境，并在其上运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="从-Hello-World-开始"><a href="#从-Hello-World-开始" class="headerlink" title="从 Hello World 开始"></a>从 Hello World 开始</h2><h3 id="Flask程序运行过程"><a href="#Flask程序运行过程" class="headerlink" title="Flask程序运行过程"></a>Flask程序运行过程</h3><ol>
+<li>当客户端想要获取资源时，一般会通过浏览器发起HTTP请求。</li>
+<li>此时，Web服务器会把来自客户端的所有请求都交给Flask程序实例</li>
+<li>程序实例使用Werkzeug来做路由分发（URL请求和视图函数之间的对应关系）。</li>
+<li>根据每个URL请求，找到具体的视图函数并进行调用。<ul>
+<li>在Flask程序中，路由的实现一般是通过程序实例的装饰器实现。</li>
+</ul>
+</li>
+<li>Flask调用视图函数后，可以返回两种内容：<ul>
+<li>字符串内容：将视图函数的返回值作为响应的内容，返回给客户端(浏览器)</li>
+<li>HTML模版内容：获取到数据后，把数据传入HTML模板文件中，模板引擎负责渲染HTTP响应数据，然后返回响应数据给客户端(浏览器)</li>
+</ul>
+</li>
+</ol>
+<h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h3><ul>
+<li>新建Flask项目</li>
+<li>导入Flask类</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Flask函数接收一个参数<strong>name</strong>，它会指向程序所在的模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>装饰器的作用是将路由映射到视图函数index</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Flask应用程序实例的run方法启动WEB服务器</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+
+<h2 id="路由定义的基本方式"><a href="#路由定义的基本方式" class="headerlink" title="路由定义的基本方式"></a>路由定义的基本方式</h2><h3 id="请求方式限定"><a href="#请求方式限定" class="headerlink" title="请求方式限定"></a>请求方式限定</h3><p>使用 methods 参数指定可接受的请求方式，可以是多种</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span>,methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;hello world&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="给路由传参示例"><a href="#给路由传参示例" class="headerlink" title="给路由传参示例"></a>给路由传参示例</h3><p>有时我们需要将同一类URL映射到同一个视图函数处理，比如：使用同一个视图函数 来显示不同用户的订单信息。</p>
+<p>路由传递的参数默认当做string处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/orders/&lt;order_id&gt;&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello_itheima</span>(<span class="params">order_id</span>):</span><br><span class="line">    <span class="comment"># 此处的逻辑: 去查询数据库改用户的订单信息, 并返回</span></span><br><span class="line">    <span class="built_in">print</span> <span class="built_in">type</span>(order_id) <span class="comment"># 类型为unicode</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;hello itcast %d&#x27;</span> % order_id</span><br></pre></td></tr></table></figure>
+
+<p>这里指定int, 会调用系统的路由转换器进行匹配和转换.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- 大致原理是将参数强转为int, 如果成功, 则可以进行路由匹配</span><br><span class="line">- 如果参数无法转换成功, 就无法匹配该路由</span><br><span class="line">@app.route(&#x27;/orders/&lt;int:order_id&gt;&#x27;)</span><br><span class="line">def hello_itheima(order_id):</span><br><span class="line">    print type(order_id) # 类型为int</span><br><span class="line">    return &#x27;hello itcast %d&#x27; % order_id</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/dynamic_route.png" alt="给路由传参"></p>
+<h1 id="Jinja2模板引擎"><a href="#Jinja2模板引擎" class="headerlink" title="Jinja2模板引擎"></a>Jinja2模板引擎</h1><h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><p>在前面的示例中，视图函数的主要作用是生成请求的响应，这是最简单的请求。实际上，视图函数有两个作用：处理业务逻辑和返回响应内容。在大型应用中，把业务逻辑和表现内容放在一起，会增加代码的复杂度和维护成本。本节学到的模板，它的作用即是承担视图函数的另一个作用，即返回响应内容。</p>
+<ul>
+<li>模板其实是一个包含响应文本的文件，其中用占位符(变量)表示动态部分，告诉模板引擎其具体的值需要从使用的数据中获取</li>
+<li>使用真实值替换变量，再返回最终得到的字符串，这个过程称为“渲染”</li>
+<li>Flask是使用 <strong>Jinja2</strong> 这个模板引擎来渲染模板</li>
+</ul>
+<p>使用模板的好处：</p>
+<ul>
+<li>视图函数只负责业务逻辑和数据处理(业务逻辑方面)</li>
+<li>而模板则取到视图函数的数据结果进行展示(视图展示方面)</li>
+<li>代码结构清晰，耦合度低</li>
+</ul>
+<h2 id="Jinja2"><a href="#Jinja2" class="headerlink" title="Jinja2"></a>Jinja2</h2><h3 id="两个概念："><a href="#两个概念：" class="headerlink" title="两个概念："></a>两个概念：</h3><ul>
+<li>Jinja2：是 Python 下一个被广泛应用的模板引擎，是由Python实现的模板语言，他的设计思想来源于 Django 的模板引擎，并扩展了其语法和一系列强大的功能，其是Flask内置的模板语言。</li>
+<li>模板语言：是一种被设计来自动生成文档的简单文本格式，在模板语言中，一般都会把一些变量传给模板，替换模板的特定位置上预先定义好的占位变量名。</li>
+</ul>
+<h3 id="渲染模版函数"><a href="#渲染模版函数" class="headerlink" title="渲染模版函数"></a>渲染模版函数</h3><ul>
+<li>Flask提供的 <strong>render_template</strong> 函数封装了该模板引擎</li>
+<li><strong>render_template</strong> 函数的第一个参数是模板的文件名，后面的参数都是键值对，表示模板中变量对应的真实值。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><ul>
+<li>使用  进行注释</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;# 这是注释 #&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="变量代码块"><a href="#变量代码块" class="headerlink" title="变量代码块"></a>变量代码块</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; post.title &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Jinja2 模版中的变量代码块可以是任意Python类型或者对象，只要它能够被Python的str()方法转换为一个字符串就可以,比如,可以通过下面的方式显示一个字典或者列表中的某个元素:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;your_dict[<span class="string">&#x27;key&#x27;</span>]&#125;&#125;</span><br><span class="line">&#123;&#123;your_list[<span class="number">0</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="控制代码块"><a href="#控制代码块" class="headerlink" title="控制代码块"></a>控制代码块</h4><ul>
+<li>用 {<strong>%%</strong>} 定义的<strong>控制代码块</strong>，可以实现一些语言层次的功能，比如循环或者if语句</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if user %&#125;</span><br><span class="line">    &#123;&#123; user &#125;&#125;</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    hello!</span><br><span class="line"></span><br><span class="line">&#123;% for index in indexs %&#125;</span><br><span class="line">    &#123;&#123; index &#125;&#125; </span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h2><p>过滤器的本质就是函数。有时候我们不仅仅只是需要输出变量的值，我们还需要修改变量的显示，甚至格式化、运算等等，而在模板中是不能直接调用 Python 中的某些方法，那么这就用到了过滤器。</p>
+<p>使用方式：</p>
+<ul>
+<li>过滤器的使用方式为：变量名 | 过滤器。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;variable | filter_name(*args)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果没有任何参数传给过滤器,则可以把括号省略掉</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;variable | filter_name&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如：&#96;&#96;，这个过滤器的作用：把变量variable 的值的首字母转换为大写，其他字母转换为小写</li>
+</ul>
+<h3 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h3><p>在 jinja2 中，过滤器是可以支持链式调用的，示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; <span class="string">&quot;hello world&quot;</span> | reverse | upper &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="常见内建过滤器"><a href="#常见内建过滤器" class="headerlink" title="常见内建过滤器"></a>常见内建过滤器</h3><h4 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h4><ul>
+<li>safe：禁用转义</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;&lt;em&gt;hello&lt;/em&gt;&#x27;</span> | safe &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>capitalize：把变量值的首字母转成大写，其余字母转小写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;hello&#x27;</span> | capitalize &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lower：把值转成小写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;HELLO&#x27;</span> | lower &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>upper：把值转成大写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;hello&#x27;</span> | upper &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>title：把值中的每个单词的首字母都转成大写</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;hello&#x27;</span> | title &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>reverse：字符串反转</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;olleh&#x27;</span> | reverse &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>format：格式化输出</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;%s is %d&#x27;</span> | <span class="built_in">format</span>(<span class="string">&#x27;name&#x27;</span>,<span class="number">17</span>) &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>striptags：渲染之前把值中所有的HTML标签都删掉</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;&lt;em&gt;hello&lt;/em&gt;&#x27;</span> | striptags &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>truncate: 字符串截断</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; <span class="string">&#x27;hello every one&#x27;</span> | truncate(<span class="number">9</span>)&#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="列表操作"><a href="#列表操作" class="headerlink" title="列表操作"></a>列表操作</h4><ul>
+<li>first：取第一个元素</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] | first &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>last：取最后一个元素</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] | last &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>length：获取列表长度</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] | length &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sum：列表求和</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] | <span class="built_in">sum</span> &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sort：列表排序</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; [6,2,3,1,5,4] | sort &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="语句块过滤"><a href="#语句块过滤" class="headerlink" title="语句块过滤"></a>语句块过滤</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% filter upper %&#125;</span><br><span class="line">    一大堆文字</span><br><span class="line">&#123;% endfilter %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Web表单"><a href="#Web表单" class="headerlink" title="Web表单"></a>Web表单</h2><p>web表单是web应用程序的基本功能。</p>
+<p>它是HTML页面中负责数据采集的部件。表单有三个部分组成：表单标签、表单域、表单按钮。表单允许用户输入数据，负责HTML页面数据采集，通过表单将用户输入的数据提交给服务器。</p>
+<p>在Flask中，为了处理web表单，我们一般使用Flask-WTF扩展，它封装了WTForms，并且它有验证表单数据的功能</p>
+<h3 id="WTForms支持的HTML标准字段"><a href="#WTForms支持的HTML标准字段" class="headerlink" title="WTForms支持的HTML标准字段"></a>WTForms支持的HTML标准字段</h3><table>
+<thead>
+<tr>
+<th align="left">字段对象</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">StringField</td>
+<td align="left">文本字段</td>
+</tr>
+<tr>
+<td align="left">TextAreaField</td>
+<td align="left">多行文本字段</td>
+</tr>
+<tr>
+<td align="left">PasswordField</td>
+<td align="left">密码文本字段</td>
+</tr>
+<tr>
+<td align="left">HiddenField</td>
+<td align="left">隐藏文件字段</td>
+</tr>
+<tr>
+<td align="left">DateField</td>
+<td align="left">文本字段，值为 datetime.date 文本格式</td>
+</tr>
+<tr>
+<td align="left">DateTimeField</td>
+<td align="left">文本字段，值为 datetime.datetime 文本格式</td>
+</tr>
+<tr>
+<td align="left">IntegerField</td>
+<td align="left">文本字段，值为整数</td>
+</tr>
+<tr>
+<td align="left">DecimalField</td>
+<td align="left">文本字段，值为decimal.Decimal</td>
+</tr>
+<tr>
+<td align="left">FloatField</td>
+<td align="left">文本字段，值为浮点数</td>
+</tr>
+<tr>
+<td align="left">BooleanField</td>
+<td align="left">复选框，值为True 和 False</td>
+</tr>
+<tr>
+<td align="left">RadioField</td>
+<td align="left">一组单选框</td>
+</tr>
+<tr>
+<td align="left">SelectField</td>
+<td align="left">下拉列表</td>
+</tr>
+<tr>
+<td align="left">SelectMutipleField</td>
+<td align="left">下拉列表，可选择多个值</td>
+</tr>
+<tr>
+<td align="left">FileField</td>
+<td align="left">文件上传字段</td>
+</tr>
+<tr>
+<td align="left">SubmitField</td>
+<td align="left">表单提交按钮</td>
+</tr>
+<tr>
+<td align="left">FormField</td>
+<td align="left">把表单作为字段嵌入另一个表单</td>
+</tr>
+<tr>
+<td align="left">FieldList</td>
+<td align="left">一组指定类型的字段</td>
+</tr>
+</tbody></table>
+<h3 id="WTForms常用验证函数"><a href="#WTForms常用验证函数" class="headerlink" title="WTForms常用验证函数"></a>WTForms常用验证函数</h3><table>
+<thead>
+<tr>
+<th align="left">验证函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">DataRequired</td>
+<td align="left">确保字段中有数据</td>
+</tr>
+<tr>
+<td align="left">EqualTo</td>
+<td align="left">比较两个字段的值，常用于比较两次密码输入</td>
+</tr>
+<tr>
+<td align="left">Length</td>
+<td align="left">验证输入的字符串长度</td>
+</tr>
+<tr>
+<td align="left">NumberRange</td>
+<td align="left">验证输入的值在数字范围内</td>
+</tr>
+<tr>
+<td align="left">URL</td>
+<td align="left">验证URL</td>
+</tr>
+<tr>
+<td align="left">AnyOf</td>
+<td align="left">验证输入值在可选列表中</td>
+</tr>
+<tr>
+<td align="left">NoneOf</td>
+<td align="left">验证输入值不在可选列表中</td>
+</tr>
+</tbody></table>
+<p>使用Flask-WTF需要配置参数SECRET_KEY。</p>
+<p>CSRF_ENABLED是为了CSRF（跨站请求伪造）保护。 SECRET_KEY用来生成加密令牌，当CSRF激活的时候，该设置会根据设置的密匙生成加密令牌。在HTML页面中直接写form表单：</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><h4 id="使用普通方式实现表单"><a href="#使用普通方式实现表单" class="headerlink" title="使用普通方式实现表单"></a>使用普通方式实现表单</h4><h4 id="在HTML页面中直接写form表单："><a href="#在HTML页面中直接写form表单：" class="headerlink" title="在HTML页面中直接写form表单："></a>在HTML页面中直接写form表单：</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>用户名:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>密码:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>确认密码:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password2&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    &#123;% for message in get_flashed_messages() %&#125;</span><br><span class="line">        &#123;&#123; message &#125;&#125;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="视图函数中获取表单数据："><a href="#视图函数中获取表单数据：" class="headerlink" title="视图函数中获取表单数据："></a>视图函数中获取表单数据：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,render_template,request</span><br><span class="line"></span><br><span class="line">app.secret_key = <span class="string">&#x27;heima&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello_world</span>():</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1. 判断请求方式是post</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 2. 获取参数, 并效验参数完整性, 如果有问题就进行flash</span></span><br><span class="line">        username = request.form.get(<span class="string">&#x27;username&#x27;</span>)</span><br><span class="line">        password = request.form.get(<span class="string">&#x27;password&#x27;</span>)</span><br><span class="line">        password2 = request.form.get(<span class="string">&#x27;password2&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">all</span>([username, password, password2]):</span><br><span class="line">            flash(<span class="string">&#x27;params error&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3. 效验密码</span></span><br><span class="line">        <span class="keyword">elif</span> password != password2:</span><br><span class="line">            flash(<span class="string">&#x27;password error&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 4. 没有问题就返回&#x27;success&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> username</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;success&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;wtf.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用Flask-WTF实现表单"><a href="#使用Flask-WTF实现表单" class="headerlink" title="使用Flask-WTF实现表单"></a>使用Flask-WTF实现表单</h4><h5 id="模板页面："><a href="#模板页面：" class="headerlink" title="模板页面："></a>模板页面：</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    &#123;#设置csrf_token#&#125;</span><br><span class="line">    &#123;&#123; form.csrf_token() &#125;&#125;</span><br><span class="line">    &#123;&#123; form.username.label &#125;&#125;&#123;&#123; form.username &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    &#123;&#123; form.password.label &#125;&#125;&#123;&#123; form.password &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    &#123;&#123; form.password2.label &#125;&#125;&#123;&#123; form.password2 &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    &#123;&#123; form.input &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="视图函数："><a href="#视图函数：" class="headerlink" title="视图函数："></a>视图函数：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, request, flash</span><br><span class="line"></span><br><span class="line"><span class="comment">#导入wtf扩展的表单类</span></span><br><span class="line"><span class="keyword">from</span> flask_wtf <span class="keyword">import</span> FlaskForm</span><br><span class="line"></span><br><span class="line"><span class="comment">#导入自定义表单需要的字段</span></span><br><span class="line"><span class="keyword">from</span> wtforms <span class="keyword">import</span> SubmitField,StringField,PasswordField</span><br><span class="line"></span><br><span class="line"><span class="comment">#导入wtf扩展提供的表单验证器</span></span><br><span class="line"><span class="keyword">from</span> wtforms.validators <span class="keyword">import</span> DataRequired,EqualTo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解决编码问题</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.config[<span class="string">&#x27;SECRET_KEY&#x27;</span>]=<span class="string">&#x27;heima&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#自定义表单类，文本字段、密码字段、提交按钮</span></span><br><span class="line"><span class="comment"># 需要自定义一个表单类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RegisterForm</span>(<span class="title class_ inherited__">FlaskForm</span>):</span><br><span class="line">    username = StringField(<span class="string">&#x27;用户名:&#x27;</span>, validators=[DataRequired()]&#125;)</span><br><span class="line">    password = PasswordField(<span class="string">&#x27;密码:&#x27;</span>, validators=[DataRequired()])</span><br><span class="line">    password2 = PasswordField(<span class="string">&#x27;确认密码:&#x27;</span>, validators=[DataRequired(), EqualTo(<span class="string">&#x27;password&#x27;</span>, <span class="string">&#x27;密码输入不一致&#x27;</span>)])</span><br><span class="line">    <span class="built_in">input</span> = SubmitField(<span class="string">&#x27;提交&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#定义根路由视图函数，生成表单对象，获取表单数据，进行表单数据验证</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/form&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">form</span>():</span><br><span class="line">    register_form = RegisterForm()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        <span class="comment"># 调用validate_on_submit方法, 可以一次性执行完所有的验证函数的逻辑</span></span><br><span class="line">        <span class="keyword">if</span> register_form.validate_on_submit():</span><br><span class="line">            <span class="comment"># 进入这里就表示所有的逻辑都验证成功</span></span><br><span class="line">            username = request.form.get(<span class="string">&#x27;username&#x27;</span>)</span><br><span class="line">            password = request.form.get(<span class="string">&#x27;password&#x27;</span>)</span><br><span class="line">            password2 = request.form.get(<span class="string">&#x27;password2&#x27;</span>)</span><br><span class="line">            <span class="built_in">print</span> username</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;success&#x27;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment">#message = register_form.errors.get(&#x27;password2&#x27;)[0]</span></span><br><span class="line">            <span class="comment">#flash(message)</span></span><br><span class="line">            flash(<span class="string">&#x27;参数有误&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;wtf.html&#x27;</span>, form=register_form)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flask中使用数据库"><a href="#Flask中使用数据库" class="headerlink" title="Flask中使用数据库"></a>Flask中使用数据库</h1><h3 id="Flask-SQLAlchemy扩展"><a href="#Flask-SQLAlchemy扩展" class="headerlink" title="Flask-SQLAlchemy扩展"></a>Flask-SQLAlchemy扩展</h3><ul>
+<li>SQLALchemy 实际上是对数据库的抽象，让开发者不用直接和 SQL 语句打交道，而是通过 Python 对象来操作数据库，在舍弃一些性能开销的同时，换来的是开发效率的较大提升</li>
+<li>SQLAlchemy是一个关系型数据库框架，它提供了高层的ORM和底层的原生数据库的操作。flask-sqlalchemy是一个简化了SQLAlchemy操作的flask扩展。</li>
+</ul>
+<h3 id="安装-flask-sqlalchemy"><a href="#安装-flask-sqlalchemy" class="headerlink" title="安装 flask-sqlalchemy"></a>安装 flask-sqlalchemy</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install flask-sqlalchemy</span><br></pre></td></tr></table></figure>
+
+<p>如果连接的是mysql数据库,需要安装mysqldb</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install flask-mysqldb</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用Flask-SQLAlchemy管理数据库"><a href="#使用Flask-SQLAlchemy管理数据库" class="headerlink" title="使用Flask-SQLAlchemy管理数据库"></a>使用Flask-SQLAlchemy管理数据库</h3><p>在Flask-SQLAlchemy中，数据库使用URL指定，而且程序使用的数据库必须保存到Flask配置对象的SQLALCHEMY_DATABASE_URI键中。</p>
+<h4 id="Flask的数据库设置："><a href="#Flask的数据库设置：" class="headerlink" title="Flask的数据库设置："></a>Flask的数据库设置：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_DATABASE_URI&#x27;</span>] = <span class="string">&#x27;mysql://root:mysql@127.0.0.1:3306/test&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>其他设置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 动态追踪修改设置，如未设置只会提示警告, 不建议开启</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_TRACK_MODIFICATIONS&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"><span class="comment"># 查询时会显示原始SQL语句</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_ECHO&#x27;</span>] = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">名字</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SQLALCHEMY_DATABASE_URI</td>
+<td align="left">用于连接的数据库 URI 。例如:sqlite:&#x2F;&#x2F;&#x2F;&#x2F;tmp&#x2F;test.dbmysql:&#x2F;&#x2F;username:password@server&#x2F;db</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_BINDS</td>
+<td align="left">一个映射 binds 到连接 URI 的字典。更多 binds 的信息见<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask-sqlalchemy/binds.html#binds"><em>用 Binds 操作多个数据库</em></a>。</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_ECHO</td>
+<td align="left">如果设置为Ture， SQLAlchemy 会记录所有 发给 stderr 的语句，这对调试有用。(打印sql语句)</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_RECORD_QUERIES</td>
+<td align="left">可以用于显式地禁用或启用查询记录。查询记录 在调试或测试模式自动启用。更多信息见get_debug_queries()。</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_NATIVE_UNICODE</td>
+<td align="left">可以用于显式禁用原生 unicode 支持。当使用 不合适的指定无编码的数据库默认值时，这对于 一些数据库适配器是必须的（比如 Ubuntu 上 某些版本的 PostgreSQL ）。</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_POOL_SIZE</td>
+<td align="left">数据库连接池的大小。默认是引擎默认值（通常 是 5 ）</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_POOL_TIMEOUT</td>
+<td align="left">设定连接池的连接超时时间。默认是 10 。</td>
+</tr>
+<tr>
+<td align="left">SQLALCHEMY_POOL_RECYCLE</td>
+<td align="left">多少秒后自动回收连接。这对 MySQL 是必要的， 它默认移除闲置多于 8 小时的连接。注意如果 使用了 MySQL ， Flask-SQLALchemy 自动设定 这个值为 2 小时。</td>
+</tr>
+</tbody></table>
+<h3 id="常用的SQLAlchemy字段类型"><a href="#常用的SQLAlchemy字段类型" class="headerlink" title="常用的SQLAlchemy字段类型"></a>常用的SQLAlchemy字段类型</h3><table>
+<thead>
+<tr>
+<th align="left">类型名</th>
+<th align="left">python中类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Integer</td>
+<td align="left">int</td>
+<td align="left">普通整数，一般是32位</td>
+</tr>
+<tr>
+<td align="left">SmallInteger</td>
+<td align="left">int</td>
+<td align="left">取值范围小的整数，一般是16位</td>
+</tr>
+<tr>
+<td align="left">BigInteger</td>
+<td align="left">int或long</td>
+<td align="left">不限制精度的整数</td>
+</tr>
+<tr>
+<td align="left">Float</td>
+<td align="left">float</td>
+<td align="left">浮点数</td>
+</tr>
+<tr>
+<td align="left">Numeric</td>
+<td align="left">decimal.Decimal</td>
+<td align="left">普通整数，一般是32位</td>
+</tr>
+<tr>
+<td align="left">String</td>
+<td align="left">str</td>
+<td align="left">变长字符串</td>
+</tr>
+<tr>
+<td align="left">Text</td>
+<td align="left">str</td>
+<td align="left">变长字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td align="left">Unicode</td>
+<td align="left">unicode</td>
+<td align="left">变长Unicode字符串</td>
+</tr>
+<tr>
+<td align="left">UnicodeText</td>
+<td align="left">unicode</td>
+<td align="left">变长Unicode字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td align="left">Boolean</td>
+<td align="left">bool</td>
+<td align="left">布尔值</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">datetime.date</td>
+<td align="left">时间</td>
+</tr>
+<tr>
+<td align="left">Time</td>
+<td align="left">datetime.datetime</td>
+<td align="left">日期和时间</td>
+</tr>
+<tr>
+<td align="left">LargeBinary</td>
+<td align="left">str</td>
+<td align="left">二进制文件</td>
+</tr>
+</tbody></table>
+<h3 id="常用的SQLAlchemy列选项"><a href="#常用的SQLAlchemy列选项" class="headerlink" title="常用的SQLAlchemy列选项"></a>常用的SQLAlchemy列选项</h3><table>
+<thead>
+<tr>
+<th align="left">选项名</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">primary_key</td>
+<td align="left">如果为True，代表表的主键</td>
+</tr>
+<tr>
+<td align="left">unique</td>
+<td align="left">如果为True，代表这列不允许出现重复的值</td>
+</tr>
+<tr>
+<td align="left">index</td>
+<td align="left">如果为True，为这列创建索引，提高查询效率</td>
+</tr>
+<tr>
+<td align="left">nullable</td>
+<td align="left">如果为True，允许有空值，如果为False，不允许有空值</td>
+</tr>
+<tr>
+<td align="left">default</td>
+<td align="left">为这列定义默认值</td>
+</tr>
+</tbody></table>
+<h3 id="常用的SQLAlchemy关系选项"><a href="#常用的SQLAlchemy关系选项" class="headerlink" title="常用的SQLAlchemy关系选项"></a>常用的SQLAlchemy关系选项</h3><table>
+<thead>
+<tr>
+<th align="left">选项名</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">backref</td>
+<td align="left">在关系的另一模型中添加反向引用</td>
+</tr>
+<tr>
+<td align="left">primary join</td>
+<td align="left">明确指定两个模型之间使用的联结条件</td>
+</tr>
+<tr>
+<td align="left">uselist</td>
+<td align="left">如果为False，不使用列表，而使用标量值</td>
+</tr>
+<tr>
+<td align="left">order_by</td>
+<td align="left">指定关系中记录的排序方式</td>
+</tr>
+<tr>
+<td align="left">secondary</td>
+<td align="left">指定多对多中记录的排序方式</td>
+</tr>
+<tr>
+<td align="left">secondary join</td>
+<td align="left">在SQLAlchemy中无法自行决定时，指定多对多关系中的二级联结条件</td>
+</tr>
+</tbody></table>
+<h1 id="数据库基本操作"><a href="#数据库基本操作" class="headerlink" title="数据库基本操作"></a>数据库基本操作</h1><h2 id="一-增删改操作"><a href="#一-增删改操作" class="headerlink" title="一. 增删改操作"></a>一. 增删改操作</h2><h3 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h3><ul>
+<li>在Flask-SQLAlchemy中，插入、修改、删除操作，均由数据库会话管理。<ul>
+<li>会话用db.session表示。在准备把数据写入数据库前，要先将数据添加到会话中然后调用 commit() 方法提交会话。</li>
+</ul>
+</li>
+<li>在Flask-SQLAlchemy中，查询操作是通过query对象操作数据。<ul>
+<li>最基本的查询是返回表中所有数据，可以通过过滤器进行更精确的数据库查询。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.session.add(role)    添加到数据库的session中</span><br><span class="line">db.session.add_all([user1, user2]) 添加多个信息到session中</span><br><span class="line">db.session.commit()     提交数据库的修改(包括增/删/改)</span><br><span class="line">db.session.rollback()   数据库的回滚操作</span><br><span class="line">db.session.delete(user) 删除数据库(需跟上commit)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-示例"><a href="#2-示例" class="headerlink" title="2. 示例"></a>2. 示例</h3><h4 id="2-1-在视图函数中定义模型类"><a href="#2-1-在视图函数中定义模型类" class="headerlink" title="2.1 在视图函数中定义模型类"></a>2.1 在视图函数中定义模型类</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask_sqlalchemy <span class="keyword">import</span> SQLAlchemy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置连接数据库的URL</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_DATABASE_URI&#x27;</span>] = <span class="string">&#x27;mysql://root:mysql@127.0.0.1:3306/Flask_test&#x27;</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_TRACK_MODIFICATIONS&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"><span class="comment">#查询时会显示原始SQL语句</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_ECHO&#x27;</span>] = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">db = SQLAlchemy(app)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Role</span>(db.Model):</span><br><span class="line">    <span class="comment"># 定义表名</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;roles&#x27;</span></span><br><span class="line">    <span class="comment"># 定义列对象</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">32</span>), unique=<span class="literal">True</span>)</span><br><span class="line">    user = db.relationship(<span class="string">&#x27;User&#x27;</span>, backref=<span class="string">&#x27;role&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#repr()方法显示一个可读字符串</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;Role: %s %s&gt;&#x27;</span> % (self.name, self.<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(db.Model):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;users&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">32</span>), unique=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    email = db.Column(db.String(<span class="number">32</span>),unique=<span class="literal">True</span>)</span><br><span class="line">    password = db.Column(db.String(<span class="number">32</span>))</span><br><span class="line">    role_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;roles.id&#x27;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;User: %s %s %s %s&gt;&#x27;</span> % (self.name, self.<span class="built_in">id</span>, self.email, self.password)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建表：</span></span><br><span class="line">    db.create_all()</span><br><span class="line">    <span class="comment"># 删除表</span></span><br><span class="line">    db.drop_all()</span><br><span class="line"></span><br><span class="line">    app.run(debug=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#### 2.2 数据的增删改</span></span><br><span class="line">```python</span><br><span class="line"><span class="comment"># 进入ipython一次执行</span></span><br><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> demo3_sqlalchemy <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一条Role数据</span></span><br><span class="line">In [<span class="number">2</span>]: role = Role(name=<span class="string">&#x27;admin&#x27;</span>)</span><br><span class="line">In [<span class="number">3</span>]: db.session.add(role)</span><br><span class="line">In [<span class="number">4</span>]: db.session.commit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加一条User数据, 数据有误可以使用回滚, 将add的对象从session移除</span></span><br><span class="line">In [<span class="number">5</span>]: user = User(name=<span class="string">&#x27;zhangsan&#x27;</span>)</span><br><span class="line">In [<span class="number">6</span>]: db.session.add(user)</span><br><span class="line">In [<span class="number">7</span>]: db.session.rollback()</span><br><span class="line">In [<span class="number">9</span>]: user.role_id = <span class="number">1</span></span><br><span class="line">In [<span class="number">6</span>]: db.session.add(user)</span><br><span class="line">In [<span class="number">4</span>]: db.session.commit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改数据</span></span><br><span class="line">In [<span class="number">13</span>]: user.name = <span class="string">&#x27;lisi&#x27;</span></span><br><span class="line">In [<span class="number">14</span>]: db.session.commit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除数据</span></span><br><span class="line">In [<span class="number">16</span>]: db.session.delete(user)</span><br><span class="line">In [<span class="number">17</span>]: db.session.commit()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-模型之间的关联"><a href="#3-模型之间的关联" class="headerlink" title="3 模型之间的关联"></a>3 模型之间的关联</h3><h4 id="3-1-一对多"><a href="#3-1-一对多" class="headerlink" title="3.1 一对多"></a>3.1 一对多</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Role</span>(db.Model):</span><br><span class="line">...</span><br><span class="line"><span class="comment">#关键代码</span></span><br><span class="line">user = db.relationship(<span class="string">&#x27;User&#x27;</span>, backref=<span class="string">&#x27;role&#x27;</span>)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(db.Model):</span><br><span class="line">...</span><br><span class="line">role_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;roles.id&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中realtionship描述了Role和User的关系。在此文中，第一个参数为对应参照的类”User”</li>
+<li>第二个参数backref为类User申明新属性的方法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">In [1]: from demo3_sqlalchemy import *</span><br><span class="line"></span><br><span class="line">In [2]: role = Role(name=&#x27;admin&#x27;)</span><br><span class="line"></span><br><span class="line">In [3]: db.session.add(role)</span><br><span class="line"></span><br><span class="line">In [4]: db.session.commit()</span><br><span class="line"></span><br><span class="line">In [5]: user1 = User(name=&#x27;zs&#x27;, role_id=role.id)</span><br><span class="line"></span><br><span class="line">In [6]: user2 = User(name=&#x27;ls&#x27;, role_id=role.id)</span><br><span class="line"></span><br><span class="line">In [7]: db.session.add_all([user1, user2])</span><br><span class="line"></span><br><span class="line">In [8]: db.session.commit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 此时就可以通过角色直接查询到用户信息</span><br><span class="line">In [9]: role.users</span><br><span class="line">Out[9]: [, ]</span><br><span class="line"></span><br><span class="line"># 此时就可以通过用户直接查询到角色信息</span><br><span class="line">In [10]: user1.role</span><br><span class="line">Out[10]: </span><br><span class="line"></span><br><span class="line">In [11]: user2.role</span><br><span class="line">Out[11]: </span><br><span class="line"></span><br><span class="line"># 此时就可以通过角色直接查询到用户信息</span><br></pre></td></tr></table></figure>
+
+<h2 id="二-查询操作"><a href="#二-查询操作" class="headerlink" title="二. 查询操作"></a>二. 查询操作</h2><h3 id="1-基本概念-1"><a href="#1-基本概念-1" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h3><h3 id="1-1-常用的SQLAlchemy查询过滤器"><a href="#1-1-常用的SQLAlchemy查询过滤器" class="headerlink" title="1.1 常用的SQLAlchemy查询过滤器"></a>1.1 常用的SQLAlchemy查询过滤器</h3><table>
+<thead>
+<tr>
+<th align="left">过滤器</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">filter()</td>
+<td align="left">把过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td align="left">filter_by()</td>
+<td align="left">把等值过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td align="left">limit</td>
+<td align="left">使用指定的值限定原查询返回的结果</td>
+</tr>
+<tr>
+<td align="left">offset()</td>
+<td align="left">偏移原查询返回的结果，返回一个新查询</td>
+</tr>
+<tr>
+<td align="left">order_by()</td>
+<td align="left">根据指定条件对原查询结果进行排序，返回一个新查询</td>
+</tr>
+<tr>
+<td align="left">group_by()</td>
+<td align="left">根据指定条件对原查询结果进行分组，返回一个新查询</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-常用的SQLAlchemy查询执行器"><a href="#1-2-常用的SQLAlchemy查询执行器" class="headerlink" title="1.2 常用的SQLAlchemy查询执行器"></a>1.2 常用的SQLAlchemy查询执行器</h3><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">all()</td>
+<td align="left">以列表形式返回查询的所有结果</td>
+</tr>
+<tr>
+<td align="left">first()</td>
+<td align="left">返回查询的第一个结果，如果未查到，返回None</td>
+</tr>
+<tr>
+<td align="left">first_or_404()</td>
+<td align="left">返回查询的第一个结果，如果未查到，返回404</td>
+</tr>
+<tr>
+<td align="left">get()</td>
+<td align="left">返回指定主键对应的行，如不存在，返回None</td>
+</tr>
+<tr>
+<td align="left">get_or_404()</td>
+<td align="left">返回指定主键对应的行，如不存在，返回404</td>
+</tr>
+<tr>
+<td align="left">count()</td>
+<td align="left">返回查询结果的数量</td>
+</tr>
+<tr>
+<td align="left">paginate()</td>
+<td align="left">返回一个Paginate对象，它包含指定范围内的结果</td>
+</tr>
+</tbody></table>
+<h3 id="2-示例-1"><a href="#2-示例-1" class="headerlink" title="2. 示例"></a>2. 示例</h3><h4 id="2-1-插入角色数据"><a href="#2-1-插入角色数据" class="headerlink" title="2.1 插入角色数据"></a>2.1 插入角色数据</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ro1 = Role(name=&#x27;admin&#x27;)</span><br><span class="line">db.session.add(ro1)</span><br><span class="line">db.session.commit()</span><br><span class="line">#再次插入一条数据</span><br><span class="line">ro2 = Role(name=&#x27;user&#x27;)</span><br><span class="line">db.session.add(ro2)</span><br><span class="line">db.session.commit()</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-一次插入多条数据"><a href="#2-2-一次插入多条数据" class="headerlink" title="2.2 一次插入多条数据"></a>2.2 一次插入多条数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">us1 = User(name=<span class="string">&#x27;wang&#x27;</span>,email=<span class="string">&#x27;wang@163.com&#x27;</span>,password=<span class="string">&#x27;123456&#x27;</span>,role_id=ro1.<span class="built_in">id</span>)</span><br><span class="line">us2 = User(name=<span class="string">&#x27;zhang&#x27;</span>,email=<span class="string">&#x27;zhang@189.com&#x27;</span>,password=<span class="string">&#x27;201512&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">us3 = User(name=<span class="string">&#x27;chen&#x27;</span>,email=<span class="string">&#x27;chen@126.com&#x27;</span>,password=<span class="string">&#x27;987654&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">us4 = User(name=<span class="string">&#x27;zhou&#x27;</span>,email=<span class="string">&#x27;zhou@163.com&#x27;</span>,password=<span class="string">&#x27;456789&#x27;</span>,role_id=ro1.<span class="built_in">id</span>)</span><br><span class="line">us5 = User(name=<span class="string">&#x27;tang&#x27;</span>,email=<span class="string">&#x27;tang@itheima.com&#x27;</span>,password=<span class="string">&#x27;158104&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">us6 = User(name=<span class="string">&#x27;wu&#x27;</span>,email=<span class="string">&#x27;wu@gmail.com&#x27;</span>,password=<span class="string">&#x27;5623514&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">us7 = User(name=<span class="string">&#x27;qian&#x27;</span>,email=<span class="string">&#x27;qian@gmail.com&#x27;</span>,password=<span class="string">&#x27;1543567&#x27;</span>,role_id=ro1.<span class="built_in">id</span>)</span><br><span class="line">us8 = User(name=<span class="string">&#x27;liu&#x27;</span>,email=<span class="string">&#x27;liu@itheima.com&#x27;</span>,password=<span class="string">&#x27;867322&#x27;</span>,role_id=ro1.<span class="built_in">id</span>)</span><br><span class="line">us9 = User(name=<span class="string">&#x27;li&#x27;</span>,email=<span class="string">&#x27;li@163.com&#x27;</span>,password=<span class="string">&#x27;4526342&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">us10 = User(name=<span class="string">&#x27;sun&#x27;</span>,email=<span class="string">&#x27;sun@163.com&#x27;</span>,password=<span class="string">&#x27;235523&#x27;</span>,role_id=ro2.<span class="built_in">id</span>)</span><br><span class="line">db.session.add_all([us1,us2,us3,us4,us5,us6,us7,us8,us9,us10])</span><br><span class="line">db.session.commit()</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-查询演练"><a href="#2-3-查询演练" class="headerlink" title="2.3 查询演练"></a>2.3 查询演练</h4><p>完成以下查询</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 查询所有用户数据</span><br><span class="line"><span class="number">2.</span> 查询有多少个用户</span><br><span class="line"><span class="number">3.</span> 查询第<span class="number">1</span>个用户</span><br><span class="line"><span class="number">4.</span> 查询<span class="built_in">id</span>为<span class="number">4</span>的用户[<span class="number">3</span>种方式]</span><br><span class="line"><span class="number">1.</span> 查询所有用户数据</span><br><span class="line"><span class="comment"># all()返回查询到的所有对象</span></span><br><span class="line">User.query.<span class="built_in">all</span>()</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 查询有多少个用户</span><br><span class="line">User.query.count()</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 查询第<span class="number">1</span>个用户</span><br><span class="line">User.query.first()</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 查询<span class="built_in">id</span>为<span class="number">4</span>的用户[<span class="number">3</span>种方式]</span><br><span class="line"><span class="comment"># filter_by直接用属性名，比较用=, filter用类名.属性名，比较用==</span></span><br><span class="line"><span class="comment"># filter_by用于查询简单的列名，不支持比较运算符</span></span><br><span class="line"><span class="comment"># filter比filter_by的功能更强大，支持比较运算符，支持or_、in_等语法。</span></span><br><span class="line">User.query.get(<span class="number">4</span>)</span><br><span class="line">User.query.filter_by(<span class="built_in">id</span>=<span class="number">4</span>).first()  <span class="comment">#属性 =</span></span><br><span class="line">User.query.<span class="built_in">filter</span>(User.<span class="built_in">id</span>==<span class="number">4</span>).first() <span class="comment">#对象名.属性 ==</span></span><br><span class="line">User.query.filter_by(<span class="built_in">id</span>=<span class="number">4</span>).first()  <span class="comment">#属性 =</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="综合案例-图书管理"><a href="#综合案例-图书管理" class="headerlink" title="综合案例-图书管理"></a>综合案例-图书管理</h1><ul>
+<li>WTF表单</li>
+<li>数据库操作</li>
+</ul>
+<h2 id="定义模型"><a href="#定义模型" class="headerlink" title="定义模型"></a>定义模型</h2><p>模型表示程序使用的数据实体，在Flask-SQLAlchemy中，模型一般是Python类，继承自db.Model，db是SQLAlchemy类的实例，代表程序使用的数据库。</p>
+<p>类中的属性对应数据库表中的列。id为主键，是由Flask-SQLAlchemy管理。db.Column类构造函数的第一个参数是数据库列和模型属性类型。</p>
+<blockquote>
+<p>注：如果没有在创建数据库的时候指定编码的话，向数据库中插入中文后，会报错，那么需要修改数据库的编码集:</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> database 数据库名 <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8</span><br></pre></td></tr></table></figure>
+
+<p>如下示例：定义了两个模型类，作者和书名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask_sqlalchemy <span class="keyword">import</span> SQLAlchemy</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_DATABASE_URI&#x27;</span>] = <span class="string">&#x27;mysql://root:mysql@127.0.0.1:3306/test2&#x27;</span></span><br><span class="line">app.config[<span class="string">&#x27;SQLALCHEMY_TRACK_MODIFICATIONS&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">db = SQLAlchemy(app)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Author</span>(db.Model):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;authors&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">64</span>), unique=<span class="literal">True</span>)</span><br><span class="line">    books = db.relationship(<span class="string">&#x27;Book&#x27;</span>, backref=<span class="string">&#x27;author&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Author:%s&#x27;</span> %self.name</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Book</span>(db.Model):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;books&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">64</span>))</span><br><span class="line">    author_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;authors.id&#x27;</span>))</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Book:%s,%s&#x27;</span>%(self.name,self.author_id)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello_world</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World!&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line"></span><br><span class="line">    db.drop_all()</span><br><span class="line">    db.create_all()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 生成数据</span></span><br><span class="line">    au1 = Author(name=<span class="string">&#x27;老王&#x27;</span>)</span><br><span class="line">    au2 = Author(name=<span class="string">&#x27;老惠&#x27;</span>)</span><br><span class="line">    au3 = Author(name=<span class="string">&#x27;老刘&#x27;</span>)</span><br><span class="line">    <span class="comment"># 把数据提交给用户会话</span></span><br><span class="line">    db.session.add_all([au1, au2, au3])</span><br><span class="line">    <span class="comment"># 提交会话</span></span><br><span class="line">    db.session.commit()</span><br><span class="line">    bk1 = Book(name=<span class="string">&#x27;老王回忆录&#x27;</span>, author_id=au1.<span class="built_in">id</span>)</span><br><span class="line">    bk2 = Book(name=<span class="string">&#x27;我读书少，你别骗我&#x27;</span>, author_id=au1.<span class="built_in">id</span>)</span><br><span class="line">    bk3 = Book(name=<span class="string">&#x27;如何才能让自己更骚&#x27;</span>, author_id=au2.<span class="built_in">id</span>)</span><br><span class="line">    bk4 = Book(name=<span class="string">&#x27;怎样征服美丽少女&#x27;</span>, author_id=au3.<span class="built_in">id</span>)</span><br><span class="line">    bk5 = Book(name=<span class="string">&#x27;如何征服英俊少男&#x27;</span>, author_id=au3.<span class="built_in">id</span>)</span><br><span class="line">    <span class="comment"># 把数据提交给用户会话</span></span><br><span class="line">    db.session.add_all([bk1, bk2, bk3, bk4, bk5])</span><br><span class="line">    <span class="comment"># 提交会话</span></span><br><span class="line">    db.session.commit()</span><br><span class="line"></span><br><span class="line">    app.run(debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据显示-amp-表单添加"><a href="#数据显示-amp-表单添加" class="headerlink" title="数据显示&amp;表单添加"></a>数据显示&amp;表单添加</h2><h3 id="使用WTF实现表单"><a href="#使用WTF实现表单" class="headerlink" title="使用WTF实现表单"></a>使用WTF实现表单</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from flask_wtf import FlaskForm</span><br><span class="line">from wtforms import StringField, SubmitField</span><br><span class="line">from wtforms.validators import DataRequired</span><br><span class="line">import sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(&quot;utf-8&quot;)</span><br><span class="line"></span><br><span class="line">app.secret_key = &#x27;abc&#x27;</span><br><span class="line"></span><br><span class="line">class Author(db.Model):</span><br><span class="line">    __tablename__ = &#x27;authors&#x27;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    name = db.Column(db.String(64), unique=True)</span><br><span class="line">    books = db.relationship(&#x27;Book&#x27;, backref=&#x27;author&#x27;)</span><br><span class="line"></span><br><span class="line">@app.route(&#x27;/&#x27;, methods=[&#x27;POST&#x27;, &#x27;GET&#x27;])</span><br><span class="line">def hello_world():</span><br><span class="line">    author_form = AuthorForm()</span><br><span class="line">    return render_template(&#x27;temp2_books.html&#x27;, form=author_form)</span><br></pre></td></tr></table></figure>
+
+<h3 id="模板代码"><a href="#模板代码" class="headerlink" title="模板代码"></a>模板代码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=&quot;post&quot;&gt;</span><br><span class="line">    &#123;&#123; form.csrt_token() &#125;&#125;</span><br><span class="line">    &#123;&#123; form.author.label &#125;&#125;&#123;&#123; form.author &#125;&#125;&lt;br&gt;</span><br><span class="line">    &#123;&#123; form.book.label &#125;&#125;&#123;&#123; form.book &#125;&#125;&lt;br&gt;</span><br><span class="line">    &#123;&#123; form.submit&#125;&#125;&lt;br&gt;</span><br><span class="line">    &#123;% for message in get_flashed_messages() %&#125;</span><br><span class="line">        &#123;&#123; message &#125;&#125;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">    &#123;% for author in authors %&#125;</span><br><span class="line">        &lt;li&gt;&#123;&#123; author.name &#125;&#125;&lt;/li&gt;</span><br><span class="line">        &lt;ul&gt;</span><br><span class="line">            &#123;% for book in author.books %&#125;</span><br><span class="line">                &lt;li&gt;&#123;&#123; book.name &#125;&#125;&lt;/li&gt;</span><br><span class="line">            &#123;% endfor %&#125;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行查询"><a href="#执行查询" class="headerlink" title="执行查询"></a>执行查询</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authors = Author.query.all()</span><br></pre></td></tr></table></figure>
+
+<h2 id="表单验证"><a href="#表单验证" class="headerlink" title="表单验证"></a>表单验证</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  1. 调用wtf的函数实现验证</span></span><br><span class="line"><span class="keyword">if</span> book_form.validate_on_submit():</span><br><span class="line">    <span class="comment"># 2. 验证通过获取数据</span></span><br><span class="line">    author_name = book_form.author.data</span><br><span class="line">    book_name = book_form.book.data</span><br><span class="line">    <span class="comment"># 3. 判断作者是否存在</span></span><br><span class="line">    author = Author.query.filter_by(name=author_name).first()</span><br><span class="line">    <span class="keyword">if</span> author:</span><br><span class="line">        <span class="comment"># 4. 判断书籍是否存在, 没有重复书籍就添加数据. 如果重复就提示错误</span></span><br><span class="line">        book = Book.query.filter_by(name=book_name).first()</span><br><span class="line">        <span class="keyword">if</span> book:</span><br><span class="line">            <span class="comment"># 如果重复就提示错误</span></span><br><span class="line">            flash(<span class="string">&#x27;已存在同名书籍&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 没有重复书籍就添加数据</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                new_book = Book(name=book_name, author_id=author.<span class="built_in">id</span>)</span><br><span class="line">                db.session.add(new_book)</span><br><span class="line">                db.session.commit()</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="built_in">print</span> e</span><br><span class="line">                flash(<span class="string">&#x27;书籍添加失败&#x27;</span>)</span><br><span class="line">                db.session.rollback()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 5. 如果作者不存在, 添加作者和书籍</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            new_author = Author(name=author_name)</span><br><span class="line">            db.session.add(new_author)</span><br><span class="line">            db.session.commit()</span><br><span class="line"></span><br><span class="line">            new_book = Book(name=book_name, author_id=new_author.<span class="built_in">id</span>)</span><br><span class="line">            db.session.add(new_book)</span><br><span class="line">            db.session.commit()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span> e</span><br><span class="line">            flash(<span class="string">&#x27;添加失败&#x27;</span>)</span><br><span class="line">            db.session.rollback()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 6. 验证不通过提示错误</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        flash(<span class="string">&#x27;参数不完整&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><ul>
+<li>定义删除author和book的路由</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/delete_book/&lt;int:book_id&gt;&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_book</span>(<span class="params">book_id</span>):</span><br><span class="line">    book = Book.query.get(book_id)</span><br><span class="line">    <span class="keyword">if</span> book:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            db.session.delete(book)</span><br><span class="line">            db.session.commit()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span> e</span><br><span class="line">            flash(<span class="string">&#x27;删除书失败&#x27;</span>)</span><br><span class="line">            db.session.rollback()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        flash(<span class="string">&#x27;书不存在&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;index&#x27;</span>))</span><br><span class="line"></span><br><span class="line">&lt;li&gt;&#123;&#123; book.name &#125;&#125;&lt;a href=<span class="string">&quot;&#123;&#123; url_for(&#x27;delete_book&#x27;, book_id=book.id) &#125;&#125;&quot;</span>&gt;删除&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&#123;% <span class="keyword">else</span> %&#125;</span><br><span class="line">&lt;li&gt;无&lt;/li&gt;</span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/delete_author/&lt;int:author_id&gt;&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_author</span>(<span class="params">author_id</span>):</span><br><span class="line">    author = Author.query.get(author_id)</span><br><span class="line">    <span class="keyword">if</span> author:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 先删除书</span></span><br><span class="line">            Book.query.filter_by(author_id=author.<span class="built_in">id</span>).delete()</span><br><span class="line">            <span class="comment"># 再删除作者</span></span><br><span class="line">            db.session.delete(author)</span><br><span class="line">            db.session.commit()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span> e</span><br><span class="line">            flash(<span class="string">&#x27;删除失败&#x27;</span>)</span><br><span class="line">            db.session.rollback()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        flash(<span class="string">&#x27;未找到该作者&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;index&#x27;</span>))</span><br><span class="line"></span><br><span class="line">&lt;li&gt;&#123;&#123; author.name &#125;&#125;&lt;a href=<span class="string">&quot;&#123;&#123; url_for(&#x27;delete_author&#x27;, author_id=author.id) &#125;&#125;&quot;</span>&gt;删除&lt;/a&gt;&lt;/li&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/04/10/BIO-NIO-%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2283,261 +3040,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://cailiang.website/2022/03/20/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/WechatIMG1.jpeg">
-      <meta itemprop="name" content="靓仔灬很忙">
-      <meta itemprop="description" content="同样是第一次做人，凭什么让我活在别人制定的规则里；All i want is just to be myself!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Boyce">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/20/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="post-title-link" itemprop="url">定时任务</a>
-        </h2>
-
-        <div class="post-meta">
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-20 17:26:46 / 修改时间：17:45:02" itemprop="dateCreated datePublished" datetime="2022-03-20T17:26:46+08:00">2022-03-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">并发编程</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ScheduledThreadPoolExecutor"><a href="#ScheduledThreadPoolExecutor" class="headerlink" title="ScheduledThreadPoolExecutor"></a><strong>ScheduledThreadPoolExecutor</strong></h1><p>定时线程池类的类结构图</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(40).png" alt="0"></p>
-<p>它用来处理延时任务或定时任务。</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(41).png" alt="0"></p>
-<p>它接收SchduledFutureTask类型的任务，是线程池调度任务的最小单位，有三种提交任务的方式：</p>
-<ol>
-<li>schedule</li>
-<li>scheduledAtFixedRate</li>
-<li>scheduledWithFixedDelay</li>
-</ol>
-<p>它采用DelayQueue存储等待的任务</p>
-<ol>
-<li>DelayQueue内部封装了一个PriorityQueue，它会根据time的先后时间排序，若time相同则根据sequenceNumber排序；</li>
-<li>DelayQueue也是一个无界队列；</li>
-</ol>
-<h2 id="SchduledFutureTask"><a href="#SchduledFutureTask" class="headerlink" title="SchduledFutureTask"></a><strong>SchduledFutureTask</strong></h2><p>SchduledFutureTask接收的参数(成员变量)：</p>
-<ol>
-<li><strong>private long</strong> <strong>time</strong>：任务开始的时间</li>
-<li><strong>private final long</strong> <strong>sequenceNumber</strong>;：任务的序号</li>
-<li><strong>private final long</strong> <strong>period</strong>：任务执行的时间间隔</li>
-</ol>
-<p>工作线程的执行过程：</p>
-<ul>
-<li>工作线程会从DelayQueue取已经到期的任务去执行；</li>
-<li>执行结束后重新设置任务的到期时间，再次放回DelayQueue</li>
-</ul>
-<p>ScheduledThreadPoolExecutor会把待执行的任务放到工作队列DelayQueue中，DelayQueue封装了一个PriorityQueue，PriorityQueue会对队列中的ScheduledFutureTask进行排序，具体的排序算法实现如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Delayed other)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (other == <span class="built_in">this</span>) <span class="comment">// compare zero if same object</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (other <span class="keyword">instanceof</span> ScheduledFutureTask) &#123;</span><br><span class="line">        ScheduledFutureTask&lt;?&gt; x = (ScheduledFutureTask&lt;?&gt;)other;</span><br><span class="line">        <span class="type">long</span> <span class="variable">diff</span> <span class="operator">=</span> time - x.time;</span><br><span class="line">        <span class="keyword">if</span> (diff &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (diff &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (sequenceNumber &lt; x.sequenceNumber)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">diff</span> <span class="operator">=</span> getDelay(NANOSECONDS) - other.getDelay(NANOSECONDS);</span><br><span class="line">    <span class="keyword">return</span> (diff &lt; <span class="number">0</span>) ? -<span class="number">1</span> : (diff &gt; <span class="number">0</span>) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​         </p>
-<ol>
-<li>首先按照time排序，time小的排在前面，time大的排在后面；</li>
-<li>如果time相同，按照sequenceNumber排序，sequenceNumber小的排在前面，sequenceNumber大的排在后面，换句话说，如果两个task的执行时间相同，优先执行先提交的task。</li>
-</ol>
-<p>SchduledFutureTask之run方法实现</p>
-<p>run方法是调度task的核心，task的执行实际上是run方法的执行。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">periodic</span> <span class="operator">=</span> isPeriodic();</span><br><span class="line"><span class="comment">//如果当前线程池已经不支持执行任务，则取消</span></span><br><span class="line">    <span class="keyword">if</span> (!canRunInCurrentRunState(periodic))</span><br><span class="line">        cancel(<span class="literal">false</span>);</span><br><span class="line"><span class="comment">//如果不需要周期性执行，则直接执行run方法然后结束</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!periodic)</span><br><span class="line">        ScheduledFutureTask.<span class="built_in">super</span>.run();</span><br><span class="line"><span class="comment">//如果需要周期执行，则在执行完任务以后，设置下一次执行时间</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ScheduledFutureTask.<span class="built_in">super</span>.runAndReset()) &#123;</span><br><span class="line">        <span class="comment">// 计算下次执行该任务的时间</span></span><br><span class="line"> setNextRunTime();</span><br><span class="line"> <span class="comment">//重复执行任务</span></span><br><span class="line">        reExecutePeriodic(outerTask);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​      </p>
-<ol>
-<li>如果当前线程池运行状态不可以执行任务，取消该任务，然后直接返回，否则执行步骤2；</li>
-<li>如果不是周期性任务，调用FutureTask中的run方法执行，会设置执行结果，然后直接返回，否则执行步骤3；</li>
-<li>如果是周期性任务，调用FutureTask中的runAndReset方法执行，不会设置执行结果，然后直接返回，否则执行步骤4和步骤5；</li>
-<li>计算下次执行该任务的具体时间；</li>
-<li>重复执行任务。</li>
-</ol>
-<p>reExecutePeriodic方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">reExecutePeriodic</span><span class="params">(RunnableScheduledFuture&lt;?&gt; task)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (canRunInCurrentRunState(<span class="literal">true</span>)) &#123;</span><br><span class="line">        <span class="built_in">super</span>.getQueue().add(task);</span><br><span class="line">        <span class="keyword">if</span> (!canRunInCurrentRunState(<span class="literal">true</span>) &amp;&amp; remove(task))</span><br><span class="line">            task.cancel(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            ensurePrestart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>该方法和delayedExecute方法类似，不同的是：</p>
-<ol>
-<li>由于调用reExecutePeriodic方法时已经执行过一次周期性任务了，所以不会reject当前任务；</li>
-<li>传入的任务一定是周期性任务。</li>
-</ol>
-<h2 id="线程池任务的提交"><a href="#线程池任务的提交" class="headerlink" title="线程池任务的提交"></a><strong>线程池任务的提交</strong></h2><p>首先是schedule方法，该方法是指任务在指定延迟时间到达后触发，只会执行一次。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; schedule(Runnable command,</span><br><span class="line">                                   <span class="type">long</span> delay,</span><br><span class="line">                                   TimeUnit unit) &#123;</span><br><span class="line"><span class="comment">//参数校验</span></span><br><span class="line"><span class="keyword">if</span> (command == <span class="literal">null</span> || unit == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line"><span class="comment">//这里是一个嵌套结构，首先把用户提交的任务包装成ScheduledFutureTask</span></span><br><span class="line"><span class="comment">//然后在调用decorateTask进行包装，该方法是留给用户去扩展的，默认是个空方法</span></span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; t = decorateTask(command,</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ScheduledFutureTask</span>&lt;Void&gt;(command, <span class="literal">null</span>,</span><br><span class="line">                                      triggerTime(delay, unit)));</span><br><span class="line">   <span class="comment">//包装好任务以后，就进行提交了</span></span><br><span class="line">delayedExecute(t);</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​          </p>
-<p>任务提交方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">delayedExecute</span><span class="params">(RunnableScheduledFuture&lt;?&gt; task)</span> &#123;</span><br><span class="line">    <span class="comment">//如果线程池已经关闭，则使用拒绝策略把提交任务拒绝掉</span></span><br><span class="line"><span class="keyword">if</span> (isShutdown())</span><br><span class="line">        reject(task);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="comment">//与ThreadPoolExecutor不同，这里直接把任务加入延迟队列</span></span><br><span class="line">        <span class="built_in">super</span>.getQueue().add(task);<span class="comment">//使用用的DelayedWorkQueue</span></span><br><span class="line"><span class="comment">//如果当前状态无法执行任务，则取消</span></span><br><span class="line">        <span class="keyword">if</span> (isShutdown() &amp;&amp;</span><br><span class="line">            !canRunInCurrentRunState(task.isPeriodic()) &amp;&amp;</span><br><span class="line">            remove(task))</span><br><span class="line">            task.cancel(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line"><span class="comment">//这里是增加一个worker线程，避免提交的任务没有worker去执行</span></span><br><span class="line"><span class="comment">//原因就是该类没有像ThreadPoolExecutor一样，woker满了才放入队列</span></span><br><span class="line">          ensurePrestart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​         </p>
-<h2 id="DelayedWorkQueue"><a href="#DelayedWorkQueue" class="headerlink" title="DelayedWorkQueue"></a><strong>DelayedWorkQueue</strong></h2><p>ScheduledThreadPoolExecutor之所以要自己实现阻塞的工作队列，是因为ScheduledThreadPoolExecutor要求的工作队列有些特殊。</p>
-<p>DelayedWorkQueue是一个基于堆的数据结构，类似于DelayQueue和PriorityQueue。在执行定时任务的时候，每个任务的执行时间都不同，所以DelayedWorkQueue的工作就是按照执行时间的升序来排列，执行时间距离当前时间越近的任务在队列的前面（<strong>注意：这里的顺序并不是绝对的，堆中的排序只保证了子节点的下次执行时间要比父节点的下次执行时间要大，而叶子节点之间并不一定是顺序的，下文中会说明</strong>）。</p>
-<p>堆结构如下图：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(42).png" alt="0"></p>
-<p>可见，DelayedWorkQueue是一个基于最小堆结构的队列。堆结构可以使用数组表示，可以转换成如下的数组：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(43).png" alt="0"></p>
-<p>在这种结构中，可以发现有如下特性：</p>
-<p>假设，索引值从0开始，子节点的索引值为k，父节点的索引值为p，则：</p>
-<ol>
-<li>一个节点的左子节点的索引为：k &#x3D; p * 2 + 1；</li>
-<li>一个节点的右子节点的索引为：k &#x3D; (p + 1) * 2；</li>
-<li>一个节点的父节点的索引为：p &#x3D; (k - 1) &#x2F; 2。</li>
-</ol>
-<p><strong>为什么要使用DelayedWorkQueue呢？</strong></p>
-<p>定时任务执行时需要取出最近要执行的任务，所以任务在队列中每次出队时一定要是当前队列中执行时间最靠前的，所以自然要使用优先级队列。</p>
-<p>DelayedWorkQueue是一个优先级队列，它可以保证每次出队的任务都是当前队列中执行时间最靠前的，由于它是基于堆结构的队列，堆结构在执行插入和删除操作时的最坏时间复杂度是 *O(logN)*。</p>
-<h3 id="DelayedWorkQueue属性"><a href="#DelayedWorkQueue属性" class="headerlink" title="DelayedWorkQueue属性"></a><strong>DelayedWorkQueue属性</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 队列初始容量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">INITIAL_CAPACITY</span> <span class="operator">=</span> <span class="number">16</span>;</span><br><span class="line"><span class="comment">// 根据初始容量创建RunnableScheduledFuture类型的数组</span></span><br><span class="line"><span class="keyword">private</span> RunnableScheduledFuture&lt;?&gt;[] queue =</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">RunnableScheduledFuture</span>&lt;?&gt;[INITIAL_CAPACITY];</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="comment">// leader线程</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">leader</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 当较新的任务在队列的头部可用时，或者新线程可能需要成为leader，则通过该条件发出信号</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Condition</span> <span class="variable">available</span> <span class="operator">=</span> lock.newCondition();</span><br></pre></td></tr></table></figure>
-
-<p>​          </p>
-<p>注意这里的leader，它是Leader-Follower模式的变体，用于减少不必要的定时等待。什么意思呢？对于多线程的网络模型来说：</p>
-<p>所有线程会有三种身份中的一种：leader和follower，以及一个干活中的状态：proccesser。它的基本原则就是，永远最多只有一个leader。而所有follower都在等待成为leader。线程池启动时会自动产生一个Leader负责等待网络IO事件，当有一个事件产生时，Leader线程首先通知一个Follower线程将其提拔为新的Leader，然后自己就去干活了，去处理这个网络事件，处理完毕后加入Follower线程等待队列，等待下次成为Leader。这种方法可以增强CPU高速缓存相似性，及消除动态内存分配和线程间的数据交换。</p>
-<h3 id="offer方法"><a href="#offer方法" class="headerlink" title="offer方法"></a><strong>offer方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">offer</span><span class="params">(Runnable x)</span> &#123;</span><br><span class="line"><span class="comment">//参数校验</span></span><br><span class="line">    <span class="keyword">if</span> (x == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; e = (RunnableScheduledFuture&lt;?&gt;)x;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">//查看当前元素数量，如果大于队列长度则进行扩容</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> size;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= queue.length)</span><br><span class="line">            grow();</span><br><span class="line"><span class="comment">//元素数量加1</span></span><br><span class="line">        size = i + <span class="number">1</span>;</span><br><span class="line"><span class="comment">//如果当前队列还没有元素，则直接加入头部</span></span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">            queue[<span class="number">0</span>] = e;</span><br><span class="line"><span class="comment">//记录索引</span></span><br><span class="line">            setIndex(e, <span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"> <span class="comment">//把任务加入堆中，并调整堆结构，这里就会根据任务的触发时间排列</span></span><br><span class="line">             <span class="comment">//把需要最早执行的任务放在前面</span></span><br><span class="line">            siftUp(i, e);</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//如果新加入的元素就是队列头，这里有两种情况</span></span><br><span class="line">        <span class="comment">//1.这是用户提交的第一个任务</span></span><br><span class="line">        <span class="comment">//2.新任务进行堆调整以后，排在队列头</span></span><br><span class="line">        <span class="keyword">if</span> (queue[<span class="number">0</span>] == e) &#123;</span><br><span class="line"><span class="comment">// leader设置为null为了使在take方法中的线程在通过available.signal();后会执行available.awaitNanos(delay);</span></span><br><span class="line">            leader = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">//加入元素以后，唤醒worker线程</span></span><br><span class="line">            available.signal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​          </p>
-<h3 id="任务排序sift方法"><a href="#任务排序sift方法" class="headerlink" title="任务排序sift方法"></a><strong>任务排序sift方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftUp</span><span class="params">(<span class="type">int</span> k, RunnableScheduledFuture&lt;?&gt; key)</span> &#123;</span><br><span class="line"><span class="comment">// 找到父节点的索引</span></span><br><span class="line"><span class="keyword">while</span> (k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取父节点</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">parent</span> <span class="operator">=</span> (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; e = queue[parent];</span><br><span class="line">  <span class="comment">// 如果key节点的执行时间大于父节点的执行时间，不需要再排序了</span></span><br><span class="line">        <span class="keyword">if</span> (key.compareTo(e) &gt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"> <span class="comment">// 如果key.compareTo(e) &lt; 0，说明key节点的执行时间小于父节点的执行时间，需要把父节点移到后面</span></span><br><span class="line">        queue[k] = e;</span><br><span class="line">        setIndex(e, k);</span><br><span class="line"><span class="comment">// 设置索引为k</span></span><br><span class="line">        k = parent;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// key设置为排序后的位置中</span></span><br><span class="line">    queue[k] = key;</span><br><span class="line">    setIndex(key, k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>代码很好理解，就是循环的根据key节点与它的父节点来判断，如果key节点的执行时间小于父节点，则将两个节点交换，使执行时间靠前的节点排列在队列的前面。</p>
-<p>假设新入队的节点的延迟时间（调用getDelay()方法获得）是5，执行过程如下：</p>
-<ol>
-<li><strong>先将新的节点添加到数组的尾部，这时新节点的索引k为7：</strong></li>
-</ol>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(44).png" alt="0"></p>
-<ol>
-<li><strong>计算新父节点的索引：parent &#x3D; (k - 1) &gt;&gt;&gt; 1，parent &#x3D; 3，那么queue[3]的时间间隔值为8，因为 5 &lt; 8 ，将执行queue[7] &#x3D; queue[3]：</strong></li>
-</ol>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(45).png" alt="0"></p>
-<ol>
-<li><strong>这时将k设置为3，继续循环，再次计算parent为1，queue[1]的时间间隔为3，因为 5 &gt; 3 ，这时退出循环，最终k为3：</strong></li>
-</ol>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(46).png" alt="0"></p>
-<p>可见，每次新增节点时，只是根据父节点来判断，而不会影响兄弟节点。</p>
-<h3 id="take方法"><a href="#take方法" class="headerlink" title="take方法"></a><strong>take方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; take() <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>)</span><br><span class="line">                available.await();</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="comment">// 计算当前时间到执行时间的时间间隔</span></span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">                <span class="comment">// leader不为空，阻塞线程</span></span><br><span class="line"><span class="keyword">if</span> (leader != <span class="literal">null</span>)</span><br><span class="line">                    available.await();</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// leader为空，则把leader设置为当前线程，</span></span><br><span class="line"><span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                       <span class="comment">// 阻塞到执行时间 </span></span><br><span class="line">available.awaitNanos(delay);</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line"><span class="comment">// 设置leader = null，让其他线程执行available.awaitNanos(delay);</span></span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line"><span class="comment">// 如果leader不为空，则说明leader的线程正在执行available.awaitNanos(delay);</span></span><br><span class="line">        <span class="comment">// 如果queue[0] == null，说明队列为空</span></span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​      </p>
-<p>take方法是什么时候调用的呢？在ThreadPoolExecutor中，介绍了getTask方法，工作线程会循环地从workQueue中取任务。但定时任务却不同，因为如果一旦getTask方法取出了任务就开始执行了，而这时可能还没有到执行的时间，所以在take方法中，要保证只有在到指定的执行时间的时候任务才可以被取走。</p>
-<p>再来说一下leader的作用，这里的leader是为了减少不必要的定时等待，当一个线程成为leader时，它只等待下一个节点的时间间隔，但其它线程无限期等待。 leader线程必须在从take（）或poll（）返回之前signal其它线程，除非其他线程成为了leader。</p>
-<p>举例来说，如果没有leader，那么在执行take时，都要执行available.awaitNanos(delay)，假设当前线程执行了该段代码，这时还没有signal，第二个线程也执行了该段代码，则第二个线程也要被阻塞。多个这时执行该段代码是没有作用的，因为只能有一个线程会从take中返回queue[0]（因为有lock），其他线程这时再返回for循环执行时取的queue[0]，已经不是之前的queue[0]了，然后又要继续阻塞。</p>
-<p>所以，为了不让多个线程频繁的做无用的定时等待，这里增加了leader，如果leader不为空，则说明队列中第一个节点已经在等待出队，这时其它的线程会一直阻塞，减少了无用的阻塞（注意，在finally中调用了signal()来唤醒一个线程，而不是signalAll()）。</p>
-<h3 id="poll-方法"><a href="#poll-方法" class="headerlink" title="poll 方法"></a><strong>poll 方法</strong></h3><p>下面看下poll方法，与take类似，但这里要提供超时功能：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> RunnableScheduledFuture&lt;?&gt; poll(<span class="type">long</span> timeout, TimeUnit unit)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nanos</span> <span class="operator">=</span> unit.toNanos(timeout);</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            RunnableScheduledFuture&lt;?&gt; first = queue[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (first == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> first.getDelay(NANOSECONDS);</span><br><span class="line"><span class="comment">// 如果delay &lt;= 0，说明已经到了任务执行的时间，返回。</span></span><br><span class="line">                <span class="keyword">if</span> (delay &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> finishPoll(first);</span><br><span class="line"><span class="comment">// 如果nanos &lt;= 0，说明已经超时，返回null</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                first = <span class="literal">null</span>; <span class="comment">// don&#x27;t retain ref while waiting</span></span><br><span class="line">  <span class="comment">// nanos &lt; delay 说明需要等待的时间小于任务要执行的延迟时间</span></span><br><span class="line">                <span class="comment">// leader != null 说明有其它线程正在对任务进行阻塞</span></span><br><span class="line">                <span class="comment">// 这时阻塞当前线程nanos纳秒</span></span><br><span class="line">                <span class="keyword">if</span> (nanos &lt; delay || leader != <span class="literal">null</span>)</span><br><span class="line">                    nanos = available.awaitNanos(nanos);</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="type">Thread</span> <span class="variable">thisThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">                    leader = thisThread;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 这里的timeLeft表示delay减去实际的等待时间</span></span><br><span class="line">                        <span class="type">long</span> <span class="variable">timeLeft</span> <span class="operator">=</span> available.awaitNanos(delay);</span><br><span class="line">                       <span class="comment">// 计算剩余的等待时间 </span></span><br><span class="line">nanos -= delay - timeLeft;</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                        <span class="keyword">if</span> (leader == thisThread)</span><br><span class="line">                            leader = <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (leader == <span class="literal">null</span> &amp;&amp; queue[<span class="number">0</span>] != <span class="literal">null</span>)</span><br><span class="line">            available.signal();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​      </p>
-<h3 id="finishPoll方法"><a href="#finishPoll方法" class="headerlink" title="finishPoll方法"></a><strong>finishPoll方法</strong></h3><p>当调用了take或者poll方法能够获取到任务时，会调用该方法进行返回：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> RunnableScheduledFuture&lt;?&gt; finishPoll(RunnableScheduledFuture&lt;?&gt; f) &#123;</span><br><span class="line"><span class="comment">// 数组长度-1</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> --size;</span><br><span class="line"><span class="comment">// 取出最后一个节点</span></span><br><span class="line">    RunnableScheduledFuture&lt;?&gt; x = queue[s];</span><br><span class="line">    queue[s] = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 长度不为0，则从第一个元素开始排序，目的是要把最后一个节点放到合适的位置上</span></span><br><span class="line">    <span class="keyword">if</span> (s != <span class="number">0</span>)</span><br><span class="line">        siftDown(<span class="number">0</span>, x);</span><br><span class="line">    setIndex(f, -<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<h3 id="siftDown方法"><a href="#siftDown方法" class="headerlink" title="siftDown方法"></a><strong>siftDown方法</strong></h3><p>siftDown方法使堆从k开始向下调整：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftDown</span><span class="params">(<span class="type">int</span> k, RunnableScheduledFuture&lt;?&gt; key)</span> &#123;</span><br><span class="line"><span class="comment">// 根据二叉树的特性，数组长度除以2，表示取有子节点的索引</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">half</span> <span class="operator">=</span> size &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 判断索引为k的节点是否有子节点</span></span><br><span class="line">    <span class="keyword">while</span> (k &lt; half) &#123;</span><br><span class="line"><span class="comment">// 左子节点的索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">child</span> <span class="operator">=</span> (k &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; c = queue[child];</span><br><span class="line"><span class="comment">// 右子节点的索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> child + <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 如果有右子节点并且左子节点的时间间隔大于右子节点，取时间间隔最小的节点</span></span><br><span class="line">        <span class="keyword">if</span> (right &lt; size &amp;&amp; c.compareTo(queue[right]) &gt; <span class="number">0</span>)</span><br><span class="line">            c = queue[child = right];</span><br><span class="line"><span class="comment">// 如果key的时间间隔小于等于c的时间间隔，跳出循环</span></span><br><span class="line">        <span class="keyword">if</span> (key.compareTo(c) &lt;= <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"><span class="comment">// 设置要移除索引的节点为其子节点</span></span><br><span class="line">        queue[k] = c;</span><br><span class="line">        setIndex(c, k);</span><br><span class="line">        k = child;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// 将key放入索引为k的位置</span></span><br><span class="line">    queue[k] = key;</span><br><span class="line">    setIndex(key, k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>siftDown方法执行时包含两种情况，一种是没有子节点，一种是有子节点（根据half判断）。例如：</p>
-<p><strong>没有子节点的情况：</strong></p>
-<p>假设初始的堆如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(47).png" alt="0"></p>
-<p>假设 k &#x3D; 3 ，那么 k &#x3D; half ，没有子节点，在执行siftDown方法时直接把索引为3的节点设置为数组的最后一个节点：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(48).png" alt="0"></p>
-<p><strong>有子节点的情况：</strong></p>
-<p>假设 k &#x3D; 0 ，那么执行以下步骤：</p>
-<p>1、获取左子节点，child &#x3D; 1 ，获取右子节点， right &#x3D; 2 ：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(49).png" alt="0"></p>
-<p>2、由于 right &lt; size ，这时比较左子节点和右子节点时间间隔的大小，这里 3 &lt; 7 ，所以 c &#x3D; queue[child] ；</p>
-<p>3、比较key的时间间隔是否小于c的时间间隔，这里不满足，继续执行，把索引为k的节点设置为c，然后将k设置为child；</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(50).png" alt="0"></p>
-<p>4、因为 half &#x3D; 3 ，k &#x3D; 1 ，继续执行循环，这时的索引变为：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(51).png" alt="0"></p>
-<p>5、这时再经过如上判断后，将k的值为3，最终的结果如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(52).png" alt="0"></p>
-<p>6、最后，如果在finishPoll方法中调用的话，会把索引为0的节点的索引设置为-1，表示已经删除了该节点，并且size也减了1，最后的结果如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(53).png" alt="0"></p>
-<p>可见，siftdown方法在执行完并不是有序的，但可以发现，子节点的下次执行时间一定比父节点的下次执行时间要大，由于每次都会取左子节点和右子节点中下次执行时间最小的节点，所以还是可以保证在take和poll时出队是有序的。</p>
-<h3 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a><strong>remove方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">remove</span><span class="params">(Object x)</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> indexOf(x);</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        setIndex(queue[i], -<span class="number">1</span>);</span><br><span class="line">        <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> --size;</span><br><span class="line">        RunnableScheduledFuture&lt;?&gt; replacement = queue[s];</span><br><span class="line">        queue[s] = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (s != i) &#123;</span><br><span class="line">  <span class="comment">// 从i开始向下调整</span></span><br><span class="line">            siftDown(i, replacement);</span><br><span class="line"> <span class="comment">// 如果queue[i] == replacement，说明i是叶子节点</span></span><br><span class="line">            <span class="comment">// 如果是这种情况，不能保证子节点的下次执行时间比父节点的大</span></span><br><span class="line">            <span class="comment">// 这时需要进行一次向上调整</span></span><br><span class="line">            <span class="keyword">if</span> (queue[i] == replacement)</span><br><span class="line">                siftUp(i, replacement);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​       </p>
-<p>假设初始的堆结构如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(54).png" alt="0"></p>
-<p>这时要删除8的节点，那么这时 k &#x3D; 1，key为最后一个节点：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(55).png" alt="0"></p>
-<p>这时通过上文对siftDown方法的分析，siftDown方法执行后的结果如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(56).png" alt="0"></p>
-<p>这时会发现，最后一个节点的值比父节点还要小，所以这里要执行一次siftUp方法来保证子节点的下次执行时间要比父节点的大，所以最终结果如下：</p>
-<p>​    <img src="https://picture-manager.oss-cn-hangzhou.aliyuncs.com/Blog_Img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/clipboard%20(57).png" alt="0"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>主要总结为以下几个方面：</p>
-<ul>
-<li>与Timer执行定时任务的比较，相比Timer，ScheduedThreadPoolExecutor有什么优点；</li>
-<li>ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，所以它也是一个线程池，也有coorPoolSize和workQueue，ScheduledThreadPoolExecutor特殊的地方在于，自己实现了优先工作队列DelayedWorkQueue；</li>
-<li>ScheduedThreadPoolExecutor实现了ScheduledExecutorService，所以就有了任务调度的方法，如schedule，scheduleAtFixedRate和scheduleWithFixedDelay，同时注意他们之间的区别；</li>
-<li>内部类ScheduledFutureTask继承自FutureTask，实现了任务的异步执行并且可以获取返回结果。同时也实现了Delayed接口，可以通过getDelay方法获取将要执行的时间间隔；</li>
-<li>周期任务的执行其实是调用了FutureTask类中的runAndReset方法，每次执行完不设置结果和状态。</li>
-<li>详细分析了DelayedWorkQueue的数据结构，它是一个基于最小堆结构的优先队列，并且每次出队时能够保证取出的任务是当前队列中下次执行时间最小的任务。同时注意一下优先队列中堆的顺序，堆中的顺序并不是绝对的，但要保证子节点的值要比父节点的值要大，这样就不会影响出队的顺序。</li>
-</ul>
-<p>总体来说，ScheduedThreadPoolExecutor的重点是要理解下次执行时间的计算，以及优先队列的出队、入队和删除的过程，这两个是理解ScheduedThreadPoolExecutor的关键。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2605,7 +3111,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2661,13 +3167,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">290k</span>
+    <span title="站点总字数">312k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:23</span>
+    <span title="站点阅读时长">4:44</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
